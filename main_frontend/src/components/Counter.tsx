@@ -109,23 +109,27 @@ const Counter = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+    <div className="bg-surface dark:bg-surface-dark rounded-lg border border-border dark:border dark:border-border-dark p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="font-semibold text-gray-800">Counter Test</h3>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <h3 className="font-semibold text-textPrimary dark:text-textPrimary-dark">Counter Test</h3>
+          <p className="text-xs text-textSecondary dark:text-textSecondary-dark mt-0.5">
             Writes to the database via a JWT-protected endpoint
           </p>
         </div>
-        <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full ${
-          jwtToken ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-        }`}>
+        <span
+          className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full ${
+            jwtToken
+              ? 'bg-status-success-bg dark:bg-status-success-bg-dark text-status-success dark:text-status-success-dark'
+              : 'bg-status-error-bg dark:bg-status-error-bg-dark text-status-error dark:text-status-error-dark'
+          }`}
+        >
           {jwtToken ? 'JWT active' : 'No JWT'}
         </span>
       </div>
 
       {error && (
-        <div className="mb-4 rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+        <div className="mb-4 rounded-md bg-status-error-bg dark:bg-status-error-bg-dark px-4 py-3 text-sm text-status-error dark:text-status-error-dark">
           {error}
         </div>
       )}
@@ -133,9 +137,9 @@ const Counter = () => {
       <div className="flex items-center gap-6">
         <div className="flex-1 text-center">
           {loading ? (
-            <span className="text-gray-400 text-sm">Loading…</span>
+            <span className="text-textSecondary dark:text-textSecondary-dark text-sm">Loading…</span>
           ) : (
-            <span className="text-6xl font-bold text-indigo-600 tabular-nums">
+            <span className="text-6xl font-bold text-primary tabular-nums">
               {count ?? '—'}
             </span>
           )}
@@ -144,7 +148,7 @@ const Counter = () => {
           <button
             onClick={handleDecrement}
             disabled={decrementing || incrementing || loading || !jwtToken}
-            className="flex-shrink-0 inline-flex items-center justify-center gap-2 rounded-lg border border-indigo-200 bg-white px-5 py-3 text-sm font-semibold text-indigo-700 hover:bg-indigo-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex-shrink-0 inline-flex items-center justify-center gap-2 rounded-lg border border-border dark:border-border-dark bg-surface dark:bg-surface-dark px-5 py-3 text-sm font-semibold text-textPrimary dark:text-textPrimary-dark hover:bg-primary/10 dark:hover:bg-background-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {decrementing ? (
               <>
@@ -161,7 +165,7 @@ const Counter = () => {
           <button
             onClick={handleIncrement}
             disabled={incrementing || decrementing || loading || !jwtToken}
-            className="flex-shrink-0 inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-5 py-3 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex-shrink-0 inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-on-light dark:text-primary-on-dark hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {incrementing ? (
               <>
@@ -179,12 +183,12 @@ const Counter = () => {
       </div>
 
       {lastChangedBy && (
-        <p className="mt-3 text-xs text-gray-400 text-center">
-          Last change by <span className="font-medium text-gray-600">{lastChangedBy}</span>
+        <p className="mt-3 text-xs text-textSecondary dark:text-textSecondary-dark text-center">
+          Last change by <span className="font-medium text-textPrimary dark:text-textPrimary-dark">{lastChangedBy}</span>
         </p>
       )}
 
-      <div className="mt-4 rounded-md bg-blue-50 border border-blue-200 px-3 py-2 text-xs text-blue-700">
+      <div className="mt-4 rounded-md bg-primary px-3 py-2 text-xs text-primary-on-light dark:text-primary-on-dark">
         <span className="font-semibold">Middleware proof:</span> each increment call includes{' '}
         <code className="font-mono">Authorization: Bearer &lt;token&gt;</code> and is validated by the
         centralized <code className="font-mono">jwtAuth</code> middleware before touching the database.

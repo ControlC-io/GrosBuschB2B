@@ -1,37 +1,228 @@
 {
   "nav": {
-    "home": "Accueil",
+    "info": "Profil",
+    "admin": "Panneau admin",
+    "menu": "Menu",
     "dashboard": "Tableau de bord",
-    "info": "Infos",
-    "admin": "Admin"
+    "features": "Fonctionnalités"
   },
   "auth": {
     "signedInAs": "Connecté en tant que",
     "signIn": "Se connecter",
     "signUp": "S'inscrire",
-    "logout": "Se déconnecter"
+    "logout": "Se déconnecter",
+    "backToHome": "← Retour à l'accueil",
+    "login": {
+      "title": "Bon retour",
+      "subtitle": "Connectez-vous à votre compte",
+      "noAccount": "Pas encore de compte ?",
+      "createOne": "Créer un compte"
+    },
+    "register": {
+      "title": "Créer un compte",
+      "subtitle": "Commencez avec AppTemplate",
+      "haveAccount": "Vous avez déjà un compte ?",
+      "signIn": "Se connecter"
+    },
+    "form": {
+      "emailLabel": "E-mail",
+      "passwordLabel": "Mot de passe",
+      "fullNameLabel": "Nom complet",
+      "confirmPasswordLabel": "Confirmez le mot de passe",
+      "emailPlaceholder": "vous@example.com",
+      "passwordPlaceholder": "Saisissez votre mot de passe",
+      "passwordConfirmPlaceholder": "Confirmez votre mot de passe",
+      "passwordMinPlaceholder": "Min. 8 caractères",
+      "loginButton": "Se connecter",
+      "loginButtonLoading": "Connexion...",
+      "loginFailed": "Échec de la connexion",
+      "registerButton": "Créer le compte",
+      "registerButtonLoading": "Création du compte...",
+      "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+      "passwordTooShort": "Le mot de passe doit contenir au moins 8 caractères"
+    },
+    "twoFactor": {
+      "title": "Authentification à deux facteurs",
+      "description": "Saisissez le code à 6 chiffres de votre application d'authentification",
+      "descriptionBackup": "Saisissez l'un de vos codes de secours",
+      "codeLabel": "Code de vérification",
+      "trustDevice": "Faire confiance à cet appareil pendant 30 jours",
+      "verify": "Vérifier",
+      "verifyLoading": "Vérification...",
+      "useBackupInstead": "Utiliser un code de secours à la place",
+      "sendEmailCode": "Envoyer le code par e-mail à la place",
+      "sendEmailCodeLoading": "Envoi...",
+      "backupTitle": "Code de secours",
+      "backupPlaceholder": "Saisissez un code de secours",
+      "verifyBackup": "Vérifier le code de secours",
+      "useAuthenticatorInstead": "Utiliser le code de l'application d'authentification",
+      "backToLogin": "Retour à la connexion",
+      "errorInvalidCode": "Code de vérification invalide",
+      "errorEmailNotFound": "E-mail introuvable. Veuillez revenir en arrière et vous reconnecter.",
+      "errorEmailSend": "Impossible d'envoyer le code par e-mail. Utilisez l'application ou un code de secours.",
+      "errorEmailSendGeneric": "Impossible d'envoyer le code par e-mail. Réessayez ou utilisez l'application d'authentification.",
+      "timeoutNote": "Cette page expirera après 5 minutes pour des raisons de sécurité."
+    },
+    "emailOtp": {
+      "title": "Vérifiez votre e-mail",
+      "description": "Nous avons envoyé un code de vérification à 6 chiffres à votre adresse e-mail. Il expire dans 10 minutes.",
+      "codeLabel": "Code de vérification",
+      "verify": "Vérifier",
+      "verifyLoading": "Vérification...",
+      "backToLogin": "← Retour à la connexion",
+      "errorInvalidCode": "Code de vérification invalide"
+    }
   },
   "pages": {
-    "tickets": { "title": "Gestion des tickets" },
-    "interventions": { "title": "Interventions à venir" },
-    "billing": { "title": "Facturation" },
-    "paymentInfo": { "title": "Informations de paiement" },
-    "sepa": { "title": "Prélèvement SEPA" },
-    "customerInfo": { "title": "Informations client" },
-    "bcpRooms": { "title": "Réservation de salles BCP" },
-    "offers": { "title": "Offres" },
-    "orders": { "title": "Commandes" },
-    "contracts": { "title": "Contrats" },
-    "kyc": { "title": "KYC" },
-    "security": { "title": "Sécurité" },
-    "resources": { "title": "Ressources" },
-    "quickOrder": { "title": "Commande rapide" },
-    "suggestions": { "title": "Vos suggestions" },
-    "dataDeletion": { "title": "Suppression des données" }
+    "featureOne": { "title": "Exemple de fonctionnalité 1" },
+    "featureTwo": { "title": "Exemple de fonctionnalité 2" },
+    "featureThree": { "title": "Exemple de fonctionnalité 3" }
   },
   "placeholders": {
-    "underConstruction": "Cette section est en cours de construction. Les fonctionnalités seront ajoutées prochainement.",
+    "underConstruction": "Cette section est en cours de construction. Ajoutez votre fonctionnalité ici.",
     "loading": "Chargement..."
+  },
+  "home": {
+    "title": "AppTemplate",
+    "subtitle": "Modèle full-stack avec architecture réseau sécurisée en DMZ",
+    "status": {
+      "checking": "Vérification en cours...",
+      "allOk": "Tous les systèmes sont opérationnels",
+      "degraded": "Service dégradé"
+    },
+    "sections": {
+      "servicesStatus": "État des services",
+      "features": "Fonctionnalités",
+      "architectureDiagram": "Schéma d'architecture",
+      "technologyStack": "Stack technologique",
+      "legend": "Légende"
+    },
+    "services": {
+      "proxy": {
+        "name": "Proxy NGINX",
+        "description": "Reverse proxy DMZ et routage des requêtes",
+        "messageRouting": "Routage des requêtes"
+      },
+      "api": {
+        "name": "API Express",
+        "description": "Serveur d'API REST interne"
+      },
+      "database": {
+        "name": "PostgreSQL",
+        "description": "Base de données relationnelle (réseau interne)",
+        "connected": "Connectée",
+        "connectionFailed": "Échec de la connexion"
+      },
+      "auth": {
+        "name": "Service d'authentification",
+        "description": "Gestion des sessions avec Better Auth"
+      },
+      "session": {
+        "name": "Session utilisateur",
+        "description": "Session d'authentification actuelle",
+        "notAuthenticated": "Non authentifié"
+      }
+    },
+    "actions": {
+      "refresh": "Actualiser"
+    },
+    "architecture": {
+      "internetClient": "Internet / Client",
+      "dmzZone": "Zone DMZ",
+      "reverseProxy": "NGINX",
+      "reverseProxyRole": "Reverse proxy",
+      "frontend": "React + Vite",
+      "frontendRole": "Frontend",
+      "internalNetwork": "Réseau interne",
+      "api": "Express.js",
+      "apiRole": "API REST",
+      "auth": "Better Auth",
+      "authRole": "Authentification",
+      "dataLayer": "Couche données",
+      "database": "PostgreSQL",
+      "databaseRole": "Base de données",
+      "orm": "Prisma ORM",
+      "ormRole": "Layer d'accès",
+      "legendDmz": "DMZ exposée",
+      "legendInternal": "Réseau interne",
+      "legendData": "Données isolées"
+    },
+    "dashboardQuickLink": {
+      "title": "Tableau de bord",
+      "description": "Menu avec liens rapides"
+    },
+    "footer": {
+      "text": "AppTemplate · Architecture sécurisée avec segmentation réseau · React + Express + PostgreSQL + NGINX"
+    },
+    "featuresList": {
+      "twoFa": {
+        "title": "Authentification 2FA",
+        "description": "TOTP avec Google Authenticator et codes de secours."
+      },
+      "dmz": {
+        "title": "Réseau DMZ segmenté",
+        "description": "Backend et base de données jamais exposés directement à Internet."
+      },
+      "rbac": {
+        "title": "Contrôle d'accès par rôle",
+        "description": "Utilisateurs et administrateurs avec des permissions différenciées."
+      },
+      "audit": {
+        "title": "Journal d'audit",
+        "description": "Traçage de chaque action avec horodatage, utilisateur et IP."
+      },
+      "sessions": {
+        "title": "Sessions sécurisées",
+        "description": "Cookies httpOnly gérés par Better Auth."
+      },
+      "docker": {
+        "title": "Docker Compose",
+        "description": "Tous les services dans des conteneurs isolés et reproductibles."
+      }
+    },
+    "techStack": {
+      "frontendTag": "Frontend",
+      "backendTag": "Backend",
+      "crossCuttingTag": "Transverse",
+      "dataTag": "Données",
+      "infraTag": "Infra"
+    }
+  },
+  "dashboard": {
+    "welcomeTitle": "Bienvenue sur {{brand}}",
+    "welcomeDescription": "Votre tableau de bord vous donne accès à votre profil, aux fonctionnalités de l'application et à l'état des services.",
+    "links": {
+      "counter": "Démo compteur",
+      "profile": "Profil",
+      "featureOne": "Fonctionnalité 1",
+      "featureTwo": "Fonctionnalité 2",
+      "featureThree": "Fonctionnalité 3",
+      "admin": "Panneau admin"
+    }
+  },
+  "components": {
+    "counter": {
+      "title": "Test du compteur",
+      "subtitle": "Écrit dans la base de données via un endpoint protégé par JWT",
+      "jwtActive": "JWT actif",
+      "noJwt": "Aucun JWT",
+      "loading": "Chargement…",
+      "decrementing": "Décrément en cours…",
+      "decrement": "− Décrémenter",
+      "incrementing": "Incrément en cours…",
+      "increment": "+ Incrémenter",
+      "lastChangedBy": "Dernière modification par {{name}}",
+      "middlewareProofTitle": "Preuve du middleware :",
+      "middlewareProofBody": "chaque appel d'incrément inclut Authorization: Bearer <token> et est validé par le middleware centralisé jwtAuth avant d'accéder à la base de données.",
+      "errors": {
+        "noJwt": "Aucun jeton JWT disponible. Veuillez vous déconnecter puis vous reconnecter.",
+        "noJwtShort": "Aucun jeton JWT. Veuillez vous déconnecter puis vous reconnecter.",
+        "unauthorized": "Non autorisé : votre jeton JWT est manquant ou expiré.",
+        "forbidden": "Interdit : votre rôle n'a pas accès à cet endpoint.",
+        "fetchFailed": "Échec de la récupération du compteur",
+        "incrementFailed": "Échec de l'incrément du compteur",
+        "decrementFailed": "Échec du décrément du compteur"
+      }
+    }
   }
 }
-

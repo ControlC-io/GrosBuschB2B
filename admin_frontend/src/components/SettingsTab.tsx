@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getAdminApiBase } from '../lib/apiBase';
 
 interface SystemSetting {
   id: string;
@@ -9,7 +10,7 @@ interface SystemSetting {
   createdAt: string;
 }
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
+const API_BASE = getAdminApiBase();
 const ADMIN_SECRET = import.meta.env.VITE_ADMIN_SECRET || '';
 
 const SettingsTab = () => {

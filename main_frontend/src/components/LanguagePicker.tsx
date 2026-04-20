@@ -11,7 +11,7 @@ interface LanguagePickerProps {
   onChange?: (language: Language) => void;
 }
 
-const STORAGE_KEY = "my-rcarre-language";
+const STORAGE_KEY = "apptemplate-language";
 
 const getInitialLanguage = (): Language => {
   if (typeof window === "undefined") {
@@ -61,7 +61,7 @@ const LanguagePicker: FC<LanguagePickerProps> = ({ className = "", onChange }) =
         onClick={() => handleSelect("fr")}
         className={`${baseButton} ${
           language === "fr"
-            ? "bg-white text-[#2b0a42]"
+            ? "bg-white text-textPrimary dark:text-textPrimary-dark"
             : "text-white/70 hover:text-white"
         }`}
         aria-pressed={language === "fr"}
@@ -77,7 +77,7 @@ const LanguagePicker: FC<LanguagePickerProps> = ({ className = "", onChange }) =
         onClick={() => handleSelect("en")}
         className={`${baseButton} ${
           language === "en"
-            ? "bg-white text-[#2b0a42]"
+            ? "bg-white text-textPrimary dark:text-textPrimary-dark"
             : "text-white/70 hover:text-white"
         }`}
         aria-pressed={language === "en"}

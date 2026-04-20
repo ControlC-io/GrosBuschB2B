@@ -45,7 +45,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="name" className="block text-sm font-medium text-textSecondary dark:text-textSecondary-dark mb-1">
           Full Name
         </label>
         <input
@@ -54,13 +54,13 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border border-border dark:border dark:border-border-dark rounded-lg bg-surface dark:bg-surface-dark focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
           placeholder="John Doe"
         />
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="email" className="block text-sm font-medium text-textSecondary dark:text-textSecondary-dark mb-1">
           Email
         </label>
         <input
@@ -69,13 +69,13 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border border-border dark:border dark:border-border-dark rounded-lg bg-surface dark:bg-surface-dark focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
           placeholder="you@example.com"
         />
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="password" className="block text-sm font-medium text-textSecondary dark:text-textSecondary-dark mb-1">
           Password
         </label>
         <input
@@ -85,13 +85,13 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
           onChange={(e) => setPassword(e.target.value)}
           required
           minLength={8}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border border-border dark:border dark:border-border-dark rounded-lg bg-surface dark:bg-surface-dark focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
           placeholder="Min 8 characters"
         />
       </div>
 
       <div>
-        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="confirmPassword" className="block text-sm font-medium text-textSecondary dark:text-textSecondary-dark mb-1">
           Confirm Password
         </label>
         <input
@@ -101,13 +101,13 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
           minLength={8}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border border-border dark:border dark:border-border-dark rounded-lg bg-surface dark:bg-surface-dark focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
           placeholder="Confirm your password"
         />
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+        <div className="bg-status-error-bg dark:bg-status-error-bg-dark text-status-error dark:text-status-error-dark px-4 py-3 rounded-lg text-sm">
           {error}
         </div>
       )}
@@ -115,7 +115,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-primary text-white dark:text-primary-on-dark py-2 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
       >
         {loading ? 'Creating account...' : 'Create Account'}
       </button>

@@ -1,8 +1,10 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@shared/auth';
-
-const PENDING_OTP_KEY = 'pending_email_otp_user_id';
+import {
+  getPendingEmailOtpUserId,
+  clearPendingAuthState,
+} from '../authStorage';
 
 const EmailOtpChallenge = () => {
   const [code, setCode] = useState('');
@@ -11,7 +13,7 @@ const EmailOtpChallenge = () => {
   const { verifyEmailOtp, checkSession } = useAuth();
   const navigate = useNavigate();
 
-  const userId = sessionStorage.getItem(PENDING_OTP_KEY);
+  const userId = getPendingEmailOtpUserId();
 
   useEffect(() => {
     if (!userId) {
@@ -29,7 +31,7 @@ const EmailOtpChallenge = () => {
 
     try {
       await verifyEmailOtp(userId, code);
-      sessionStorage.removeItem('pending_2fa_email');
+      clearPendingAuthState();
       // checkSession(true) uses flushSync so user state is committed before navigate().
       await checkSession(true);
       navigate('/dashboard');
@@ -42,24 +44,24 @@ const EmailOtpChallenge = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full">
+    <div className="bg-background dark:bg-background-dark text-textPrimary dark:text-textPrimary-dark min-h-screen flex items-center justify-center p-4">
+      <div className="bg-surface dark:bg-surface-dark rounded-lg shadow-xl p-8 max-w-md w-full border border-border dark:border dark:border-border-dark">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-            <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-full mb-4 text-primary-on-light dark:text-primary-on-dark dark:bg-icon-dark dark:border dark:border-border-dark">
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">Check your email</h1>
-          <p className="text-gray-600">
+          <h1 className="text-2xl font-bold text-textPrimary dark:text-textPrimary-dark mb-2">Check your email</h1>
+          <p className="text-textSecondary dark:text-textSecondary-dark">
             We sent a 6-digit verification code to your email address. It expires in 10 minutes.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="code" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="code" className="block text-sm font-medium text-textSecondary dark:text-textSecondary-dark mb-1">
               Verification Code
             </label>
             <input
@@ -71,13 +73,13 @@ const EmailOtpChallenge = () => {
               required
               maxLength={6}
               autoFocus
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-center text-2xl tracking-widest"
+              className="w-full px-3 py-2 border border-border dark:border dark:border-border-dark rounded-lg bg-surface dark:bg-surface-dark focus:outline-none focus:ring-2 focus:ring-primary text-center text-2xl tracking-widest"
               placeholder="000000"
             />
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm">
+            <div className="bg-status-error-bg dark:bg-status-error-bg-dark text-status-error dark:text-status-error-dark px-4 py-3 rounded text-sm">
               {error}
             </div>
           )}
@@ -94,7 +96,7 @@ const EmailOtpChallenge = () => {
         <div className="mt-6 text-center">
           <button
             onClick={() => navigate('/login')}
-            className="text-sm text-gray-500 hover:text-gray-700"
+            className="text-sm text-textSecondary dark:text-textSecondary-dark hover:text-textPrimary dark:hover:text-textPrimary-dark"
           >
             ← Back to login
           </button>

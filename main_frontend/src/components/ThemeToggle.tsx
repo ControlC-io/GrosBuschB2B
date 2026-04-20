@@ -22,12 +22,12 @@ const ThemeToggle: FC<ThemeToggleProps> = ({ className = "" }) => {
       <span className="sr-only">Turn dark mode on or off</span>
       <span
         className={`inline-flex h-5 w-5 transform items-center justify-center rounded-full shadow-sm transition-transform duration-200 ${
-          isDark ? "translate-x-7 bg-slate-700" : "translate-x-1 bg-slate-200"
+          isDark ? "translate-x-7 bg-surface-dark text-textPrimary-dark" : "translate-x-1 bg-surface text-textPrimary"
         }`}
       >
         {isDark ? (
           <svg
-            className="h-3 w-3 text-slate-100"
+            className="h-3 w-3"
             viewBox="0 0 24 24"
             fill="currentColor"
           >
@@ -35,7 +35,7 @@ const ThemeToggle: FC<ThemeToggleProps> = ({ className = "" }) => {
           </svg>
         ) : (
           <svg
-            className="h-3 w-3 text-slate-800"
+            className="h-3 w-3"
             viewBox="0 0 24 24"
             fill="currentColor"
           >

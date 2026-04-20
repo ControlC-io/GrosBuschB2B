@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { getAdminApiBase } from '../lib/apiBase';
 
 type TableName =
   | 'users'
@@ -27,7 +28,7 @@ const TABLES: TableInfo[] = [
   { name: 'audit_logs', label: 'Audit Logs', description: 'Security audit trail' }
 ];
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
+const API_BASE = getAdminApiBase();
 const ADMIN_SECRET = import.meta.env.VITE_ADMIN_SECRET || '';
 
 const adminHeaders = {

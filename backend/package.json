@@ -1,5 +1,5 @@
 {
-  "name": "myrtest-backend",
+  "name": "apptemplate-backend",
   "version": "1.0.0",
   "description": "Backend API for DMZ architecture project",
   "main": "dist/index.js",

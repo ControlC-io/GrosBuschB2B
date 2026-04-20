@@ -1,37 +1,228 @@
 {
   "nav": {
-    "home": "Home",
+    "info": "Profile",
+    "admin": "Admin Panel",
+    "menu": "Menu",
     "dashboard": "Dashboard",
-    "info": "Info",
-    "admin": "Admin"
+    "features": "Features"
   },
   "auth": {
     "signedInAs": "Signed in as",
     "signIn": "Sign In",
     "signUp": "Sign Up",
-    "logout": "Log out"
+    "logout": "Log out",
+    "backToHome": "← Back to home",
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to your account",
+      "noAccount": "Don't have an account?",
+      "createOne": "Create one"
+    },
+    "register": {
+      "title": "Create Account",
+      "subtitle": "Get started with AppTemplate",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "form": {
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "fullNameLabel": "Full Name",
+      "confirmPasswordLabel": "Confirm Password",
+      "emailPlaceholder": "you@example.com",
+      "passwordPlaceholder": "Enter your password",
+      "passwordConfirmPlaceholder": "Confirm your password",
+      "passwordMinPlaceholder": "Min 8 characters",
+      "loginButton": "Sign In",
+      "loginButtonLoading": "Signing in...",
+      "loginFailed": "Login failed",
+      "registerButton": "Create Account",
+      "registerButtonLoading": "Creating account...",
+      "passwordsDoNotMatch": "Passwords do not match",
+      "passwordTooShort": "Password must be at least 8 characters"
+    },
+    "twoFactor": {
+      "title": "Two-Factor Authentication",
+      "description": "Enter the 6-digit code from your authenticator app",
+      "descriptionBackup": "Enter one of your backup codes",
+      "codeLabel": "Verification Code",
+      "trustDevice": "Trust this device for 30 days",
+      "verify": "Verify",
+      "verifyLoading": "Verifying...",
+      "useBackupInstead": "Use a backup code instead",
+      "sendEmailCode": "Send code to my email instead",
+      "sendEmailCodeLoading": "Sending...",
+      "backupTitle": "Backup Code",
+      "backupPlaceholder": "Enter backup code",
+      "verifyBackup": "Verify Backup Code",
+      "useAuthenticatorInstead": "Use authenticator code instead",
+      "backToLogin": "Back to login",
+      "errorInvalidCode": "Invalid verification code",
+      "errorEmailNotFound": "Email not found. Please go back and sign in again.",
+      "errorEmailSend": "Could not send email code. Use authenticator or backup code.",
+      "errorEmailSendGeneric": "Could not send email code. Try again or use authenticator.",
+      "timeoutNote": "This page will timeout after 5 minutes for security."
+    },
+    "emailOtp": {
+      "title": "Check your email",
+      "description": "We sent a 6-digit verification code to your email address. It expires in 10 minutes.",
+      "codeLabel": "Verification Code",
+      "verify": "Verify",
+      "verifyLoading": "Verifying...",
+      "backToLogin": "← Back to login",
+      "errorInvalidCode": "Invalid verification code"
+    }
   },
   "pages": {
-    "tickets": { "title": "Ticket management" },
-    "interventions": { "title": "Upcoming interventions" },
-    "billing": { "title": "Billing" },
-    "paymentInfo": { "title": "Payment information" },
-    "sepa": { "title": "SEPA Direct Debit" },
-    "customerInfo": { "title": "Customer information" },
-    "bcpRooms": { "title": "BCP room booking" },
-    "offers": { "title": "Offers" },
-    "orders": { "title": "Orders" },
-    "contracts": { "title": "Contracts" },
-    "kyc": { "title": "KYC" },
-    "security": { "title": "Security" },
-    "resources": { "title": "Resources" },
-    "quickOrder": { "title": "Quick order" },
-    "suggestions": { "title": "Your suggestions" },
-    "dataDeletion": { "title": "Data deletion" }
+    "featureOne": { "title": "Example Feature One" },
+    "featureTwo": { "title": "Example Feature Two" },
+    "featureThree": { "title": "Example Feature Three" }
   },
   "placeholders": {
-    "underConstruction": "This section is under construction. Features will be added soon.",
+    "underConstruction": "This section is under construction. Add your feature here.",
     "loading": "Loading..."
+  },
+  "home": {
+    "title": "AppTemplate",
+    "subtitle": "Full-stack starter template with secure DMZ architecture",
+    "status": {
+      "checking": "Checking...",
+      "allOk": "All systems operational",
+      "degraded": "Degraded service"
+    },
+    "sections": {
+      "servicesStatus": "Services Status",
+      "features": "Features",
+      "architectureDiagram": "Architecture Diagram",
+      "technologyStack": "Technology Stack",
+      "legend": "Legend"
+    },
+    "services": {
+      "proxy": {
+        "name": "NGINX Proxy",
+        "description": "DMZ reverse proxy and request router",
+        "messageRouting": "Routing requests"
+      },
+      "api": {
+        "name": "Express API",
+        "description": "Internal REST API server"
+      },
+      "database": {
+        "name": "PostgreSQL",
+        "description": "Relational database (internal network)",
+        "connected": "Connected",
+        "connectionFailed": "Connection failed"
+      },
+      "auth": {
+        "name": "Auth Service",
+        "description": "Better Auth session management"
+      },
+      "session": {
+        "name": "User Session",
+        "description": "Current authenticated session",
+        "notAuthenticated": "Not authenticated"
+      }
+    },
+    "actions": {
+      "refresh": "Refresh"
+    },
+    "architecture": {
+      "internetClient": "Internet / Client",
+      "dmzZone": "DMZ Zone",
+      "reverseProxy": "NGINX",
+      "reverseProxyRole": "Reverse Proxy",
+      "frontend": "React + Vite",
+      "frontendRole": "Frontend",
+      "internalNetwork": "Internal Network",
+      "api": "Express.js",
+      "apiRole": "REST API",
+      "auth": "Better Auth",
+      "authRole": "Authentication",
+      "dataLayer": "Data Layer",
+      "database": "PostgreSQL",
+      "databaseRole": "Database",
+      "orm": "Prisma ORM",
+      "ormRole": "Access layer",
+      "legendDmz": "Exposed DMZ",
+      "legendInternal": "Internal network",
+      "legendData": "Isolated data"
+    },
+    "dashboardQuickLink": {
+      "title": "Dashboard",
+      "description": "Menu with quick links"
+    },
+    "footer": {
+      "text": "AppTemplate · Secure architecture with network segmentation · React + Express + PostgreSQL + NGINX"
+    },
+    "featuresList": {
+      "twoFa": {
+        "title": "2FA Authentication",
+        "description": "TOTP with Google Authenticator and backup codes."
+      },
+      "dmz": {
+        "title": "Segmented DMZ Network",
+        "description": "Backend and DB never directly exposed to the internet."
+      },
+      "rbac": {
+        "title": "Role-Based Access Control",
+        "description": "Users and administrators with differentiated permissions."
+      },
+      "audit": {
+        "title": "Audit Logging",
+        "description": "Logging of every action with timestamp, user, and IP."
+      },
+      "sessions": {
+        "title": "Secure Sessions",
+        "description": "httpOnly cookies managed by Better Auth."
+      },
+      "docker": {
+        "title": "Docker Compose",
+        "description": "All services in isolated and reproducible containers."
+      }
+    },
+    "techStack": {
+      "frontendTag": "Frontend",
+      "backendTag": "Backend",
+      "crossCuttingTag": "Cross-cutting",
+      "dataTag": "Data",
+      "infraTag": "Infra"
+    }
+  },
+  "dashboard": {
+    "welcomeTitle": "Welcome to {{brand}}",
+    "welcomeDescription": "Your dashboard gives you access to your profile, application features, and system status. Use the links below to navigate.",
+    "links": {
+      "counter": "Counter Demo",
+      "profile": "Profile",
+      "featureOne": "Feature One",
+      "featureTwo": "Feature Two",
+      "featureThree": "Feature Three",
+      "admin": "Admin Panel"
+    }
+  },
+  "components": {
+    "counter": {
+      "title": "Counter Test",
+      "subtitle": "Writes to the database via a JWT-protected endpoint",
+      "jwtActive": "JWT active",
+      "noJwt": "No JWT",
+      "loading": "Loading…",
+      "decrementing": "Decrementing…",
+      "decrement": "− Decrement",
+      "incrementing": "Incrementing…",
+      "increment": "+ Increment",
+      "lastChangedBy": "Last change by {{name}}",
+      "middlewareProofTitle": "Middleware proof:",
+      "middlewareProofBody": "each increment call includes Authorization: Bearer <token> and is validated by the centralized jwtAuth middleware before touching the database.",
+      "errors": {
+        "noJwt": "No JWT token available. Please log out and log in again.",
+        "noJwtShort": "No JWT token. Please log out and log in again.",
+        "unauthorized": "Unauthorized: your JWT token is missing or expired.",
+        "forbidden": "Forbidden: your role does not have access to this endpoint.",
+        "fetchFailed": "Failed to fetch counter",
+        "incrementFailed": "Failed to increment counter",
+        "decrementFailed": "Failed to decrement counter"
+      }
+    }
   }
 }
-

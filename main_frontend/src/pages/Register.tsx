@@ -9,24 +9,24 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full">
+    <div className="bg-background dark:bg-background-dark text-textPrimary dark:text-textPrimary-dark min-h-screen flex items-center justify-center p-4">
+      <div className="bg-surface dark:bg-surface-dark rounded-lg shadow-xl p-8 max-w-md w-full border border-border dark:border dark:border-border-dark">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Create Account</h1>
-          <p className="text-gray-600">Get started with DMZ Auth</p>
+          <h1 className="text-3xl font-bold text-textPrimary dark:text-textPrimary-dark mb-2">Create Account</h1>
+          <p className="text-textSecondary dark:text-textSecondary-dark">Get started with DMZ Auth</p>
         </div>
 
         <RegisterForm onSuccess={handleSuccess} />
 
-        <div className="mt-6 text-center text-sm text-gray-600">
+        <div className="mt-6 text-center text-sm text-textSecondary dark:text-textSecondary-dark">
           Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium">
+          <Link to="/login" className="text-primary hover:opacity-90 font-medium">
             Sign in
           </Link>
         </div>
 
         <div className="mt-6 text-center">
-          <Link to="/" className="text-sm text-gray-500 hover:text-gray-700">
+          <Link to="/" className="text-sm text-textSecondary dark:text-textSecondary-dark hover:text-textPrimary dark:hover:text-textPrimary-dark">
             ← Back to home
           </Link>
         </div>

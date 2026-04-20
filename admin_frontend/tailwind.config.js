@@ -9,48 +9,52 @@ export default {
     extend: {
       colors: {
         // Brand
-        primary: "#E9E8FF",
-        secondary: "#BF60B5",
+        primary: "#3B82F6",
+        secondary: "#0EA5E9",
 
         // Contrast on brand
         "primary-on-light": "#FFFFFF",
-        "primary-on-dark": "#000000",
+        "primary-on-dark": "#FFFFFF",
         "secondary-on-light": "#FFFFFF",
-        "secondary-on-dark": "#000000",
+        "secondary-on-dark": "#FFFFFF",
 
         // Background & surfaces
-        background: {
-          DEFAULT: "#F2EFFF",
-          dark: "#040225",
-        },
-        surface: {
-          DEFAULT: "#FFFFFF",
-          dark: "#28164e",
-        },
-        border: {
-          DEFAULT: "#D9C9FF",
-          dark: "#3B2A6F",
-        },
+        background: "#F8FAFC",
+        "background-dark": "#0F172A",
+        surface: "#FFFFFF",
+        "surface-dark": "#1E293B",
+        border: "#E2E8F0",
+        "border-dark": "#334155",
+
+        // Navbar
+        navbar: "#1D4ED8",
+        "navbar-dark": "#0F172A",
+        "navbar-border-dark": "#1E40AF",
 
         // Text
-        textPrimary: {
-          DEFAULT: "#111827",
-          dark: "#F9FAFB",
-        },
-        textSecondary: {
-          DEFAULT: "#4B5563",
-          dark: "#9CA3AF",
-        },
+        textPrimary: "#0F172A",
+        "textPrimary-dark": "#F8FAFC",
+        textSecondary: "#64748B",
+        "textSecondary-dark": "#94A3B8",
 
-        // Palette (purple / pink)
-        "dark-purple": "#040225",
-        "dark-purple-semitransparent": "#040226",
-        "dark-purple-transparent": "#040225",
-        "black-purple": "#28164e",
-        "black-purple-semitransparent": "#28164e",
-        purple: "#462671",
-        "light-purple": "#73389d",
-        pink: "#bf30b5",
+        // Icon surfaces
+        "icon-dark": "#334155",
+
+        // Status — light
+        "status-success": "#16a34a",
+        "status-success-bg": "#dcfce7",
+        "status-error": "#dc2626",
+        "status-error-bg": "#fee2e2",
+        "status-warning": "#d97706",
+        "status-warning-bg": "#fef3c7",
+
+        // Status — dark
+        "status-success-dark": "#4ade80",
+        "status-success-bg-dark": "rgba(74,222,128,0.15)",
+        "status-error-dark": "#f87171",
+        "status-error-bg-dark": "rgba(248,113,113,0.15)",
+        "status-warning-dark": "#fbbf24",
+        "status-warning-bg-dark": "rgba(251,191,36,0.15)",
       },
       borderRadius: {
         lg: "8px",

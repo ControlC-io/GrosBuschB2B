@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@shared/auth';
-
-const PENDING_OTP_KEY = 'pending_email_otp_user_id';
-const PENDING_2FA_EMAIL_KEY = 'pending_2fa_email';
+import {
+  getPending2FAEmail,
+  setPendingEmailOtpUserId,
+  clearPending2FAEmail,
+} from '../authStorage';
 
 const TwoFactorChallenge = () => {
   const [code, setCode] = useState('');
@@ -38,7 +40,7 @@ const TwoFactorChallenge = () => {
   };
 
   const handleUseEmailCode = async () => {
-    const email = sessionStorage.getItem(PENDING_2FA_EMAIL_KEY);
+    const email = getPending2FAEmail();
     if (!email) {
       setError('Email not found. Please go back and sign in again.');
       return;
@@ -63,8 +65,8 @@ const TwoFactorChallenge = () => {
         return;
       }
       if (data?.userId) {
-        sessionStorage.setItem(PENDING_OTP_KEY, data.userId);
-        sessionStorage.removeItem(PENDING_2FA_EMAIL_KEY);
+        setPendingEmailOtpUserId(data.userId);
+        clearPending2FAEmail();
         navigate('/auth/email-otp');
       }
     } catch {
@@ -109,17 +111,17 @@ const TwoFactorChallenge = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="bg-background dark:bg-background-dark text-textPrimary dark:text-textPrimary-dark min-h-screen flex items-center justify-center p-4">
       <div className="max-w-md w-full">
-        <div className="bg-white rounded-lg shadow-xl p-8">
+        <div className="bg-surface dark:bg-surface-dark rounded-lg shadow-xl p-8 border border-border dark:border dark:border-border-dark">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-              <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-full mb-4 text-primary-on-light dark:text-primary-on-dark dark:bg-icon-dark dark:border dark:border-border-dark">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-gray-800 mb-2">Two-Factor Authentication</h1>
-            <p className="text-gray-600">
+            <h1 className="text-2xl font-bold text-textPrimary dark:text-textPrimary-dark mb-2">Two-Factor Authentication</h1>
+            <p className="text-textSecondary dark:text-textSecondary-dark">
               {showBackupCode 
                 ? 'Enter one of your backup codes'
                 : 'Enter the 6-digit code from your authenticator app'}
@@ -129,7 +131,7 @@ const TwoFactorChallenge = () => {
           {!showBackupCode ? (
             <form onSubmit={handleVerifyCode} className="space-y-4">
               <div>
-                <label htmlFor="code" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="code" className="block text-sm font-medium text-textSecondary dark:text-textSecondary-dark mb-1">
                   Verification Code
                 </label>
                 <input
@@ -140,7 +142,7 @@ const TwoFactorChallenge = () => {
                   required
                   maxLength={6}
                   autoFocus
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-center text-2xl tracking-widest"
+                  className="w-full px-3 py-2 border border-border dark:border dark:border-border-dark rounded-lg bg-surface dark:bg-surface-dark focus:outline-none focus:ring-2 focus:ring-primary text-center text-2xl tracking-widest"
                   placeholder="000000"
                 />
               </div>
@@ -151,15 +153,15 @@ const TwoFactorChallenge = () => {
                   type="checkbox"
                   checked={trustDevice}
                   onChange={(e) => setTrustDevice(e.target.checked)}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-primary focus:ring-primary border-border dark:border-border-dark rounded"
                 />
-                <label htmlFor="trustDevice" className="ml-2 block text-sm text-gray-700">
+                <label htmlFor="trustDevice" className="ml-2 block text-sm text-textSecondary dark:text-textSecondary-dark">
                   Trust this device for 30 days
                 </label>
               </div>
 
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                <div className="bg-status-error-bg dark:bg-status-error-bg-dark text-status-error dark:text-status-error-dark px-4 py-3 rounded">
                   {error}
                 </div>
               )}
@@ -167,7 +169,7 @@ const TwoFactorChallenge = () => {
               <button
                 type="submit"
                 disabled={loading || code.length !== 6}
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-primary text-white dark:text-primary-on-dark py-2 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Verifying...' : 'Verify'}
               </button>
@@ -176,7 +178,7 @@ const TwoFactorChallenge = () => {
                 <button
                   type="button"
                   onClick={() => setShowBackupCode(true)}
-                  className="block w-full text-sm text-blue-600 hover:text-blue-700"
+                  className="block w-full text-sm text-primary hover:opacity-90"
                 >
                   Use a backup code instead
                 </button>
@@ -184,7 +186,7 @@ const TwoFactorChallenge = () => {
                   type="button"
                   onClick={handleUseEmailCode}
                   disabled={emailOtpSending}
-                  className="block w-full text-sm text-blue-600 hover:text-blue-700 disabled:opacity-50"
+                  className="block w-full text-sm text-primary hover:opacity-90 disabled:opacity-50"
                 >
                   {emailOtpSending ? 'Sending...' : 'Send code to my email instead'}
                 </button>
@@ -193,7 +195,7 @@ const TwoFactorChallenge = () => {
           ) : (
             <form onSubmit={handleVerifyBackupCode} className="space-y-4">
               <div>
-                <label htmlFor="backupCode" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="backupCode" className="block text-sm font-medium text-textSecondary dark:text-textSecondary-dark mb-1">
                   Backup Code
                 </label>
                 <input
@@ -203,7 +205,7 @@ const TwoFactorChallenge = () => {
                   onChange={(e) => setBackupCode(e.target.value)}
                   required
                   autoFocus
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-center font-mono"
+                  className="w-full px-3 py-2 border border-border dark:border dark:border-border-dark rounded-lg bg-surface dark:bg-surface-dark focus:outline-none focus:ring-2 focus:ring-primary text-center font-mono"
                   placeholder="Enter backup code"
                 />
               </div>
@@ -214,15 +216,15 @@ const TwoFactorChallenge = () => {
                   type="checkbox"
                   checked={trustDevice}
                   onChange={(e) => setTrustDevice(e.target.checked)}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-primary focus:ring-primary border-border dark:border-border-dark rounded"
                 />
-                <label htmlFor="trustDeviceBackup" className="ml-2 block text-sm text-gray-700">
+                <label htmlFor="trustDeviceBackup" className="ml-2 block text-sm text-textSecondary dark:text-textSecondary-dark">
                   Trust this device for 30 days
                 </label>
               </div>
 
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                <div className="bg-status-error-bg dark:bg-status-error-bg-dark text-status-error dark:text-status-error-dark px-4 py-3 rounded">
                   {error}
                 </div>
               )}
@@ -230,7 +232,7 @@ const TwoFactorChallenge = () => {
               <button
                 type="submit"
                 disabled={loading || !backupCode}
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-primary text-white dark:text-primary-on-dark py-2 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Verifying...' : 'Verify Backup Code'}
               </button>
@@ -243,7 +245,7 @@ const TwoFactorChallenge = () => {
                     setBackupCode('');
                     setError('');
                   }}
-                  className="text-sm text-blue-600 hover:text-blue-700"
+                  className="text-sm text-primary hover:opacity-90"
                 >
                   Use authenticator code instead
                 </button>
@@ -254,17 +256,17 @@ const TwoFactorChallenge = () => {
           <div className="mt-6 text-center">
             <button
               onClick={() => {
-                sessionStorage.removeItem(PENDING_2FA_EMAIL_KEY);
+                clearPending2FAEmail();
                 navigate('/login');
               }}
-              className="text-sm text-gray-600 hover:text-gray-700"
+              className="text-sm text-textSecondary dark:text-textSecondary-dark hover:text-textPrimary dark:hover:text-textPrimary-dark"
             >
               Back to login
             </button>
           </div>
         </div>
 
-        <div className="mt-4 text-center text-sm text-gray-600">
+        <div className="mt-4 text-center text-sm text-textSecondary dark:text-textSecondary-dark">
           <p>This page will timeout after 5 minutes for security.</p>
         </div>
       </div>

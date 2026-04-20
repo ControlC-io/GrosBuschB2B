@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getAdminApiBase } from '../lib/apiBase';
 
 interface AuditLog {
   id: string;
@@ -8,7 +9,7 @@ interface AuditLog {
   timestamp: string;
 }
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
+const API_BASE = getAdminApiBase();
 const ADMIN_SECRET = import.meta.env.VITE_ADMIN_SECRET || '';
 
 const LogsTab = () => {

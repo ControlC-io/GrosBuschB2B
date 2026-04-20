@@ -10,7 +10,6 @@ interface Service {
   description: string;
   status: ServiceStatus;
   message: string;
-  detail?: string;
 }
 
 const StatusDot = ({ status }: { status: ServiceStatus }) => {
@@ -181,17 +180,17 @@ const Home = () => {
   const anyError = services.some(s => s.status === 'error');
 
   return (
-    <div className="min-h-screen">
+    <div className="bg-background dark:bg-background-dark text-textPrimary dark:text-textPrimary-dark min-h-screen">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
 
         {/* ── Header info ── */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-textPrimary dark:text-textPrimary-dark tracking-tight">
-              MyR<span className="text-secondary"> Panel</span>
+              App<span className="text-primary">Template</span>
             </h1>
             <p className="text-sm text-textSecondary dark:text-textSecondary-dark mt-0.5">
-              Management platform with segmented network architecture
+              Full-stack starter template with secure DMZ architecture
             </p>
           </div>
           <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium ${
@@ -209,13 +208,13 @@ const Home = () => {
         </div>
 
         {/* ── Services Status ── */}
-        <div className="bg-surface dark:bg-surface-dark border border-border dark:border-border-dark rounded-2xl shadow-sm p-6">
+        <div className="bg-surface dark:bg-surface-dark border border-border dark:border dark:border-border-dark rounded-2xl shadow-sm p-6">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-sm font-semibold text-textSecondary dark:text-textSecondary-dark uppercase tracking-wider">Services Status</h2>
             <button
               onClick={checkServices}
               disabled={checking}
-              className="flex items-center gap-1.5 text-xs text-secondary hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-1.5 text-xs text-primary hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <svg className={`w-3.5 h-3.5 ${checking ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -240,9 +239,9 @@ const Home = () => {
           <div className="grid grid-cols-1 gap-3">
             <Link
               to="/dashboard"
-              className="flex items-center gap-3 p-4 bg-surface dark:bg-surface-dark border border-border dark:border-border-dark rounded-xl shadow-sm hover:border-secondary hover:shadow-md transition-all group"
+              className="flex items-center gap-3 p-4 bg-surface dark:bg-surface-dark border border-border dark:border dark:border-border-dark rounded-xl shadow-sm hover:border-primary hover:shadow-md transition-all group"
             >
-              <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-primary-on-light dark:text-primary-on-dark group-hover:opacity-90 transition-colors">
+              <div className="w-9 h-9 rounded-lg bg-primary dark:bg-icon-dark dark:border dark:border-border-dark flex items-center justify-center text-primary-on-light dark:text-primary-on-dark group-hover:opacity-90 transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                 </svg>
@@ -256,7 +255,7 @@ const Home = () => {
         )}
 
         {/* ── Features ── */}
-        <div className="bg-surface dark:bg-surface-dark border border-border dark:border-border-dark rounded-2xl shadow-sm p-6">
+        <div className="bg-surface dark:bg-surface-dark border border-border dark:border dark:border-border-dark rounded-2xl shadow-sm p-6">
           <h2 className="text-sm font-semibold text-textSecondary dark:text-textSecondary-dark uppercase tracking-wider mb-5">Features</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
@@ -279,7 +278,7 @@ const Home = () => {
         </div>
 
         {/* ── Architecture diagram ── */}
-        <div className="bg-surface dark:bg-surface-dark border border-border dark:border-border-dark rounded-2xl shadow-sm p-6">
+        <div className="bg-surface dark:bg-surface-dark border border-border dark:border dark:border-border-dark rounded-2xl shadow-sm p-6">
           <h2 className="text-sm font-semibold text-textSecondary dark:text-textSecondary-dark uppercase tracking-wider mb-6">Architecture Diagram</h2>
 
           <div className="flex flex-col items-center gap-0 text-xs">
@@ -306,11 +305,11 @@ const Home = () => {
             <div className="w-full border border-blue-200 bg-blue-50 rounded-xl p-4">
               <p className="text-blue-500 font-bold uppercase tracking-widest text-xs mb-3">DMZ Zone</p>
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-surface dark:bg-surface-dark border border-blue-100 rounded-lg px-4 py-2.5 text-center">
+                <div className="bg-surface dark:bg-surface-dark border border-blue-100 dark:border-border-dark rounded-lg px-4 py-2.5 text-center">
                   <p className="font-semibold text-textPrimary dark:text-textPrimary-dark">NGINX</p>
                   <p className="text-textSecondary dark:text-textSecondary-dark text-xs mt-0.5">Reverse Proxy</p>
                 </div>
-                <div className="bg-surface dark:bg-surface-dark border border-blue-100 rounded-lg px-4 py-2.5 text-center">
+                <div className="bg-surface dark:bg-surface-dark border border-blue-100 dark:border-border-dark rounded-lg px-4 py-2.5 text-center">
                   <p className="font-semibold text-textPrimary dark:text-textPrimary-dark">React + Vite</p>
                   <p className="text-textSecondary dark:text-textSecondary-dark text-xs mt-0.5">Frontend</p>
                 </div>
@@ -329,11 +328,11 @@ const Home = () => {
             <div className="w-full border border-indigo-200 bg-indigo-50 rounded-xl p-4">
               <p className="text-indigo-500 font-bold uppercase tracking-widest text-xs mb-3">Internal Network</p>
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-surface dark:bg-surface-dark border border-indigo-100 rounded-lg px-4 py-2.5 text-center">
+                <div className="bg-surface dark:bg-surface-dark border border-indigo-100 dark:border-border-dark rounded-lg px-4 py-2.5 text-center">
                   <p className="font-semibold text-textPrimary dark:text-textPrimary-dark">Express.js</p>
                   <p className="text-textSecondary dark:text-textSecondary-dark text-xs mt-0.5">REST API</p>
                 </div>
-                <div className="bg-surface dark:bg-surface-dark border border-indigo-100 rounded-lg px-4 py-2.5 text-center">
+                <div className="bg-surface dark:bg-surface-dark border border-indigo-100 dark:border-border-dark rounded-lg px-4 py-2.5 text-center">
                   <p className="font-semibold text-textPrimary dark:text-textPrimary-dark">Better Auth</p>
                   <p className="text-textSecondary dark:text-textSecondary-dark text-xs mt-0.5">Authentication</p>
                 </div>
@@ -349,14 +348,14 @@ const Home = () => {
             </div>
 
             {/* Data layer */}
-            <div className="w-full border border-purple-200 bg-purple-50 rounded-xl p-4">
-              <p className="text-purple-500 font-bold uppercase tracking-widest text-xs mb-3">Data Layer</p>
+            <div className="w-full border border-blue-200 bg-blue-50 dark:bg-surface-dark dark:border-border-dark rounded-xl p-4">
+              <p className="text-blue-600 dark:text-blue-400 font-bold uppercase tracking-widest text-xs mb-3">Data Layer</p>
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-surface dark:bg-surface-dark border border-purple-100 rounded-lg px-4 py-2.5 text-center">
+                <div className="bg-surface dark:bg-surface-dark border border-blue-100 dark:border-border-dark rounded-lg px-4 py-2.5 text-center">
                   <p className="font-semibold text-textPrimary dark:text-textPrimary-dark">PostgreSQL</p>
                   <p className="text-textSecondary dark:text-textSecondary-dark text-xs mt-0.5">Database</p>
                 </div>
-                <div className="bg-surface dark:bg-surface-dark border border-purple-100 rounded-lg px-4 py-2.5 text-center">
+                <div className="bg-surface dark:bg-surface-dark border border-blue-100 dark:border-border-dark rounded-lg px-4 py-2.5 text-center">
                   <p className="font-semibold text-textPrimary dark:text-textPrimary-dark">Prisma ORM</p>
                   <p className="text-textSecondary dark:text-textSecondary-dark text-xs mt-0.5">Access layer</p>
                 </div>
@@ -371,7 +370,7 @@ const Home = () => {
             {[
               { color: 'bg-blue-200', label: 'Exposed DMZ' },
               { color: 'bg-indigo-200', label: 'Internal network' },
-              { color: 'bg-purple-200', label: 'Isolated data' },
+              { color: 'bg-blue-300', label: 'Isolated data' },
             ].map((l) => (
               <span key={l.label} className="flex items-center gap-1.5 text-xs text-textSecondary dark:text-textSecondary-dark">
                 <span className={`w-2.5 h-2.5 rounded-sm ${l.color}`} />
@@ -382,7 +381,7 @@ const Home = () => {
         </div>
 
         {/* ── Tech stack ── */}
-        <div className="bg-surface dark:bg-surface-dark border border-border dark:border-border-dark rounded-2xl shadow-sm p-6">
+        <div className="bg-surface dark:bg-surface-dark border border-border dark:border dark:border-border-dark rounded-2xl shadow-sm p-6">
           <h2 className="text-sm font-semibold text-textSecondary dark:text-textSecondary-dark uppercase tracking-wider mb-5">Technology Stack</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
@@ -393,11 +392,11 @@ const Home = () => {
               { name: 'Express.js', role: 'REST API', tag: 'Backend', tagColor: 'bg-gray-100 text-gray-600' },
               { name: 'Better Auth', role: '2FA Authentication', tag: 'Backend', tagColor: 'bg-gray-100 text-gray-600' },
               { name: 'Prisma ORM', role: 'Typed data access', tag: 'Backend', tagColor: 'bg-gray-100 text-gray-600' },
-              { name: 'PostgreSQL', role: 'Relational database', tag: 'Data', tagColor: 'bg-purple-50 text-purple-700' },
+              { name: 'PostgreSQL', role: 'Relational database', tag: 'Data', tagColor: 'bg-blue-50 text-blue-700' },
               { name: 'NGINX', role: 'Reverse proxy and TLS', tag: 'Infra', tagColor: 'bg-green-50 text-green-700' },
               { name: 'Docker Compose', role: 'Local orchestration', tag: 'Infra', tagColor: 'bg-green-50 text-green-700' },
               { name: 'Node.js LTS', role: 'Server runtime', tag: 'Backend', tagColor: 'bg-gray-100 text-gray-600' },
-              { name: 'Prisma Migrate', role: 'Migration control', tag: 'Data', tagColor: 'bg-purple-50 text-purple-700' },
+              { name: 'Prisma Migrate', role: 'Migration control', tag: 'Data', tagColor: 'bg-blue-50 text-blue-700' },
             ].map((tech) => (
               <div
                 key={tech.name}
@@ -418,7 +417,7 @@ const Home = () => {
         {/* ── Footer info ── */}
         <div className="text-center pb-4">
           <p className="text-xs text-textSecondary dark:text-textSecondary-dark">
-            MyR Panel · Secure architecture with network segmentation · React + Express + PostgreSQL + NGINX
+            AppTemplate · Secure architecture with network segmentation · React + Express + PostgreSQL + NGINX
           </p>
         </div>
 
