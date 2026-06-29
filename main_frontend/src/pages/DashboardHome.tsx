@@ -21,6 +21,15 @@ const ProfileIcon = () => (
   </svg>
 );
 
+const FileIcon = () => (
+  <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M14 3H7.5A2.5 2.5 0 0 0 5 5.5v13A2.5 2.5 0 0 0 7.5 21h9A2.5 2.5 0 0 0 19 18.5V8z" />
+    <path d="M14 3v5h5" />
+    <path d="M9 13h6" />
+    <path d="M9 17h4" />
+  </svg>
+);
+
 const PuzzleIcon = () => (
   <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M9 3h6v3a2 2 0 0 0 4 0V3h.5A1.5 1.5 0 0 1 21 4.5v5h-3a2 2 0 0 0 0 4h3v5.5A1.5 1.5 0 0 1 19.5 21H4.5A1.5 1.5 0 0 1 3 19.5V14h3a2 2 0 0 0 0-4H3V4.5A1.5 1.5 0 0 1 4.5 3H9z" />
@@ -52,6 +61,7 @@ const getIconForLink = (id: DashboardLink['id']) => {
   switch (id) {
     case 'counter': return <CounterIcon />;
     case 'profile': return <ProfileIcon />;
+    case 'documents': return <FileIcon />;
     case 'feature-one': return <PuzzleIcon />;
     case 'feature-two': return <LayoutIcon />;
     case 'feature-three': return <StarIcon />;
@@ -63,7 +73,7 @@ const getIconForLink = (id: DashboardLink['id']) => {
 const links: DashboardLink[] = [
   { id: 'counter', titleKey: 'dashboard.links.counter', to: '/dashboard' },
   { id: 'profile', titleKey: 'dashboard.links.profile', to: '/info' },
-  { id: 'feature-one', titleKey: 'dashboard.links.featureOne', to: '/features/example-one' },
+  { id: 'documents', titleKey: 'dashboard.links.documents', to: '/documents' },
   { id: 'feature-two', titleKey: 'dashboard.links.featureTwo', to: '/features/example-two' },
   { id: 'feature-three', titleKey: 'dashboard.links.featureThree', to: '/features/example-three' },
   { id: 'admin', titleKey: 'dashboard.links.admin', to: 'http://localhost:8080' },

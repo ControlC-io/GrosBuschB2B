@@ -31,6 +31,14 @@ docker compose exec backend npm run seed   # optional test user
 | http://localhost/api/docs | Swagger |
 | http://localhost:5555 | Prisma Studio |
 
+## Deployment (Coolify)
+
+Production deploys use `docker-compose.coolify.yml` on [Coolify](https://coolify.io).
+
+See **[docs/coolify-deployment.md](docs/coolify-deployment.md)** for the full guide (domains, env vars, first deploy bootstrap, gotchas).
+
+Quick reference: copy `.env.production.sample`, set secrets, point Coolify to `/docker-compose.coolify.yml`, assign domains to the `nginx` service.
+
 ## Project Structure
 
 ```

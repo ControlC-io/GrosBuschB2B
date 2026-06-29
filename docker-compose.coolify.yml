@@ -1,0 +1,157 @@
+# Docker Compose for Coolify deployment.
+#
+# Key differences from docker-compose.yml:
+#   - Production images (compiled binaries, static frontends)
+#   - No source code volume mounts
+#   - No host port bindings (Traefik owns 80/443)
+#   - nginx exposes port 80 for Coolify routing
+#   - Memory limits per service
+#   - internal_net isolated from dmz_net (DMZ pattern preserved)
+#
+# Usage in Coolify: set Docker Compose Location to /docker-compose.coolify.yml
+
+networks:
+  dmz_net:
+    driver: bridge
+  internal_net:
+    driver: bridge
+    internal: true
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-apptemplate}
+    command: >
+      postgres
+        -c shared_buffers=256MB
+        -c effective_cache_size=1GB
+        -c work_mem=16MB
+        -c maintenance_work_mem=128MB
+        -c max_connections=50
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-apptemplate}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  email_service:
+    build:
+      context: ./email_service
+      dockerfile: Dockerfile.coolify
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      EMAIL_SERVICE_PORT: ${EMAIL_SERVICE_PORT:-3001}
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY}
+      SENDGRID_FROM_EMAIL: ${SENDGRID_FROM_EMAIL}
+      EMAIL_SERVICE_SECRET: ${EMAIL_SERVICE_SECRET}
+    networks:
+      - internal_net
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.coolify
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: ${PORT:-3000}
+      DATABASE_URL: ${DATABASE_URL}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+      TRUSTED_ORIGINS: ${TRUSTED_ORIGINS}
+      ADMIN_SECRET: ${ADMIN_SECRET}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
+      EMAIL_SERVICE_URL: ${EMAIL_SERVICE_URL:-http://email_service:3001}
+      EMAIL_SERVICE_SECRET: ${EMAIL_SERVICE_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
+      NODE_OPTIONS: --max-old-space-size=512
+    depends_on:
+      postgres:
+        condition: service_healthy
+      email_service:
+        condition: service_started
+    networks:
+      - internal_net
+    deploy:
+      resources:
+        limits:
+          memory: 768M
+
+  main_frontend:
+    build:
+      context: .
+      dockerfile: main_frontend/Dockerfile.coolify
+      args:
+        VITE_API_URL: ${VITE_API_URL:-}
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-}
+        VITE_API_KEY: ${VITE_API_KEY:-}
+        VITE_API_BEARER_TOKEN: ${VITE_API_BEARER_TOKEN:-}
+    restart: unless-stopped
+    networks:
+      - dmz_net
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+
+  admin_frontend:
+    build:
+      context: .
+      dockerfile: admin_frontend/Dockerfile.coolify
+      args:
+        VITE_API_URL: ${VITE_API_URL:-}
+        VITE_ADMIN_SECRET: ${VITE_ADMIN_SECRET}
+    restart: unless-stopped
+    networks:
+      - dmz_net
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    restart: unless-stopped
+    expose:
+      - "80"
+    environment:
+      MAIN_APP_DOMAIN: ${MAIN_APP_DOMAIN}
+      ADMIN_APP_DOMAIN: ${ADMIN_APP_DOMAIN}
+      EXTERNAL_API_UPSTREAM: ${EXTERNAL_API_UPSTREAM:-127.0.0.1:1}
+    depends_on:
+      - backend
+      - main_frontend
+      - admin_frontend
+    networks:
+      - dmz_net
+      - internal_net
+    deploy:
+      resources:
+        limits:
+          memory: 32M
+
+volumes:
+  postgres_data:

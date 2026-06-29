@@ -31,6 +31,28 @@ services:
       retries: 5
       start_period: 5s
 
+  minio:
+    image: minio/minio:latest
+    container_name: minio_storage
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      MINIO_API_CORS_ALLOW_ORIGIN: "*"
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      - internal_net
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   backend:
     build:
       context: ./backend
@@ -47,6 +69,11 @@ services:
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
       EMAIL_SERVICE_URL: ${EMAIL_SERVICE_URL:-http://email_service:3001}
       EMAIL_SERVICE_SECRET: ${EMAIL_SERVICE_SECRET}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT:-http://minio:9000}
+      MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-http://127.0.0.1:9000}
+      MINIO_ACCESS_KEY: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      MINIO_BUCKET: ${MINIO_BUCKET:-apptemplate-documents}
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -57,6 +84,8 @@ services:
       - internal_net
     depends_on:
       postgres:
+        condition: service_healthy
+      minio:
         condition: service_healthy
       email_service:
         condition: service_started
@@ -130,3 +159,4 @@ services:
 
 volumes:
   postgres_data:
+  minio_data:

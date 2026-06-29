@@ -194,10 +194,35 @@
     "links": {
       "counter": "Counter Demo",
       "profile": "Profile",
+      "documents": "Documents",
       "featureOne": "Feature One",
       "featureTwo": "Feature Two",
       "featureThree": "Feature Three",
       "admin": "Admin Panel"
+    }
+  },
+  "documents": {
+    "title": "Documents",
+    "subtitle": "Upload and manage your files securely.",
+    "uploadTitle": "Upload a file",
+    "uploadHint": "Supported formats: PDF, DOCX, PNG, JPEG. Maximum size: 50 MB.",
+    "uploadButton": "Choose file",
+    "uploading": "Uploading...",
+    "listTitle": "Your documents",
+    "refresh": "Refresh",
+    "empty": "No documents yet. Upload your first file above.",
+    "open": "Open",
+    "opening": "Opening...",
+    "delete": "Delete",
+    "confirmDelete": "Delete \"{{name}}\"? This cannot be undone.",
+    "errors": {
+      "noJwt": "No JWT token available. Please log out and log in again.",
+      "loadFailed": "Failed to load documents",
+      "uploadFailed": "Failed to upload document",
+      "openFailed": "Failed to open document",
+      "deleteFailed": "Failed to delete document",
+      "invalidType": "Unsupported file type.",
+      "tooLarge": "File exceeds the 50 MB limit."
     }
   },
   "components": {

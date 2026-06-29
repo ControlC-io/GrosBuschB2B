@@ -194,10 +194,35 @@
     "links": {
       "counter": "Démo compteur",
       "profile": "Profil",
+      "documents": "Documents",
       "featureOne": "Fonctionnalité 1",
       "featureTwo": "Fonctionnalité 2",
       "featureThree": "Fonctionnalité 3",
       "admin": "Panneau admin"
+    }
+  },
+  "documents": {
+    "title": "Documents",
+    "subtitle": "Téléversez et gérez vos fichiers en toute sécurité.",
+    "uploadTitle": "Téléverser un fichier",
+    "uploadHint": "Formats acceptés : PDF, DOCX, PNG, JPEG. Taille maximale : 50 Mo.",
+    "uploadButton": "Choisir un fichier",
+    "uploading": "Téléversement...",
+    "listTitle": "Vos documents",
+    "refresh": "Actualiser",
+    "empty": "Aucun document pour le moment. Téléversez votre premier fichier ci dessus.",
+    "open": "Ouvrir",
+    "opening": "Ouverture...",
+    "delete": "Supprimer",
+    "confirmDelete": "Supprimer « {{name}} » ? Cette action est irréversible.",
+    "errors": {
+      "noJwt": "Aucun jeton JWT disponible. Veuillez vous déconnecter puis vous reconnecter.",
+      "loadFailed": "Impossible de charger les documents",
+      "uploadFailed": "Échec du téléversement",
+      "openFailed": "Impossible d'ouvrir le document",
+      "deleteFailed": "Impossible de supprimer le document",
+      "invalidType": "Type de fichier non pris en charge.",
+      "tooLarge": "Le fichier dépasse la limite de 50 Mo."
     }
   },
   "components": {

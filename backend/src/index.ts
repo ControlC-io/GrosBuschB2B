@@ -7,9 +7,11 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
+import { S3Client, HeadBucketCommand, CreateBucketCommand, PutBucketCorsCommand } from '@aws-sdk/client-s3';
 import prisma from './lib/prisma';
 import { loadAuthConfig } from './lib/auth';
 import { swaggerSpec } from './lib/swagger';
+import { checkMinioHealth } from './lib/storage';
 import { jwtAuth } from './middleware/jwtAuth';
 import { adminAuth } from './middleware/adminAuth';
 import authRouter from './routes/auth';
@@ -17,6 +19,8 @@ import betterAuthProxyRouter from './routes/betterAuthProxy';
 import adminRouter from './routes/admin';
 import rolesRouter from './routes/roles';
 import counterRouter from './routes/counter';
+import uploadRouter from './routes/upload';
+import documentsRouter from './routes/documents';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -79,7 +83,9 @@ app.get('/api/health', async (_req, res) => {
     dbLatencyMs = Date.now() - dbStart;
   }
 
-  const allOk = dbOk;
+  const minioHealth = await checkMinioHealth();
+
+  const allOk = dbOk && minioHealth.ok;
 
   res.status(allOk ? 200 : 503).json({
     status: allOk ? 'ok' : 'degraded',
@@ -90,6 +96,11 @@ app.get('/api/health', async (_req, res) => {
         ok: dbOk,
         latencyMs: dbLatencyMs,
         message: dbOk ? `Connected (${dbLatencyMs}ms)` : 'Connection failed',
+      },
+      minio: {
+        ok: minioHealth.ok,
+        latencyMs: minioHealth.latencyMs,
+        message: minioHealth.message,
       },
     },
   });
@@ -109,6 +120,10 @@ app.use(jwtAuth);
 // ─── Counter Routes (JWT protected) ──────────────────────────────────────────
 app.use('/api/counter', counterRouter);
 
+// ─── Document Upload & Storage Routes (JWT protected) ─────────────────────────
+app.use('/api/upload', uploadRouter);
+app.use('/api/documents', documentsRouter);
+
 // ─── Admin API Routes (x-admin-secret auth; jwtAuth skips /api/admin via PUBLIC_ROUTES) ─
 app.use('/api/admin', adminAuth);
 app.use('/api/admin', adminRouter);
@@ -125,10 +140,57 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
   res.status(500).json({ error: 'Internal server error' });
 });
 
+async function ensureMinioReady(): Promise<void> {
+  const endpoint = process.env.MINIO_ENDPOINT ?? 'http://minio:9000';
+  const bucket = process.env.MINIO_BUCKET ?? 'apptemplate-documents';
+  const client = new S3Client({
+    endpoint,
+    region: 'us-east-1',
+    credentials: {
+      accessKeyId: process.env.MINIO_ACCESS_KEY ?? 'minioadmin',
+      secretAccessKey: process.env.MINIO_SECRET_KEY ?? 'minioadmin',
+    },
+    forcePathStyle: true,
+    requestChecksumCalculation: 'WHEN_REQUIRED',
+    responseChecksumValidation: 'WHEN_REQUIRED',
+  });
+
+  try {
+    await client.send(new HeadBucketCommand({ Bucket: bucket }));
+    console.log(`MinIO: bucket "${bucket}" ready`);
+  } catch {
+    try {
+      await client.send(new CreateBucketCommand({ Bucket: bucket }));
+      console.log(`MinIO: created bucket "${bucket}"`);
+    } catch (createErr) {
+      console.warn(`MinIO: could not create bucket "${bucket}":`, createErr instanceof Error ? createErr.message : createErr);
+    }
+  }
+
+  try {
+    await client.send(new PutBucketCorsCommand({
+      Bucket: bucket,
+      CORSConfiguration: {
+        CORSRules: [{
+          AllowedHeaders: ['*'],
+          AllowedMethods: ['GET', 'PUT', 'POST', 'DELETE', 'HEAD'],
+          AllowedOrigins: ['*'],
+          ExposeHeaders: ['ETag'],
+          MaxAgeSeconds: 3600,
+        }],
+      },
+    }));
+    console.log(`MinIO: CORS configured on bucket "${bucket}"`);
+  } catch (corsErr) {
+    console.warn(`MinIO: could not set CORS on "${bucket}":`, corsErr instanceof Error ? corsErr.message : corsErr);
+  }
+}
+
 // ─── Start Server ─────────────────────────────────────────────────────────────
 const startServer = async () => {
   try {
     await loadAuthConfig();
+    await ensureMinioReady();
 
     app.listen(PORT, () => {
       console.log(`Backend server running on port ${PORT}`);

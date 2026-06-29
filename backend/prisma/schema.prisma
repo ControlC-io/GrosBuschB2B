@@ -28,6 +28,7 @@ model User {
   sessions          Session[]
   twoFactor         TwoFactor?
   userRoles         UserRole[]
+  documents         Document[]
   
   @@map("users")
 }
@@ -157,4 +158,19 @@ model AuditLog {
   timestamp DateTime @default(now())
   
   @@map("audit_logs")
+}
+
+model Document {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  filename  String
+  filePath  String
+  mimeType  String
+  fileSize  BigInt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("documents")
 }
