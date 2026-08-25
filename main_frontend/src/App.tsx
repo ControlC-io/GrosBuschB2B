@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import TwoFactorChallenge from "./pages/TwoFactorChallenge";
 import EmailOtpChallenge from "./pages/EmailOtpChallenge";
 import Navbar from "./components/Navbar";
+import AppShell from "./components/AppShell";
 import RequireAuth from "./components/RequireAuth";
 import DashboardHome from "./pages/DashboardHome";
 import Catalog from "./pages/Catalog";
@@ -21,10 +22,11 @@ const App = () => {
       <BrowserRouter>
         <AuthProvider>
           <CartProvider>
-          <div className="min-h-screen flex flex-col bg-background dark:bg-background-dark text-textPrimary dark:text-textPrimary-dark font-sans">
-            <Navbar />
-            <main className="flex-1">
-              <Routes>
+            <div className="min-h-screen flex flex-col bg-background dark:bg-background-dark text-textPrimary dark:text-textPrimary-dark font-sans">
+              <Navbar />
+              <AppShell>
+                <main>
+                  <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/service-status" element={<Home />} />
                 <Route path="/login" element={<Login />} />
@@ -50,9 +52,10 @@ const App = () => {
                     element={<PlaceholderPage titleKey="pages.featureThree.title" />}
                   />
                 </Route>
-              </Routes>
-            </main>
-          </div>
+                  </Routes>
+                </main>
+              </AppShell>
+            </div>
           </CartProvider>
         </AuthProvider>
       </BrowserRouter>

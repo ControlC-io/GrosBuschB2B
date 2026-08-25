@@ -5,7 +5,31 @@
     "menu": "Menu",
     "dashboard": "Dashboard",
     "catalog": "Catalog",
-    "features": "Features"
+    "features": "Features",
+    "tagline": "Fruits & Vegetables",
+    "account": "My Account",
+    "cart": "Cart",
+    "theme": "Theme",
+    "searchSubmit": "Search",
+    "quickLabel": "Quick links",
+    "quick": {
+      "new": "New",
+      "promos": "Promos",
+      "catalog": "Catalog"
+    },
+    "categories": {
+      "fruit": "Fruit",
+      "vegetables": "Vegetables",
+      "freshCut": "Fresh Cut",
+      "driedFruit": "Dried Fruit",
+      "grosbusch": "Grosbusch",
+      "local": "Local",
+      "organic": "Organic",
+      "juices": "Juices",
+      "prePacked": "Pre-packed",
+      "herbs": "Herbs",
+      "gifts": "Gifts"
+    }
   },
   "auth": {
     "signedInAs": "Signed in as",
@@ -206,7 +230,7 @@
   "catalog": {
     "title": "Catalog",
     "subtitle": "Browse the online assortment and filter by universe, origin and label.",
-    "searchPlaceholder": "Search for a product",
+    "searchPlaceholder": "Product name or item number...",
     "deliverySlot": "Delivery",
     "categoriesLabel": "Product universes",
     "allCategories": "All products",

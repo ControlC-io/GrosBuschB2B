@@ -4,8 +4,8 @@ import { useCart } from '../../context/CartProvider';
 import { formatPrice } from '../../utils/format';
 
 /**
- * Cart panel shown only when it contains articles. Sticky on large screens so
- * the summary stays in view while browsing the catalog.
+ * Cart panel shown only when it contains articles. Mounted globally so the
+ * summary stays visible on every page, not only on the catalog.
  */
 const CartSidebar = () => {
   const { t, i18n } = useTranslation('common');
@@ -13,7 +13,7 @@ const CartSidebar = () => {
   const belowMinimum = subtotal < ORDER_MINIMUM_EUR;
 
   return (
-    <aside className="flex h-full max-h-[calc(100vh-6rem)] flex-col rounded-lg border border-border dark:border-border-dark bg-surface dark:bg-surface-dark">
+    <aside className="flex h-full min-h-0 w-full flex-col rounded-lg border border-border dark:border-border-dark bg-surface dark:bg-surface-dark shadow-sm">
       <header className="space-y-1 border-b border-border dark:border-border-dark p-4">
         <h2 className="text-sm font-bold text-textPrimary dark:text-textPrimary-dark">
           {t('catalog.cart.title')}

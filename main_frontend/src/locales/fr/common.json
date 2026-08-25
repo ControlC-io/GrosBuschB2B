@@ -5,7 +5,31 @@
     "menu": "Menu",
     "dashboard": "Tableau de bord",
     "catalog": "Catalogue",
-    "features": "Fonctionnalités"
+    "features": "Fonctionnalités",
+    "tagline": "Fruits & Vegetables",
+    "account": "Mon compte",
+    "cart": "Panier",
+    "theme": "Thème",
+    "searchSubmit": "Rechercher",
+    "quickLabel": "Accès rapides",
+    "quick": {
+      "new": "New",
+      "promos": "Promos",
+      "catalog": "Catalog"
+    },
+    "categories": {
+      "fruit": "Fruit",
+      "vegetables": "Vegetables",
+      "freshCut": "Fresh Cut",
+      "driedFruit": "Dried Fruit",
+      "grosbusch": "Grosbusch",
+      "local": "Local",
+      "organic": "Organic",
+      "juices": "Juices",
+      "prePacked": "Pre-packed",
+      "herbs": "Herbs",
+      "gifts": "Gifts"
+    }
   },
   "auth": {
     "signedInAs": "Connecté en tant que",
@@ -206,7 +230,7 @@
   "catalog": {
     "title": "Catalogue",
     "subtitle": "Parcourez les articles en ligne, filtrez par univers, origine et label.",
-    "searchPlaceholder": "Rechercher un article",
+    "searchPlaceholder": "Nom du produit ou numéro d'article...",
     "deliverySlot": "Livraison",
     "categoriesLabel": "Univers produits",
     "allCategories": "Tous les articles",

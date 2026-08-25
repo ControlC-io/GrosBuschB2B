@@ -73,8 +73,31 @@ const parsePositiveInt = (raw: unknown, fallback: number, max: number): number =
 const buildSearchWhere = (search: string): Prisma.ProductWhereInput =>
   search.length > 0 ? { name: { contains: search, mode: 'insensitive' } } : {};
 
+type ProductFilterScope = {
+  category?: string;
+  origins?: string[];
+  tags?: string[];
+  search?: string;
+};
+
+const buildProductWhere = (scope: ProductFilterScope): Prisma.ProductWhereInput => ({
+  ...buildSearchWhere(scope.search ?? ''),
+  ...(scope.category && scope.category.length > 0 ? { category: scope.category } : {}),
+  ...(scope.origins && scope.origins.length > 0 ? { origin: { in: scope.origins } } : {}),
+  ...(scope.tags && scope.tags.length > 0 ? { tags: { hasSome: scope.tags } } : {}),
+});
+
 const toFacets = (groups: Facet[]): Facet[] =>
   [...groups].sort((a, b) => a.value.localeCompare(b.value));
+
+/** Keep currently selected values visible so a checkbox cannot vanish while still checked. */
+const withSelectedFacets = (facets: Facet[], selected: string[]): Facet[] => {
+  const present = new Set(facets.map((facet) => facet.value));
+  const extras = selected
+    .filter((value) => !present.has(value))
+    .map((value) => ({ value, count: 0 }));
+  return toFacets([...facets, ...extras]);
+};
 
 /**
  * @swagger
@@ -158,12 +181,7 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
     const page = parsePositiveInt(req.query.page, 1, Number.MAX_SAFE_INTEGER);
     const pageSize = parsePositiveInt(req.query.pageSize, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE);
 
-    const where: Prisma.ProductWhereInput = {
-      ...buildSearchWhere(search),
-      ...(category.length > 0 ? { category } : {}),
-      ...(origins.length > 0 ? { origin: { in: origins } } : {}),
-      ...(tags.length > 0 ? { tags: { hasSome: tags } } : {}),
-    };
+    const where = buildProductWhere({ category, origins, tags, search });
 
     const orderBy = isSortKey(sortParam) ? SORT_CLAUSES[sortParam] : SORT_CLAUSES.name;
 
@@ -194,7 +212,7 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
  * /api/products/facets:
  *   get:
  *     summary: Available filter facets with counts
- *     description: Returns the selectable categories, origins and tags with the number of matching products. Category counts always cover the whole catalog so the navigation tabs stay stable, while origin and tag counts are scoped to the selected category. Public, no JWT required.
+ *     description: Returns selectable categories, origins and tags with counts. Each facet group is computed from the other active filters, so checking Belgium only lists labels present on Belgian products, and checking a label only lists origins that carry it. Public, no JWT required.
  *     tags:
  *       - Products
  *     parameters:
@@ -202,7 +220,17 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
  *         name: category
  *         schema:
  *           type: string
- *         description: Scopes the origin and tag counts to a single category
+ *         description: Scopes origin and tag counts to a single category
+ *       - in: query
+ *         name: origins
+ *         schema:
+ *           type: string
+ *         description: Comma separated origins used when counting tags and categories
+ *       - in: query
+ *         name: tags
+ *         schema:
+ *           type: string
+ *         description: Comma separated tags used when counting origins and categories
  *       - in: query
  *         name: search
  *         schema:
@@ -234,25 +262,29 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
 router.get('/facets', async (req: Request, res: Response): Promise<void> => {
   try {
     const category = parseText(req.query.category);
+    const origins = parseList(req.query.origins);
+    const tags = parseList(req.query.tags);
     const search = parseText(req.query.search);
 
-    const searchWhere = buildSearchWhere(search);
-    const scopedWhere: Prisma.ProductWhereInput =
-      category.length > 0 ? { ...searchWhere, category } : searchWhere;
+    // Each group ignores its own selection so remaining options stay comparable,
+    // while still applying the other filters (Belgium narrows labels, Bio narrows origins).
+    const categoryWhere = buildProductWhere({ search, origins, tags });
+    const originWhere = buildProductWhere({ search, category, tags });
+    const tagWhere = buildProductWhere({ search, category, origins });
 
     const [categoryGroups, originGroups, taggedProducts] = await Promise.all([
       prisma.product.groupBy({
         by: ['category'],
-        where: searchWhere,
+        where: categoryWhere,
         _count: { _all: true },
       }),
       prisma.product.groupBy({
         by: ['origin'],
-        where: scopedWhere,
+        where: originWhere,
         _count: { _all: true },
       }),
       prisma.product.findMany({
-        where: scopedWhere,
+        where: tagWhere,
         select: { tags: true },
       }),
     ]);
@@ -265,13 +297,22 @@ router.get('/facets', async (req: Request, res: Response): Promise<void> => {
     }, new Map());
 
     res.json({
-      categories: toFacets(
-        categoryGroups.map((group) => ({ value: group.category, count: group._count._all })),
+      categories: withSelectedFacets(
+        toFacets(
+          categoryGroups.map((group) => ({ value: group.category, count: group._count._all })),
+        ),
+        category.length > 0 ? [category] : [],
       ),
-      origins: toFacets(
-        originGroups.map((group) => ({ value: group.origin, count: group._count._all })),
+      origins: withSelectedFacets(
+        toFacets(
+          originGroups.map((group) => ({ value: group.origin, count: group._count._all })),
+        ),
+        origins,
       ),
-      tags: toFacets([...tagCounts].map(([value, count]) => ({ value, count }))),
+      tags: withSelectedFacets(
+        toFacets([...tagCounts].map(([value, count]) => ({ value, count }))),
+        tags,
+      ),
     });
   } catch (error) {
     console.error('Error computing product facets:', error);

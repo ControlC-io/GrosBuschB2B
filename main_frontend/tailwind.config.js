@@ -78,6 +78,12 @@ export default {
           "\"Segoe UI\"",
           "sans-serif",
         ],
+        serif: [
+          "\"Playfair Display\"",
+          "Georgia",
+          "\"Times New Roman\"",
+          "serif",
+        ],
       },
     },
   },

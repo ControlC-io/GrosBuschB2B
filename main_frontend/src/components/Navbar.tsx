@@ -1,39 +1,52 @@
 import { useState, useRef, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@shared/auth";
 import LanguagePicker from "./LanguagePicker";
 import ThemeToggle from "./ThemeToggle";
+import GlobalSearch from "./GlobalSearch";
+import CartButton from "./CartButton";
+import BrandLogo from "./BrandLogo";
+import {
+  QUICK_LINKS,
+  SHOP_CATEGORIES,
+  catalogHrefFor,
+  isCategoryActive,
+  isQuickLinkActive,
+} from "../config/navigation";
 
-type SubNavItem = {
-  labelKey: string;
-  to: string;
+const iconClass = "h-7 w-7";
+
+const QuickIcon = ({ name }: { name: "star" | "promo" | "catalog" }) => {
+  if (name === "star") {
+    return (
+      <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6}>
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M12 3.5l2.4 4.86 5.36.78-3.88 3.78.92 5.34L12 15.9l-4.8 2.36.92-5.34-3.88-3.78 5.36-.78L12 3.5z"
+        />
+      </svg>
+    );
+  }
+  if (name === "promo") {
+    return (
+      <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6}>
+        <circle cx="12" cy="12" r="9" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 15l6-6M10.2 10.2h.01M13.8 13.8h.01" />
+      </svg>
+    );
+  }
+  return (
+    <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+    </svg>
+  );
 };
-
-type PrimaryNavItem = {
-  labelKey: string;
-  to?: string;
-  submenu?: SubNavItem[];
-};
-
-const publicNavItems: PrimaryNavItem[] = [
-  { labelKey: "nav.catalog", to: "/catalog" },
-];
-
-const authenticatedNavItems: PrimaryNavItem[] = [
-  { labelKey: "nav.dashboard", to: "/dashboard" },
-  {
-    labelKey: "nav.features",
-    submenu: [
-      { labelKey: "pages.featureOne.title", to: "/features/example-one" },
-      { labelKey: "pages.featureTwo.title", to: "/features/example-two" },
-      { labelKey: "pages.featureThree.title", to: "/features/example-three" },
-    ],
-  },
-];
 
 const Navbar = () => {
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const { t } = useTranslation("common");
   const { user, logout, loading } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -46,286 +59,213 @@ const Navbar = () => {
         setProfileOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const isActive = (path: string): boolean => location.pathname === path;
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname, location.search]);
 
-  const navLinkClass = (path: string) =>
-    `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-      isActive(path)
-        ? "bg-primary text-primary-on-light dark:text-primary-on-dark"
-        : "text-textSecondary dark:text-textSecondary-dark hover:text-textPrimary dark:hover:text-textPrimary-dark hover:bg-primary/10 dark:hover:bg-white/10"
-    }`;
+  const accountMenu = (
+    <div className="absolute right-0 top-full z-50 mt-1 w-56 rounded-md border border-border bg-surface py-1 shadow-lg dark:border-border-dark dark:bg-surface-dark">
+      {user ? (
+        <>
+          <div className="border-b border-border px-4 py-3 dark:border-border-dark">
+            <p className="text-xs text-textSecondary dark:text-textSecondary-dark">{t("auth.signedInAs")}</p>
+            <p className="mt-0.5 truncate text-sm font-medium" title={user.email}>
+              {user.email}
+            </p>
+          </div>
+          <Link to="/dashboard" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm hover:bg-background dark:hover:bg-background-dark">
+            {t("nav.dashboard")}
+          </Link>
+          <Link to="/info" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm hover:bg-background dark:hover:bg-background-dark">
+            {t("nav.info")}
+          </Link>
+          <Link to="/documents" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm hover:bg-background dark:hover:bg-background-dark">
+            {t("dashboard.links.documents")}
+          </Link>
+          <a
+            href="http://localhost:8080"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setProfileOpen(false)}
+            className="block px-4 py-2 text-sm hover:bg-background dark:hover:bg-background-dark"
+          >
+            {t("nav.admin")}
+          </a>
+          <div className="flex items-center justify-between px-4 py-2">
+            <span className="text-sm">{t("nav.theme")}</span>
+            <ThemeToggle />
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setProfileOpen(false);
+              logout();
+            }}
+            className="block w-full px-4 py-2 text-left text-sm hover:bg-background dark:hover:bg-background-dark"
+          >
+            {t("auth.logout")}
+          </button>
+        </>
+      ) : (
+        <>
+          <Link to="/login" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm hover:bg-background dark:hover:bg-background-dark">
+            {t("auth.signIn")}
+          </Link>
+          <Link to="/register" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm hover:bg-background dark:hover:bg-background-dark">
+            {t("auth.signUp")}
+          </Link>
+          <div className="flex items-center justify-between px-4 py-2">
+            <span className="text-sm">{t("nav.theme")}</span>
+            <ThemeToggle />
+          </div>
+        </>
+      )}
+    </div>
+  );
 
   return (
-    <header className="bg-surface dark:bg-navbar-dark border-b border-border dark:border-navbar-border-dark sticky top-0 z-50 shadow-sm font-sans text-textPrimary dark:text-textPrimary-dark">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <header className="relative sticky top-0 z-50 border-b border-border bg-surface font-sans text-textPrimary shadow-sm dark:border-navbar-border-dark dark:bg-navbar-dark dark:text-textPrimary-dark">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-3 pt-3 pb-1 lg:gap-6">
+          <button
+            type="button"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="p-2 lg:hidden"
+            aria-label={t("nav.menu")}
+          >
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {mobileOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
 
-          <div className="flex items-center gap-3">
-            {/* Mobile menu button */}
-            <button
-                onClick={() => setMobileOpen(!mobileOpen)}
-                className="md:hidden p-2 rounded-md text-textSecondary dark:text-textSecondary-dark hover:bg-primary/10 dark:hover:bg-white/10"
-                aria-label="Menu"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  {mobileOpen ? (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  ) : (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  )}
-                </svg>
-              </button>
+          <BrandLogo />
 
-            {/* Brand */}
-            <div className="flex items-center space-x-8">
-              <Link to={user ? "/dashboard" : "/"} className="flex items-center space-x-2">
-                <span className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-sm overflow-hidden">
-                  <span className="text-sm font-bold text-white">G</span>
-                </span>
-                <span className="text-lg font-bold tracking-tight text-textPrimary dark:text-textPrimary-dark">
-                  GrosBuschB2B
-                </span>
-              </Link>
+          <nav className="hidden items-center gap-5 lg:flex" aria-label={t("nav.quickLabel")}>
+            {QUICK_LINKS.map((item) => {
+              const active = isQuickLinkActive(item.to, searchParams, location.pathname);
+              return (
+                <Link
+                  key={item.id}
+                  to={item.to}
+                  className={`flex w-14 flex-col items-center gap-1 ${
+                    active ? "text-brand-green" : "text-textPrimary dark:text-textPrimary-dark"
+                  }`}
+                >
+                  <QuickIcon name={item.icon} />
+                  <span className="text-[0.62rem] font-bold uppercase tracking-wide">{t(item.labelKey)}</span>
+                </Link>
+              );
+            })}
+          </nav>
 
-              {/* Desktop Nav: catalog is public, other items require a session */}
-              <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-                  {[...publicNavItems, ...(user ? authenticatedNavItems : [])].map((item) => (
-                    <div key={item.labelKey} className="relative group">
-                      {item.submenu ? (
-                        <>
-                          <button
-                            type="button"
-                            className="inline-flex items-center gap-1 px-2 py-1 text-sm font-medium text-textSecondary dark:text-textSecondary-dark hover:text-textPrimary dark:hover:text-textPrimary-dark"
-                          >
-                            <span>{t(item.labelKey)}</span>
-                            <svg
-                              className="w-3 h-3"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 9l-7 7-7-7"
-                              />
-                            </svg>
-                          </button>
-                          <div className="absolute left-1/2 -translate-x-1/2 top-full pt-3 hidden group-hover:block z-40">
-                            <div className="relative">
-                              <div className="absolute left-1/2 -top-1 w-3 h-3 bg-surface dark:bg-surface-dark border-l border-t border-border dark:border-border-dark rounded-tl-sm rotate-45 -translate-x-1/2" />
-                              <div className="relative bg-surface dark:bg-surface-dark text-textPrimary dark:text-textPrimary-dark border border-border dark:border-border-dark rounded-lg shadow-lg py-2 min-w-[220px]">
-                                {item.submenu.map((subItem) => (
-                                  <Link
-                                    key={subItem.labelKey}
-                                    to={subItem.to}
-                                    className="flex items-center gap-3 px-4 py-2 text-sm text-textPrimary dark:text-textPrimary-dark hover:bg-background dark:hover:bg-background-dark transition-colors"
-                                  >
-                                    <span className="w-2.5 h-2.5 bg-primary rounded-sm rotate-45" />
-                                    <span>{t(subItem.labelKey)}</span>
-                                  </Link>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      ) : (
-                        <Link
-                          to={item.to ?? "#"}
-                          className={navLinkClass(item.to ?? "#")}
-                        >
-                          {t(item.labelKey)}
-                        </Link>
-                      )}
-                    </div>
-                  ))}
-                </nav>
-            </div>
+          <div className="hidden min-w-0 flex-1 sm:block">
+            <GlobalSearch />
           </div>
 
-          {/* Right side */}
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-2">
-              <LanguagePicker />
-              <div className="hidden md:block">
-                <ThemeToggle />
-              </div>
-            </div>
-            {!loading && user ? (
-              <div ref={profileRef} className="relative flex items-center gap-3">
+          <div className="ml-auto flex items-center gap-3 sm:ml-0">
+            {!loading && (
+              <div ref={profileRef} className="relative">
                 <button
-                  onClick={() => setProfileOpen((o) => !o)}
-                  className="flex items-center justify-center w-9 h-9 rounded-full bg-primary/20 text-textPrimary dark:bg-icon-dark dark:text-textPrimary-dark dark:border dark:border-border-dark hover:bg-primary/30 dark:hover:bg-icon-dark/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-transparent"
-                  aria-label="Profile menu"
+                  type="button"
+                  onClick={() => setProfileOpen((open) => !open)}
+                  className="flex w-16 flex-col items-center gap-1 text-textPrimary dark:text-textPrimary-dark"
+                  aria-label={t("nav.account")}
                   aria-expanded={profileOpen}
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  <svg className="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                    <circle cx="12" cy="12" r="9" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 11.2a2.7 2.7 0 100-5.4 2.7 2.7 0 000 5.4zM7.2 17.4a5.4 5.4 0 019.6 0"
+                    />
                   </svg>
+                  <span className="text-[0.62rem] font-bold uppercase tracking-wide">{t("nav.account")}</span>
                 </button>
-                {profileOpen && (
-                  <div className="absolute right-0 top-full mt-1 w-56 bg-surface dark:bg-surface-dark rounded-lg shadow-lg border border-border dark:border-border-dark z-50">
-                    <div className="px-4 py-3 border-b border-border/60 dark:border-border-dark/60">
-                      <p className="text-xs text-textSecondary dark:text-textSecondary-dark">
-                        {t("auth.signedInAs")}
-                      </p>
-                      <p
-                        className="mt-0.5 text-sm font-medium text-textPrimary dark:text-textPrimary-dark truncate"
-                        title={user.email}
-                      >
-                        {user.email}
-                      </p>
-                    </div>
-                    <div className="py-1">
-                      <Link
-                        to="/info"
-                        onClick={() => setProfileOpen(false)}
-                        className="flex w-full items-center gap-2 px-4 py-2 text-sm text-textSecondary dark:text-textSecondary-dark hover:bg-background dark:hover:bg-background-dark"
-                      >
-                        <span className="w-4 h-4 rounded-full bg-primary/20 dark:bg-icon-dark flex items-center justify-center text-[10px] text-primary">
-                          i
-                        </span>
-                        <span>{t("nav.info")}</span>
-                      </Link>
-                      <a
-                        href="http://localhost:8080"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => setProfileOpen(false)}
-                        className="flex w-full items-center gap-2 px-4 py-2 text-sm text-textSecondary dark:text-textSecondary-dark hover:bg-background dark:hover:bg-background-dark"
-                      >
-                        <svg
-                          className="w-4 h-4 text-textSecondary dark:text-textSecondary-dark"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                          />
-                        </svg>
-                        <span>{t("nav.admin")}</span>
-                      </a>
-                      <button
-                        onClick={() => {
-                          setProfileOpen(false);
-                          logout();
-                        }}
-                        className="w-full text-left px-4 py-2 text-sm text-textSecondary dark:text-textSecondary-dark hover:bg-background dark:hover:bg-background-dark flex items-center gap-2"
-                      >
-                        <svg
-                          className="w-4 h-4 text-textSecondary dark:text-textSecondary-dark"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                        </svg>
-                        {t("auth.logout")}
-                      </button>
-                    </div>
-                  </div>
-                )}
+                {profileOpen && accountMenu}
               </div>
-            ) : (
-              !loading && (
-                <div className="flex items-center space-x-2">
-                  <Link
-                    to="/login"
-                    className="px-3 py-1.5 text-sm font-medium text-textPrimary dark:text-textPrimary-dark rounded-lg border border-border/60 dark:border-border-dark/60 hover:bg-primary/10 dark:hover:bg-white/10 transition-colors"
-                  >
-                    {t("auth.signIn")}
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="px-3 py-1.5 text-sm font-medium text-primary-on-light bg-primary rounded-lg hover:opacity-90 transition-colors"
-                  >
-                    {t("auth.signUp")}
-                  </Link>
-                </div>
-              )
             )}
+            <CartButton />
+            <LanguagePicker />
           </div>
+        </div>
+
+        <div className="pb-1 sm:hidden">
+          <GlobalSearch />
         </div>
       </div>
 
-      {/* Mobile sidebar */}
-      {mobileOpen && (
-        <div className="fixed inset-x-0 top-16 bottom-0 z-40 md:hidden">
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setMobileOpen(false)}
-          />
-          <div className="relative h-full w-72 bg-surface dark:bg-surface-dark border-r border-border dark:border-border-dark shadow-lg flex flex-col">
-            <div className="px-4 py-3 flex items-center justify-between border-b border-border dark:border-border-dark">
-              <span className="text-sm font-medium text-textPrimary dark:text-textPrimary-dark">
-                {t("nav.menu", "Menu")}
-              </span>
-              <button
-                onClick={() => setMobileOpen(false)}
-                className="p-1 rounded-md text-textSecondary dark:text-textSecondary-dark hover:bg-background dark:hover:bg-background-dark"
-                aria-label="Close menu"
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <nav
+          aria-label={t("catalog.categoriesLabel")}
+          className="flex items-center justify-center gap-5 overflow-x-auto"
+        >
+          {SHOP_CATEGORIES.map((item) => {
+            const active = isCategoryActive(item, searchParams, location.pathname);
+            return (
+              <Link
+                key={item.id}
+                to={catalogHrefFor(item)}
+                className={`relative shrink-0 border-b-[3px] py-2 text-[0.8rem] font-bold uppercase tracking-wide ${
+                  active
+                    ? "border-brand-green text-textPrimary dark:text-textPrimary-dark"
+                    : "border-transparent text-textPrimary hover:text-brand-green dark:text-textPrimary-dark"
+                }`}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {t(item.labelKey)}
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
+
+      {mobileOpen && (
+        <div className="absolute inset-x-0 top-full z-40 h-[100dvh] lg:hidden">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
+          <div className="relative flex h-full w-72 flex-col border-r border-border bg-surface shadow-lg dark:border-border-dark dark:bg-surface-dark">
+            <div className="flex items-center justify-between border-b border-border px-4 py-3 dark:border-border-dark">
+              <span className="text-sm font-medium">{t("nav.menu")}</span>
+              <button type="button" onClick={() => setMobileOpen(false)} aria-label={t("nav.menu")}>
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
-
-            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
-              <div className="space-y-2">
-                {[...publicNavItems, ...(user ? authenticatedNavItems : [])].map((item) => (
-                  <div key={item.labelKey} className="space-y-1">
-                    <div className="flex w-full items-center justify-between px-3 py-2 rounded-md text-sm font-medium text-textPrimary dark:text-textPrimary-dark">
-                      <span>{t(item.labelKey)}</span>
-                      {item.submenu && (
-                        <svg
-                          className="w-4 h-4 text-textSecondary dark:text-textSecondary-dark"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      )}
-                    </div>
-                    {item.submenu && (
-                      <div className="pl-6 space-y-0.5">
-                        {item.submenu.map((subItem) => (
-                          <Link
-                            key={subItem.labelKey}
-                            to={subItem.to}
-                            onClick={() => setMobileOpen(false)}
-                            className="flex items-center gap-3 px-3 py-1.5 rounded-md text-sm text-textSecondary dark:text-textSecondary-dark hover:bg-background dark:hover:bg-background-dark"
-                          >
-                            <span className="w-2.5 h-2.5 bg-primary rounded-sm rotate-45" />
-                            <span>{t(subItem.labelKey)}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                    {!item.submenu && item.to && (
-                      <Link
-                        to={item.to}
-                        onClick={() => setMobileOpen(false)}
-                        className="ml-3 px-3 py-1.5 rounded-md text-sm text-textSecondary dark:text-textSecondary-dark hover:bg-background dark:hover:bg-background-dark inline-flex"
-                      >
-                        {t(item.labelKey)}
-                      </Link>
-                    )}
-                  </div>
+            <div className="flex-1 space-y-5 overflow-y-auto px-4 py-4">
+              <div className="flex gap-4">
+                {QUICK_LINKS.map((item) => (
+                  <Link
+                    key={item.id}
+                    to={item.to}
+                    onClick={() => setMobileOpen(false)}
+                    className="flex flex-col items-center gap-1 text-xs font-bold uppercase"
+                  >
+                    <QuickIcon name={item.icon} />
+                    {t(item.labelKey)}
+                  </Link>
                 ))}
               </div>
-
-              <div className="pt-4 border-t border-border/70 dark:border-border-dark/70 flex items-center justify-end">
+              <div className="space-y-1 border-t border-border pt-3 dark:border-border-dark">
+                {SHOP_CATEGORIES.map((item) => (
+                  <Link
+                    key={item.id}
+                    to={catalogHrefFor(item)}
+                    onClick={() => setMobileOpen(false)}
+                    className="block px-1 py-1.5 text-sm font-semibold uppercase"
+                  >
+                    {t(item.labelKey)}
+                  </Link>
+                ))}
+              </div>
+              <div className="flex items-center justify-end border-t border-border pt-3 dark:border-border-dark">
                 <ThemeToggle />
               </div>
             </div>

@@ -39,13 +39,15 @@ export const listProducts = async (
 };
 
 export const listFacets = async (
-  scope: { category: string; search: string },
+  filters: Pick<ProductFilters, 'category' | 'origins' | 'tags' | 'search'>,
   signal?: AbortSignal,
   token?: string,
 ): Promise<ProductFacets> => {
   const params = new URLSearchParams();
-  if (scope.category) params.set('category', scope.category);
-  if (scope.search) params.set('search', scope.search);
+  if (filters.category) params.set('category', filters.category);
+  if (filters.origins.length > 0) params.set('origins', filters.origins.join(','));
+  if (filters.tags.length > 0) params.set('tags', filters.tags.join(','));
+  if (filters.search) params.set('search', filters.search);
 
   const res = await fetch(`/api/products/facets?${params.toString()}`, {
     headers: authHeaders(token),

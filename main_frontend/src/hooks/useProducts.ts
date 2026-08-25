@@ -12,8 +12,6 @@ import {
   type ProductSort,
 } from '../types/catalog';
 
-const SEARCH_DEBOUNCE_MS = 250;
-
 const splitParam = (raw: string | null): string[] =>
   raw === null
     ? []
@@ -48,8 +46,8 @@ const toggleValue = (values: string[], value: string): string[] =>
 
 /**
  * Drives the catalog page. Active filters live in the query string so that a
- * filtered view stays shareable and the browser back button keeps working,
- * while the search field is debounced to avoid one request per keystroke.
+ * filtered view stays shareable and the browser back button keeps working.
+ * Search is owned by the global header and written into the same query string.
  */
 export const useProducts = () => {
   const { jwtToken } = useAuth();
@@ -58,9 +56,6 @@ export const useProducts = () => {
   const filters = useMemo(() => parseFilters(searchParams), [searchParams]);
   const filtersRef = useRef(filters);
   filtersRef.current = filters;
-
-  const [searchInput, setSearchInput] = useState(filters.search);
-  const searchDirtyRef = useRef(false);
 
   const [products, setProducts] = useState<Product[]>([]);
   const [total, setTotal] = useState(0);
@@ -75,11 +70,6 @@ export const useProducts = () => {
     },
     [setSearchParams],
   );
-
-  const setSearch = useCallback((value: string) => {
-    searchDirtyRef.current = true;
-    setSearchInput(value);
-  }, []);
 
   const setCategory = useCallback(
     (category: string) => {
@@ -113,32 +103,12 @@ export const useProducts = () => {
   );
 
   const clearFilters = useCallback(() => {
-    searchDirtyRef.current = false;
-    setSearchInput('');
     applyFilters(DEFAULT_FILTERS);
   }, [applyFilters]);
 
   const reload = useCallback(() => {
     setReloadKey((key) => key + 1);
   }, []);
-
-  // Push the debounced search term into the query string
-  useEffect(() => {
-    if (!searchDirtyRef.current) return undefined;
-
-    const timer = window.setTimeout(() => {
-      searchDirtyRef.current = false;
-      applyFilters({ ...filtersRef.current, search: searchInput }, true);
-    }, SEARCH_DEBOUNCE_MS);
-
-    return () => window.clearTimeout(timer);
-  }, [searchInput, applyFilters]);
-
-  // Keep the field aligned with the URL on back and forward navigation
-  useEffect(() => {
-    if (searchDirtyRef.current) return;
-    setSearchInput(filters.search);
-  }, [filters.search]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -149,11 +119,7 @@ export const useProducts = () => {
       try {
         const [list, facetGroups] = await Promise.all([
           listProducts(filters, controller.signal, jwtToken ?? undefined),
-          listFacets(
-            { category: filters.category, search: filters.search },
-            controller.signal,
-            jwtToken ?? undefined,
-          ),
+          listFacets(filters, controller.signal, jwtToken ?? undefined),
         ]);
         setProducts(list.items);
         setTotal(list.total);
@@ -175,14 +141,12 @@ export const useProducts = () => {
 
   return {
     filters,
-    searchInput,
     products,
     total,
     facets,
     loading,
     error,
     activeFilterCount,
-    setSearch,
     setCategory,
     toggleOrigin,
     toggleTag,
