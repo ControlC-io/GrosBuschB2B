@@ -265,7 +265,33 @@
       "favorite": "Add to favorites",
       "decrease": "Decrease quantity",
       "increase": "Increase quantity",
-      "perSalesUnit": "Sold per {{unit}}"
+      "perSalesUnit": "Sold per {{unit}}",
+      "openSheet": "Open product sheet for {{name}}"
+    },
+    "availability": {
+      "inStock": "In stock",
+      "unavailable": "Unavailable",
+      "cannotAdd": "This article cannot be added while it is unavailable."
+    },
+    "units": {
+      "PCS": "piece",
+      "KG": "kg",
+      "L": "litre",
+      "BUNCH": "bunch"
+    },
+    "sheet": {
+      "back": "Back to catalog",
+      "sku": "Item {{sku}}",
+      "origin": "Origin",
+      "category": "Category",
+      "salesUnit": "Sales unit",
+      "labels": "Quality labels",
+      "attributes": "Product details",
+      "noLabels": "No quality label on this article",
+      "signInToOrder": "Sign in to order",
+      "notFoundTitle": "Product not found",
+      "notFoundDescription": "This article is no longer in the catalog or the link is incorrect.",
+      "loadFailed": "Could not load the product sheet: {{message}}"
     },
     "empty": {
       "title": "No product found",

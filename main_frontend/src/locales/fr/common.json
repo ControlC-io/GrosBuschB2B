@@ -265,7 +265,33 @@
       "favorite": "Ajouter aux favoris",
       "decrease": "Diminuer la quantité",
       "increase": "Augmenter la quantité",
-      "perSalesUnit": "Vendu à la {{unit}}"
+      "perSalesUnit": "Unité : {{unit}}",
+      "openSheet": "Ouvrir la fiche produit {{name}}"
+    },
+    "availability": {
+      "inStock": "En stock",
+      "unavailable": "Indisponible",
+      "cannotAdd": "Cet article ne peut pas être ajouté tant qu'il est indisponible."
+    },
+    "units": {
+      "PCS": "pièce",
+      "KG": "kg",
+      "L": "litre",
+      "BUNCH": "botte"
+    },
+    "sheet": {
+      "back": "Retour au catalogue",
+      "sku": "Article {{sku}}",
+      "origin": "Origine",
+      "category": "Catégorie",
+      "salesUnit": "Unité de vente",
+      "labels": "Labels de qualité",
+      "attributes": "Détails du produit",
+      "noLabels": "Aucun label de qualité sur cet article",
+      "signInToOrder": "Se connecter pour commander",
+      "notFoundTitle": "Produit introuvable",
+      "notFoundDescription": "Cet article n'est plus au catalogue ou le lien est incorrect.",
+      "loadFailed": "Impossible de charger la fiche produit : {{message}}"
     },
     "empty": {
       "title": "Aucun article trouvé",

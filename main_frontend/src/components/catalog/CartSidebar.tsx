@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DELIVERY_SLOT, ORDER_MINIMUM_EUR } from '../../config/catalog';
 import { useCart } from '../../context/CartProvider';
@@ -35,9 +36,12 @@ const CartSidebar = () => {
               className="h-14 w-14 shrink-0 rounded-md object-contain bg-background dark:bg-background-dark"
             />
             <div className="min-w-0 flex-1">
-              <p className="line-clamp-2 text-xs font-medium text-textPrimary dark:text-textPrimary-dark">
+              <Link
+                to={`/catalog/${encodeURIComponent(line.product.sku)}`}
+                className="line-clamp-2 text-xs font-medium text-textPrimary dark:text-textPrimary-dark hover:text-brand-orange"
+              >
                 {line.product.name}
-              </p>
+              </Link>
               <p className="mt-0.5 text-xs font-semibold text-brand-orange">
                 {formatPrice(line.product.pricePerUnit * line.quantity, i18n.language)}
               </p>

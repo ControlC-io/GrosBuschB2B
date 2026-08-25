@@ -59,6 +59,13 @@ export const listFacets = async (
   return res.json() as Promise<ProductFacets>;
 };
 
+export class ProductNotFoundError extends Error {
+  constructor(sku: string) {
+    super(`Product not found: ${sku}`);
+    this.name = 'ProductNotFoundError';
+  }
+}
+
 export const getProduct = async (
   sku: string,
   signal?: AbortSignal,
@@ -68,6 +75,9 @@ export const getProduct = async (
     headers: authHeaders(token),
     signal,
   });
+  if (res.status === 404) {
+    throw new ProductNotFoundError(sku);
+  }
   if (!res.ok) {
     throw await readError(res, 'Product request failed');
   }

@@ -57,6 +57,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   }, [lines]);
 
   const setQuantity = useCallback((product: Product, quantity: number) => {
+    if (!product.isAvailable && quantity > 0) return;
     setLines((current) => {
       const nextQuantity = Math.max(0, Math.floor(quantity));
       if (nextQuantity === 0) {
@@ -73,6 +74,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   }, []);
 
   const increment = useCallback((product: Product) => {
+    if (!product.isAvailable) return;
     setLines((current) => {
       const existing = current.find((line) => line.product.sku === product.sku);
       if (!existing) return [...current, { product, quantity: 1 }];

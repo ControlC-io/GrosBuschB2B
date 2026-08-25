@@ -11,6 +11,7 @@ import AppShell from "./components/AppShell";
 import RequireAuth from "./components/RequireAuth";
 import DashboardHome from "./pages/DashboardHome";
 import Catalog from "./pages/Catalog";
+import ProductSheet from "./pages/ProductSheet";
 import Documents from "./pages/Documents";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import { ThemeProvider } from "./theme/ThemeProvider";
@@ -34,6 +35,7 @@ const App = () => {
                 <Route path="/auth/2fa-challenge" element={<TwoFactorChallenge />} />
                 <Route path="/auth/email-otp" element={<EmailOtpChallenge />} />
                 <Route path="/catalog" element={<Catalog />} />
+                <Route path="/catalog/:sku" element={<ProductSheet />} />
                 <Route element={<RequireAuth />}>
                   <Route path="/dashboard" element={<DashboardHome />} />
                   <Route path="/documents" element={<Documents />} />

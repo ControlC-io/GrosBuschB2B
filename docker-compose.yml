@@ -113,6 +113,7 @@ services:
     container_name: grosbuschb2b_admin_frontend
     environment:
       NODE_ENV: ${NODE_ENV:-development}
+      VITE_ADMIN_SECRET: ${ADMIN_SECRET}
     volumes:
       - ./admin_frontend:/app
       - /app/node_modules

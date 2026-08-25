@@ -26,6 +26,15 @@ type ParsedKgPrice = {
 
 const PRICE_PER_KG_PATTERN = /^\s*([\d.]+)\s*€\s*\/\s*([A-Z]+)\s*$/i;
 
+const parseSalesUnit = (name: string): string => {
+  if (/\bBUNCH\b/i.test(name)) return 'BUNCH';
+  if (/\bPCS\b/i.test(name)) return 'PCS';
+  if (/\b\d+(?:[.,]\d+)?\s*KG\b/i.test(name)) return 'KG';
+  if (/\b\d+(?:[.,]\d+)?\s*L\b/i.test(name)) return 'L';
+  if (/\b\d+(?:[.,]\d+)?\s*G\b/i.test(name)) return 'PCS';
+  return 'PCS';
+};
+
 /**
  * The mocked file stores the reference price as a display string such as
  * "26.85 €/KG", or "N/A" when the article is not sold by weight. Splitting it
@@ -33,15 +42,15 @@ const PRICE_PER_KG_PATTERN = /^\s*([\d.]+)\s*€\s*\/\s*([A-Z]+)\s*$/i;
  */
 const parseKgPrice = (raw: string, name: string): ParsedKgPrice => {
   const match = PRICE_PER_KG_PATTERN.exec(raw);
+  const salesUnit = parseSalesUnit(name);
 
   if (!match) {
-    const fallbackUnit = /\bBUNCH\b/i.test(name) ? 'BUNCH' : 'PCS';
-    return { pricePerKg: null, salesUnit: fallbackUnit };
+    return { pricePerKg: null, salesUnit };
   }
 
   return {
     pricePerKg: new Prisma.Decimal(match[1]),
-    salesUnit: match[2].toUpperCase(),
+    salesUnit,
   };
 };
 
@@ -74,7 +83,7 @@ const seedProducts = async () => {
       salesUnit,
       tags: mock.tags,
       imageUrl: mock.image_url,
-      isAvailable: true,
+      isAvailable: !mock.tags.some((tag) => tag.toLowerCase() === 'coming soon'),
     };
 
     const product = await prisma.product.upsert({

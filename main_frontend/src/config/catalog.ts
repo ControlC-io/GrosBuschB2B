@@ -15,3 +15,6 @@ export const ORDER_MINIMUM_EUR = Number.isFinite(parsedMinimum) && parsedMinimum
   : 30;
 
 export const CURRENCY = 'EUR';
+
+/** Weight reference used under the selling price (F017). */
+export const REFERENCE_WEIGHT_UNIT = 'KG';

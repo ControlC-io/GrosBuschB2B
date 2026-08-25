@@ -1,4 +1,4 @@
-import { CURRENCY } from '../config/catalog';
+import { CURRENCY, REFERENCE_WEIGHT_UNIT } from '../config/catalog';
 
 export const formatPrice = (value: number, language: string): string => {
   try {
@@ -17,3 +17,7 @@ export const formatUnitPrice = (
   unit: string,
   language: string,
 ): string => `${formatPrice(value, language)} / ${unit}`;
+
+/** Always formats the catalog weight reference as an amount per kilogram. */
+export const formatReferencePrice = (value: number, language: string): string =>
+  formatUnitPrice(value, REFERENCE_WEIGHT_UNIT, language);
