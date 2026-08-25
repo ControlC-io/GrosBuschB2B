@@ -193,7 +193,7 @@ const Navbar = () => {
                 {profileOpen && accountMenu}
               </div>
             )}
-            <CartButton />
+            {user && <CartButton />}
             <LanguagePicker />
           </div>
         </div>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProductBadge from './ProductBadge';
 import { formatPrice, formatUnitPrice } from '../../utils/format';
+import { useAuth } from '@shared/auth';
 import { useCart } from '../../context/CartProvider';
 import type { Product } from '../../types/catalog';
 
@@ -13,6 +14,7 @@ interface ProductCardProps {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   const { t, i18n } = useTranslation('common');
+  const { user } = useAuth();
   const { quantityOf, increment, decrement } = useCart();
   const [favorite, setFavorite] = useState(false);
   const quantity = quantityOf(product.sku);
@@ -88,26 +90,28 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </p>
         </div>
 
-        <div className="flex shrink-0 items-center gap-1 rounded-md border border-border dark:border-border-dark p-0.5">
-          <button
-            type="button"
-            onClick={() => decrement(product.sku)}
-            disabled={quantity === 0}
-            aria-label={t('catalog.card.decrease')}
-            className="h-7 w-7 rounded text-textSecondary dark:text-textSecondary-dark hover:bg-background dark:hover:bg-background-dark disabled:opacity-40"
-          >
-            −
-          </button>
-          <span className="w-6 text-center text-sm font-semibold tabular-nums">{quantity}</span>
-          <button
-            type="button"
-            onClick={() => increment(product)}
-            aria-label={t('catalog.card.increase')}
-            className="h-7 w-7 rounded bg-brand-orange text-base font-bold leading-none text-white hover:bg-brand-orange-hover"
-          >
-            +
-          </button>
-        </div>
+        {user ? (
+          <div className="flex shrink-0 items-center gap-1 rounded-md border border-border dark:border-border-dark p-0.5">
+            <button
+              type="button"
+              onClick={() => decrement(product.sku)}
+              disabled={quantity === 0}
+              aria-label={t('catalog.card.decrease')}
+              className="h-7 w-7 rounded text-textSecondary dark:text-textSecondary-dark hover:bg-background dark:hover:bg-background-dark disabled:opacity-40"
+            >
+              −
+            </button>
+            <span className="w-6 text-center text-sm font-semibold tabular-nums">{quantity}</span>
+            <button
+              type="button"
+              onClick={() => increment(product)}
+              aria-label={t('catalog.card.increase')}
+              className="h-7 w-7 rounded bg-brand-orange text-base font-bold leading-none text-white hover:bg-brand-orange-hover"
+            >
+              +
+            </button>
+          </div>
+        ) : null}
       </div>
     </article>
   );

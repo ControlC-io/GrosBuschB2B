@@ -36,13 +36,6 @@ const Catalog = () => {
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-background dark:bg-background-dark text-textPrimary dark:text-textPrimary-dark">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <header className="mb-5 space-y-1">
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{t('catalog.title')}</h1>
-          <p className="text-sm text-textSecondary dark:text-textSecondary-dark">
-            {t('catalog.subtitle')}
-          </p>
-        </header>
-
         <CatalogTopBar />
 
         <div className="mt-5 grid gap-5 lg:grid-cols-[16rem_minmax(0,1fr)]">
