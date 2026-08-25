@@ -5,9 +5,8 @@ import type {
   ProductListResponse,
 } from '../types/catalog';
 
-const authHeaders = (token: string): HeadersInit => ({
-  Authorization: `Bearer ${token}`,
-});
+const authHeaders = (token?: string): HeadersInit =>
+  token ? { Authorization: `Bearer ${token}` } : {};
 
 const readError = async (res: Response, fallback: string): Promise<Error> => {
   const body = (await res.json().catch(() => ({}))) as { error?: string };
@@ -25,9 +24,9 @@ const buildListQuery = (filters: ProductFilters): string => {
 };
 
 export const listProducts = async (
-  token: string,
   filters: ProductFilters,
   signal?: AbortSignal,
+  token?: string,
 ): Promise<ProductListResponse> => {
   const res = await fetch(`/api/products?${buildListQuery(filters)}`, {
     headers: authHeaders(token),
@@ -40,9 +39,9 @@ export const listProducts = async (
 };
 
 export const listFacets = async (
-  token: string,
   scope: { category: string; search: string },
   signal?: AbortSignal,
+  token?: string,
 ): Promise<ProductFacets> => {
   const params = new URLSearchParams();
   if (scope.category) params.set('category', scope.category);
@@ -59,9 +58,9 @@ export const listFacets = async (
 };
 
 export const getProduct = async (
-  token: string,
   sku: string,
   signal?: AbortSignal,
+  token?: string,
 ): Promise<Product> => {
   const res = await fetch(`/api/products/${encodeURIComponent(sku)}`, {
     headers: authHeaders(token),

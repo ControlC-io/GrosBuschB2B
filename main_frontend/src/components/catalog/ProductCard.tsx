@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProductBadge from './ProductBadge';
 import { formatPrice, formatUnitPrice } from '../../utils/format';
+import { useCart } from '../../context/CartProvider';
 import type { Product } from '../../types/catalog';
 
 const MAX_VISIBLE_BADGES = 2;
@@ -12,8 +13,9 @@ interface ProductCardProps {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   const { t, i18n } = useTranslation('common');
-  const [quantity, setQuantity] = useState(0);
+  const { quantityOf, increment, decrement } = useCart();
   const [favorite, setFavorite] = useState(false);
+  const quantity = quantityOf(product.sku);
 
   const visibleTags = product.tags.slice(0, MAX_VISIBLE_BADGES);
   const hasDiscount = product.oldPrice !== null && product.oldPrice > product.pricePerUnit;
@@ -89,7 +91,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <div className="flex shrink-0 items-center gap-1 rounded-md border border-border dark:border-border-dark p-0.5">
           <button
             type="button"
-            onClick={() => setQuantity((value) => Math.max(0, value - 1))}
+            onClick={() => decrement(product.sku)}
             disabled={quantity === 0}
             aria-label={t('catalog.card.decrease')}
             className="h-7 w-7 rounded text-textSecondary dark:text-textSecondary-dark hover:bg-background dark:hover:bg-background-dark disabled:opacity-40"
@@ -99,7 +101,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <span className="w-6 text-center text-sm font-semibold tabular-nums">{quantity}</span>
           <button
             type="button"
-            onClick={() => setQuantity((value) => value + 1)}
+            onClick={() => increment(product)}
             aria-label={t('catalog.card.increase')}
             className="h-7 w-7 rounded bg-brand-orange text-base font-bold leading-none text-white hover:bg-brand-orange-hover"
           >

@@ -13,12 +13,14 @@ import Catalog from "./pages/Catalog";
 import Documents from "./pages/Documents";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import { ThemeProvider } from "./theme/ThemeProvider";
+import { CartProvider } from "./context/CartProvider";
 
 const App = () => {
   return (
     <ThemeProvider>
       <BrowserRouter>
         <AuthProvider>
+          <CartProvider>
           <div className="min-h-screen flex flex-col bg-background dark:bg-background-dark text-textPrimary dark:text-textPrimary-dark font-sans">
             <Navbar />
             <main className="flex-1">
@@ -29,9 +31,9 @@ const App = () => {
                 <Route path="/register" element={<Register />} />
                 <Route path="/auth/2fa-challenge" element={<TwoFactorChallenge />} />
                 <Route path="/auth/email-otp" element={<EmailOtpChallenge />} />
+                <Route path="/catalog" element={<Catalog />} />
                 <Route element={<RequireAuth />}>
                   <Route path="/dashboard" element={<DashboardHome />} />
-                  <Route path="/catalog" element={<Catalog />} />
                   <Route path="/documents" element={<Documents />} />
                   <Route path="/info" element={<InfoPage />} />
                   {/* Generic feature routes — rename or replace with your own pages */}
@@ -51,6 +53,7 @@ const App = () => {
               </Routes>
             </main>
           </div>
+          </CartProvider>
         </AuthProvider>
       </BrowserRouter>
     </ThemeProvider>

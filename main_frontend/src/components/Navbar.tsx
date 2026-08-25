@@ -16,9 +16,12 @@ type PrimaryNavItem = {
   submenu?: SubNavItem[];
 };
 
-const primaryNavItems: PrimaryNavItem[] = [
-  { labelKey: "nav.dashboard", to: "/dashboard" },
+const publicNavItems: PrimaryNavItem[] = [
   { labelKey: "nav.catalog", to: "/catalog" },
+];
+
+const authenticatedNavItems: PrimaryNavItem[] = [
+  { labelKey: "nav.dashboard", to: "/dashboard" },
   {
     labelKey: "nav.features",
     submenu: [
@@ -62,9 +65,8 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
 
           <div className="flex items-center gap-3">
-            {/* Mobile menu button (only when authenticated) */}
-            {user && (
-              <button
+            {/* Mobile menu button */}
+            <button
                 onClick={() => setMobileOpen(!mobileOpen)}
                 className="md:hidden p-2 rounded-md text-textSecondary dark:text-textSecondary-dark hover:bg-primary/10 dark:hover:bg-white/10"
                 aria-label="Menu"
@@ -77,23 +79,21 @@ const Navbar = () => {
                   )}
                 </svg>
               </button>
-            )}
 
             {/* Brand */}
             <div className="flex items-center space-x-8">
               <Link to={user ? "/dashboard" : "/"} className="flex items-center space-x-2">
                 <span className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-sm overflow-hidden">
-                  <span className="text-sm font-bold text-white">A</span>
+                  <span className="text-sm font-bold text-white">G</span>
                 </span>
                 <span className="text-lg font-bold tracking-tight text-textPrimary dark:text-textPrimary-dark">
-                  App<span className="text-primary">Template</span>
+                  GrosBuschB2B
                 </span>
               </Link>
 
-              {/* Desktop Nav: only visible when authenticated */}
-              {user && (
-                <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-                  {primaryNavItems.map((item) => (
+              {/* Desktop Nav: catalog is public, other items require a session */}
+              <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+                  {[...publicNavItems, ...(user ? authenticatedNavItems : [])].map((item) => (
                     <div key={item.labelKey} className="relative group">
                       {item.submenu ? (
                         <>
@@ -145,7 +145,6 @@ const Navbar = () => {
                     </div>
                   ))}
                 </nav>
-              )}
             </div>
           </div>
 
@@ -259,7 +258,7 @@ const Navbar = () => {
       </div>
 
       {/* Mobile sidebar */}
-      {user && mobileOpen && (
+      {mobileOpen && (
         <div className="fixed inset-x-0 top-16 bottom-0 z-40 md:hidden">
           <div
             className="absolute inset-0 bg-black/40"
@@ -283,7 +282,7 @@ const Navbar = () => {
 
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
               <div className="space-y-2">
-                {primaryNavItems.map((item) => (
+                {[...publicNavItems, ...(user ? authenticatedNavItems : [])].map((item) => (
                   <div key={item.labelKey} className="space-y-1">
                     <div className="flex w-full items-center justify-between px-3 py-2 rounded-md text-sm font-medium text-textPrimary dark:text-textPrimary-dark">
                       <span>{t(item.labelKey)}</span>

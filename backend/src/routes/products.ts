@@ -81,11 +81,9 @@ const toFacets = (groups: Facet[]): Facet[] =>
  * /api/products:
  *   get:
  *     summary: List catalog products with server side filtering
- *     description: Returns a paginated list of products. Filters are combined with AND, except tags which match any of the requested values. Requires a valid JWT token.
+ *     description: Returns a paginated list of products. Filters are combined with AND, except tags which match any of the requested values. Public, no JWT required.
  *     tags:
  *       - Products
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: category
@@ -196,11 +194,9 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
  * /api/products/facets:
  *   get:
  *     summary: Available filter facets with counts
- *     description: Returns the selectable categories, origins and tags with the number of matching products. Category counts always cover the whole catalog so the navigation tabs stay stable, while origin and tag counts are scoped to the selected category. Requires a valid JWT token.
+ *     description: Returns the selectable categories, origins and tags with the number of matching products. Category counts always cover the whole catalog so the navigation tabs stay stable, while origin and tag counts are scoped to the selected category. Public, no JWT required.
  *     tags:
  *       - Products
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: category
@@ -288,11 +284,9 @@ router.get('/facets', async (req: Request, res: Response): Promise<void> => {
  * /api/products/{sku}:
  *   get:
  *     summary: Get a single product by SKU
- *     description: Returns the full product detail used by the product sheet. Requires a valid JWT token.
+ *     description: Returns the full product detail used by the product sheet. Public, no JWT required.
  *     tags:
  *       - Products
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: sku

@@ -49,6 +49,11 @@ export const EMPTY_FACETS: ProductFacets = {
   tags: [],
 };
 
+export interface CartLine {
+  product: Product;
+  quantity: number;
+}
+
 export const DEFAULT_FILTERS: ProductFilters = {
   category: '',
   origins: [],

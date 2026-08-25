@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import CartSidebarPlaceholder from '../components/catalog/CartSidebarPlaceholder';
+import CartSidebar from '../components/catalog/CartSidebar';
 import CatalogEmptyState from '../components/catalog/CatalogEmptyState';
 import CatalogSkeleton from '../components/catalog/CatalogSkeleton';
 import CatalogTopBar from '../components/catalog/CatalogTopBar';
 import FilterSidebar from '../components/catalog/FilterSidebar';
 import ProductGrid from '../components/catalog/ProductGrid';
+import { useCart } from '../context/CartProvider';
 import { useProducts } from '../hooks/useProducts';
 import { PRODUCT_SORTS, type ProductSort } from '../types/catalog';
 
@@ -16,6 +17,7 @@ const SORT_LABEL_KEYS: Record<ProductSort, string> = {
 
 const Catalog = () => {
   const { t } = useTranslation('common');
+  const { itemCount } = useCart();
   const {
     filters,
     searchInput,
@@ -24,7 +26,6 @@ const Catalog = () => {
     facets,
     loading,
     error,
-    tokenMissing,
     activeFilterCount,
     setSearch,
     setCategory,
@@ -37,10 +38,11 @@ const Catalog = () => {
 
   const hasActiveFilters =
     activeFilterCount > 0 || filters.category !== '' || filters.search !== '';
+  const cartOpen = itemCount > 0;
 
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-background dark:bg-background-dark text-textPrimary dark:text-textPrimary-dark">
-      <div className="mx-auto max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8">
+      <div className={`mx-auto px-4 py-6 sm:px-6 lg:px-8 ${cartOpen ? 'max-w-[1600px]' : 'max-w-7xl'}`}>
         <header className="mb-5 space-y-1">
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{t('catalog.title')}</h1>
           <p className="text-sm text-textSecondary dark:text-textSecondary-dark">
@@ -56,7 +58,11 @@ const Catalog = () => {
           onCategoryChange={setCategory}
         />
 
-        <div className="mt-5 grid gap-5 lg:grid-cols-[16rem_minmax(0,1fr)] xl:grid-cols-[16rem_minmax(0,1fr)_20rem]">
+        <div
+          className={`mt-5 grid gap-5 lg:grid-cols-[16rem_minmax(0,1fr)] ${
+            cartOpen ? 'xl:grid-cols-[16rem_minmax(0,1fr)_20rem]' : ''
+          }`}
+        >
           <div className="lg:sticky lg:top-20 lg:self-start">
             <FilterSidebar
               origins={facets.origins}
@@ -70,7 +76,7 @@ const Catalog = () => {
             />
           </div>
 
-          <section className="space-y-4">
+          <section className={`space-y-4 ${cartOpen ? 'pb-36 xl:pb-0' : ''}`}>
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-sm text-textSecondary dark:text-textSecondary-dark">
                 {t('catalog.resultCount', { total })}
@@ -93,11 +99,7 @@ const Catalog = () => {
               </label>
             </div>
 
-            {tokenMissing ? (
-              <div className="rounded-md border border-status-warning bg-status-warning-bg px-4 py-3 text-sm text-status-warning">
-                {t('catalog.errors.noJwt')}
-              </div>
-            ) : error !== null ? (
+            {error !== null ? (
               <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-status-error bg-status-error-bg px-4 py-3 text-sm text-status-error">
                 <span>{t('catalog.errors.loadFailed', { message: error })}</span>
                 <button type="button" onClick={reload} className="font-semibold hover:underline">
@@ -113,11 +115,21 @@ const Catalog = () => {
             )}
           </section>
 
-          <div className="hidden xl:block xl:sticky xl:top-20 xl:self-start xl:h-[calc(100vh-6rem)]">
-            <CartSidebarPlaceholder />
-          </div>
+          {cartOpen && (
+            <div className="hidden xl:block xl:sticky xl:top-20 xl:self-start">
+              <CartSidebar />
+            </div>
+          )}
         </div>
       </div>
+
+      {cartOpen && (
+        <div className="fixed inset-x-0 bottom-0 z-40 p-3 xl:hidden">
+          <div className="mx-auto max-h-[50vh] max-w-3xl overflow-hidden rounded-lg shadow-lg">
+            <CartSidebar />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

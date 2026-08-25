@@ -141,8 +141,6 @@ export const useProducts = () => {
   }, [filters.search]);
 
   useEffect(() => {
-    if (!jwtToken) return undefined;
-
     const controller = new AbortController();
 
     const load = async () => {
@@ -150,11 +148,11 @@ export const useProducts = () => {
       setError(null);
       try {
         const [list, facetGroups] = await Promise.all([
-          listProducts(jwtToken, filters, controller.signal),
+          listProducts(filters, controller.signal, jwtToken ?? undefined),
           listFacets(
-            jwtToken,
             { category: filters.category, search: filters.search },
             controller.signal,
+            jwtToken ?? undefined,
           ),
         ]);
         setProducts(list.items);
@@ -183,7 +181,6 @@ export const useProducts = () => {
     facets,
     loading,
     error,
-    tokenMissing: !jwtToken,
     activeFilterCount,
     setSearch,
     setCategory,
