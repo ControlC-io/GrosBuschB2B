@@ -1,6 +1,6 @@
 # Authentication Specification
 
-AppTemplate uses the [Better Auth](https://better-auth.com) library with providers enabled or disabled dynamically at runtime based on database records.
+GrosBuschB2B uses the [Better Auth](https://better-auth.com) library with providers enabled or disabled dynamically at runtime based on database records.
 
 ## Database Schema (Prisma)
 
@@ -39,6 +39,6 @@ Standard schema required by Better Auth. Includes: `email`, `name`, `image`, `pr
 
 ## JWT Strategy
 
-After a successful session login, the backend issues a short-lived JWT signed with `JWT_SECRET`. The frontend stores this in `localStorage` under the key `apptemplate_jwt_token` and includes it as a `Bearer` token in every protected API request.
+After a successful session login, the backend issues a short-lived JWT signed with `JWT_SECRET`. The frontend stores this in `localStorage` under the key `grosbuschb2b_jwt_token` and includes it as a `Bearer` token in every protected API request.
 
 The `jwtAuth` middleware on the backend validates this token on every protected route.

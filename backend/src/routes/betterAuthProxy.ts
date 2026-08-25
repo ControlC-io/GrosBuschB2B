@@ -4,7 +4,7 @@ import { auth } from '../lib/auth';
 const router = express.Router();
 
 /** Cookie prefix (must match auth.ts advanced.cookiePrefix). */
-const COOKIE_PREFIX = 'dmz_auth';
+const COOKIE_PREFIX = 'grosbuschb2b_auth';
 /** Better Auth cookie names (prefix.name). */
 const SESSION_COOKIE = `${COOKIE_PREFIX}.session_token`;
 const SESSION_DATA_COOKIE = `${COOKIE_PREFIX}.session_data`;

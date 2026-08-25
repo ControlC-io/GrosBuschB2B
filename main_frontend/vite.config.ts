@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
       },
       proxy: {
         '/api': {
-          target: 'http://backend_api:3000',
+          target: 'http://backend:3000',
           changeOrigin: true,
         },
         // Proxy for external accounting / tickets API to avoid CORS in the browser.

@@ -31,7 +31,7 @@ export const useAuth = (): AuthContextType => {
   return context;
 };
 
-const JWT_STORAGE_KEY = 'apptemplate_jwt_token';
+const JWT_STORAGE_KEY = 'grosbuschb2b_jwt_token';
 const PENDING_OTP_KEY = 'pending_email_otp_user_id';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {

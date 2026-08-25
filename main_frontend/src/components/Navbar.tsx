@@ -18,6 +18,7 @@ type PrimaryNavItem = {
 
 const primaryNavItems: PrimaryNavItem[] = [
   { labelKey: "nav.dashboard", to: "/dashboard" },
+  { labelKey: "nav.catalog", to: "/catalog" },
   {
     labelKey: "nav.features",
     submenu: [

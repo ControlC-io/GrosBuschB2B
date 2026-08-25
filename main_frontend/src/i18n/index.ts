@@ -4,7 +4,7 @@ import { initReactI18next } from "react-i18next";
 import frCommon from "../locales/fr/common.json";
 import enCommon from "../locales/en/common.json";
 
-const STORAGE_KEY = "apptemplate-language";
+const STORAGE_KEY = "grosbuschb2b-language";
 
 const getInitialLanguage = (): "fr" | "en" => {
   if (typeof window === "undefined") {

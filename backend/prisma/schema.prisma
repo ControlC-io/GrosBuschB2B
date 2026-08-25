@@ -2,8 +2,9 @@
 
 generator client {
   provider      = "prisma-client-js"
-  // Windows (local), linux-musl (Alpine x64), linux-musl-arm64 (Alpine ARM e.g. Docker Desktop ARM)
-  binaryTargets = ["windows", "linux-musl", "linux-musl-arm64-openssl-3.0.x"]
+  // Windows (local), linux-musl (Alpine x64 with OpenSSL 1.1), linux-musl-openssl-3.0.x
+  // (Alpine x64 with OpenSSL 3, current node:20-alpine), linux-musl-arm64 (Alpine ARM e.g. Docker Desktop ARM)
+  binaryTargets = ["windows", "linux-musl", "linux-musl-openssl-3.0.x", "linux-musl-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -173,4 +174,25 @@ model Document {
 
   @@index([userId])
   @@map("documents")
+}
+
+// Catalog product for the webshop PoC
+model Product {
+  id           String   @id @default(uuid())
+  sku          String   @unique
+  name         String
+  origin       String
+  category     String
+  pricePerUnit Decimal  @db.Decimal(10, 2)
+  oldPrice     Decimal? @db.Decimal(10, 2)
+  pricePerKg   Decimal? @db.Decimal(10, 2)
+  salesUnit    String   @default("PCS")
+  tags         String[]
+  imageUrl     String
+  isAvailable  Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([category])
+  @@map("products")
 }

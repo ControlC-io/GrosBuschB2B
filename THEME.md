@@ -1,4 +1,4 @@
-# AppTemplate Theme
+# GrosBuschB2B Theme
 
 This template uses **Tailwind CSS with class-based dark mode**. All colors are defined as custom tokens in `tailwind.config.js`. Change a color once there, and every component picks it up automatically.
 

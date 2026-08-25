@@ -5,10 +5,10 @@ const options: swaggerJSDoc.Options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'DMZ Secure App API',
+      title: 'GrosBuschB2B API',
       version: '1.0.0',
       description:
-        'REST API for the DMZ Secure App. Protected endpoints require a Bearer JWT obtained from `POST /api/auth/token`.',
+        'REST API for GrosBuschB2B. Protected endpoints require a Bearer JWT obtained from `POST /api/auth/token`.',
     },
     servers: [
       {
@@ -110,6 +110,30 @@ const options: swaggerJSDoc.Options = {
             providerConfig: { type: 'object', nullable: true },
             createdAt: { type: 'string', format: 'date-time' },
             updatedAt: { type: 'string', format: 'date-time' },
+          },
+        },
+        Product: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', format: 'uuid' },
+            sku: { type: 'string', example: 'p001' },
+            name: { type: 'string', example: 'SICILIAN NOCELLARA OLIVES ANTIPASTI 130 G' },
+            origin: { type: 'string', example: 'ITALY' },
+            category: { type: 'string', example: 'New' },
+            pricePerUnit: { type: 'number', format: 'float', example: 3.49 },
+            oldPrice: { type: 'number', format: 'float', nullable: true, example: 3.99 },
+            pricePerKg: { type: 'number', format: 'float', nullable: true, example: 26.85 },
+            salesUnit: { type: 'string', example: 'KG' },
+            tags: { type: 'array', items: { type: 'string' }, example: ['New', 'Promo'] },
+            imageUrl: { type: 'string', format: 'uri' },
+            isAvailable: { type: 'boolean' },
+          },
+        },
+        Facet: {
+          type: 'object',
+          properties: {
+            value: { type: 'string', example: 'ITALY' },
+            count: { type: 'integer', example: 4 },
           },
         },
         AuditLog: {

@@ -52,3 +52,9 @@ coverage/
 
 # TypeScript
 *.tsbuildinfo
+
+# plan files
+Plan_PoC_Webshop.md 
+
+#poc files
+mock_products_poc_20.json

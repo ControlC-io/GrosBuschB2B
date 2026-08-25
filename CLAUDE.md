@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**AppTemplate** is a secure, multi-tier web application template with network-isolated DMZ architecture. It consists of a user-facing React frontend, an admin React frontend, an Express/TypeScript backend, an isolated email microservice, PostgreSQL, and NGINX as the reverse proxy entry point.
+**GrosBuschB2B** is a secure, multi-tier B2B and B2C webshop with network-isolated DMZ architecture. It consists of a user-facing React frontend, an admin React frontend, an Express/TypeScript backend, an isolated email microservice, PostgreSQL, and NGINX as the reverse proxy entry point.
 
 ---
 

@@ -4,6 +4,7 @@
     "admin": "Panneau admin",
     "menu": "Menu",
     "dashboard": "Tableau de bord",
+    "catalog": "Catalogue",
     "features": "Fonctionnalités"
   },
   "auth": {
@@ -20,7 +21,7 @@
     },
     "register": {
       "title": "Créer un compte",
-      "subtitle": "Commencez avec AppTemplate",
+      "subtitle": "Commencez avec GrosBuschB2B",
       "haveAccount": "Vous avez déjà un compte ?",
       "signIn": "Se connecter"
     },
@@ -83,7 +84,7 @@
     "loading": "Chargement..."
   },
   "home": {
-    "title": "AppTemplate",
+    "title": "GrosBuschB2B",
     "subtitle": "Modèle full-stack avec architecture réseau sécurisée en DMZ",
     "status": {
       "checking": "Vérification en cours...",
@@ -152,7 +153,7 @@
       "description": "Menu avec liens rapides"
     },
     "footer": {
-      "text": "AppTemplate · Architecture sécurisée avec segmentation réseau · React + Express + PostgreSQL + NGINX"
+      "text": "GrosBuschB2B · Architecture sécurisée avec segmentation réseau · React + Express + PostgreSQL + NGINX"
     },
     "featuresList": {
       "twoFa": {
@@ -193,12 +194,72 @@
     "welcomeDescription": "Votre tableau de bord vous donne accès à votre profil, aux fonctionnalités de l'application et à l'état des services.",
     "links": {
       "counter": "Démo compteur",
+      "catalog": "Catalogue",
       "profile": "Profil",
       "documents": "Documents",
       "featureOne": "Fonctionnalité 1",
       "featureTwo": "Fonctionnalité 2",
       "featureThree": "Fonctionnalité 3",
       "admin": "Panneau admin"
+    }
+  },
+  "catalog": {
+    "title": "Catalogue",
+    "subtitle": "Parcourez les articles en ligne, filtrez par univers, origine et label.",
+    "searchPlaceholder": "Rechercher un article",
+    "deliverySlot": "Livraison",
+    "categoriesLabel": "Univers produits",
+    "allCategories": "Tous les articles",
+    "resultCount": "{{total}} articles",
+    "retry": "Réessayer",
+    "sort": {
+      "label": "Trier par",
+      "name": "Nom",
+      "priceAsc": "Prix croissant",
+      "priceDesc": "Prix décroissant"
+    },
+    "filters": {
+      "title": "Filtres",
+      "origins": "Origines",
+      "tags": "Labels et attributs",
+      "clear": "Tout effacer",
+      "empty": "Aucune valeur disponible"
+    },
+    "badges": {
+      "new": "Nouveau",
+      "promo": "Promo",
+      "bio": "Bio",
+      "fairtrade": "Fairtrade",
+      "local": "Local",
+      "fresh": "Frais",
+      "seasonal": "Saison",
+      "comingSoon": "Bientôt",
+      "preOrder": "Précommande",
+      "luxury": "Prestige"
+    },
+    "card": {
+      "favorite": "Ajouter aux favoris",
+      "decrease": "Diminuer la quantité",
+      "increase": "Augmenter la quantité",
+      "perSalesUnit": "Vendu à la {{unit}}"
+    },
+    "empty": {
+      "title": "Aucun article trouvé",
+      "description": "Aucun article ne correspond à votre sélection. Modifiez vos filtres ou votre recherche."
+    },
+    "errors": {
+      "noJwt": "Aucun jeton JWT disponible. Veuillez vous déconnecter puis vous reconnecter.",
+      "loadFailed": "Impossible de charger le catalogue : {{message}}"
+    },
+    "cart": {
+      "title": "Votre panier",
+      "deliveryOn": "Livraison le {{date}} entre {{window}}",
+      "empty": "Votre panier est vide",
+      "emptyHint": "Ajoutez des articles avec le bouton orange des cartes produit.",
+      "subtotal": "Sous total",
+      "minimumNotice": "Minimum de commande : {{amount}}",
+      "validate": "Valider et payer",
+      "comingSoon": "Panier interactif disponible à la prochaine étape du PoC."
     }
   },
   "documents": {

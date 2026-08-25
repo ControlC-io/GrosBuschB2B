@@ -17,7 +17,7 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
-const STORAGE_KEY = "apptemplate-theme";
+const STORAGE_KEY = "grosbuschb2b-theme";
 
 const getInitialTheme = (): Theme => {
   if (typeof window === "undefined") {

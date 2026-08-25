@@ -1,6 +1,6 @@
-# AppTemplate
+# GrosBuschB2B
 
-Production-ready full-stack starter: React + Express + PostgreSQL + NGINX in a DMZ architecture, with auth, 2FA, RBAC, dark mode, and i18n built in.
+B2B and B2C webshop: React + Express + PostgreSQL + NGINX in a DMZ architecture, with auth, 2FA, RBAC, dark mode, and i18n built in.
 
 ## Stack
 
@@ -52,7 +52,7 @@ nginx/            Reverse proxy config
 
 ## How to Customise
 
-**Rename the app** — search-replace `AppTemplate` / `apptemplate` in:
+**Rename the app** — search-replace `GrosBuschB2B` / `grosbuschb2b` in:
 `index.html`, `package.json`, `.env`, `docker-compose.yml`,
 `shared/auth/AuthProvider.tsx` (`JWT_STORAGE_KEY`),
 `src/i18n/index.ts` (`STORAGE_KEY`), locale files.

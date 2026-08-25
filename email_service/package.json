@@ -1,5 +1,5 @@
 {
-  "name": "email-service",
+  "name": "grosbuschb2b-email-service",
   "version": "1.0.0",
   "description": "Dedicated SendGrid email microservice for 2FA OTP delivery",
   "main": "dist/index.js",

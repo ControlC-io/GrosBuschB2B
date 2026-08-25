@@ -11,7 +11,7 @@ interface LanguagePickerProps {
   onChange?: (language: Language) => void;
 }
 
-const STORAGE_KEY = "apptemplate-language";
+const STORAGE_KEY = "grosbuschb2b-language";
 
 const getInitialLanguage = (): Language => {
   if (typeof window === "undefined") {

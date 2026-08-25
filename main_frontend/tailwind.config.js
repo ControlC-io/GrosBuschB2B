@@ -12,6 +12,13 @@ export default {
         primary: "#3B82F6",
         secondary: "#0EA5E9",
 
+        // Webshop brand (product actions and order validation)
+        "brand-orange": "#F29400",
+        "brand-orange-hover": "#D98400",
+        "brand-orange-bg": "#FFF4E0",
+        "brand-green": "#76C186",
+        "brand-green-hover": "#63AC73",
+
         // Backgrounds
         background: "#F8FAFC",
         "background-dark": "#0F172A",

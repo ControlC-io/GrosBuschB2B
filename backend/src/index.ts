@@ -19,6 +19,7 @@ import betterAuthProxyRouter from './routes/betterAuthProxy';
 import adminRouter from './routes/admin';
 import rolesRouter from './routes/roles';
 import counterRouter from './routes/counter';
+import productsRouter from './routes/products';
 import uploadRouter from './routes/upload';
 import documentsRouter from './routes/documents';
 
@@ -120,6 +121,9 @@ app.use(jwtAuth);
 // ─── Counter Routes (JWT protected) ──────────────────────────────────────────
 app.use('/api/counter', counterRouter);
 
+// ─── Catalog Routes (JWT protected) ──────────────────────────────────────────
+app.use('/api/products', productsRouter);
+
 // ─── Document Upload & Storage Routes (JWT protected) ─────────────────────────
 app.use('/api/upload', uploadRouter);
 app.use('/api/documents', documentsRouter);
@@ -142,7 +146,7 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
 
 async function ensureMinioReady(): Promise<void> {
   const endpoint = process.env.MINIO_ENDPOINT ?? 'http://minio:9000';
-  const bucket = process.env.MINIO_BUCKET ?? 'apptemplate-documents';
+  const bucket = process.env.MINIO_BUCKET ?? 'grosbuschb2b-documents';
   const client = new S3Client({
     endpoint,
     region: 'us-east-1',

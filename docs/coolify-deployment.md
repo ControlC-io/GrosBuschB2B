@@ -1,4 +1,4 @@
-# Deploying AppTemplate to Coolify
+# Deploying GrosBuschB2B to Coolify
 
 Step by step guide to deploy this project on [Coolify](https://coolify.io) using Docker Compose. Based on the same patterns used in the lawyer-app Coolify setup.
 

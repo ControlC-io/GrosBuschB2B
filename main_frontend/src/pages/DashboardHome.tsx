@@ -44,6 +44,14 @@ const LayoutIcon = () => (
   </svg>
 );
 
+const CatalogIcon = () => (
+  <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M3 3h2l2.4 12h11.2L21 7H6" />
+    <circle cx="9.5" cy="20" r="1.2" />
+    <circle cx="17.5" cy="20" r="1.2" />
+  </svg>
+);
+
 const StarIcon = () => (
   <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -60,6 +68,7 @@ const ShieldIcon = () => (
 const getIconForLink = (id: DashboardLink['id']) => {
   switch (id) {
     case 'counter': return <CounterIcon />;
+    case 'catalog': return <CatalogIcon />;
     case 'profile': return <ProfileIcon />;
     case 'documents': return <FileIcon />;
     case 'feature-one': return <PuzzleIcon />;
@@ -72,6 +81,7 @@ const getIconForLink = (id: DashboardLink['id']) => {
 
 const links: DashboardLink[] = [
   { id: 'counter', titleKey: 'dashboard.links.counter', to: '/dashboard' },
+  { id: 'catalog', titleKey: 'dashboard.links.catalog', to: '/catalog' },
   { id: 'profile', titleKey: 'dashboard.links.profile', to: '/info' },
   { id: 'documents', titleKey: 'dashboard.links.documents', to: '/documents' },
   { id: 'feature-two', titleKey: 'dashboard.links.featureTwo', to: '/features/example-two' },
@@ -97,7 +107,7 @@ const DashboardHome = () => {
         <div className="bg-surface dark:bg-surface-dark border border-border dark:border-border-dark rounded-lg shadow-sm px-6 sm:px-8 py-8 sm:py-10 space-y-8">
           <header className="text-center space-y-3">
             <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-textPrimary dark:text-textPrimary-dark">
-              {t('dashboard.welcomeTitle', { brand: 'AppTemplate' })}
+              {t('dashboard.welcomeTitle', { brand: 'GrosBuschB2B' })}
             </h1>
             <p className="max-w-3xl mx-auto text-sm sm:text-base text-textSecondary dark:text-textSecondary-dark">
               {t('dashboard.welcomeDescription')}

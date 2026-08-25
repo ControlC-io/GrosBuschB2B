@@ -1,7 +1,7 @@
 {
-  "name": "apptemplate-backend",
+  "name": "grosbuschb2b-backend",
   "version": "1.0.0",
-  "description": "Backend API for DMZ architecture project",
+  "description": "Backend API for the GrosBuschB2B webshop",
   "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
@@ -12,6 +12,7 @@
     "prisma:push": "prisma db push",
     "prisma:studio": "prisma studio",
     "seed": "ts-node src/scripts/seed.ts",
+    "seed:products": "ts-node src/scripts/seedProducts.ts",
     "test:auth": "ts-node src/scripts/test-auth.ts"
   },
   "dependencies": {

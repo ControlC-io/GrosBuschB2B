@@ -417,7 +417,7 @@ const Home = () => {
         {/* ── Footer info ── */}
         <div className="text-center pb-4">
           <p className="text-xs text-textSecondary dark:text-textSecondary-dark">
-            AppTemplate · Secure architecture with network segmentation · React + Express + PostgreSQL + NGINX
+            GrosBuschB2B · Secure architecture with network segmentation · React + Express + PostgreSQL + NGINX
           </p>
         </div>
 

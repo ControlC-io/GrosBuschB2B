@@ -17,7 +17,7 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
-const STORAGE_KEY = "apptemplate-theme";
+const STORAGE_KEY = "grosbuschb2b-theme";
 
 // CSS custom properties injected on <html> for each theme.
 // These mirror the tokens in tailwind.config.js so colors are
@@ -26,6 +26,8 @@ const CSS_VARS: Record<Theme, Record<string, string>> = {
   light: {
     "--color-primary":          "#3B82F6",
     "--color-secondary":        "#0EA5E9",
+    "--color-brand-orange":     "#F29400",
+    "--color-brand-green":      "#76C186",
     "--color-background":       "#F8FAFC",
     "--color-surface":          "#FFFFFF",
     "--color-border":           "#E2E8F0",
@@ -37,6 +39,8 @@ const CSS_VARS: Record<Theme, Record<string, string>> = {
   dark: {
     "--color-primary":          "#3B82F6",
     "--color-secondary":        "#0EA5E9",
+    "--color-brand-orange":     "#F29400",
+    "--color-brand-green":      "#76C186",
     "--color-background":       "#0F172A",
     "--color-surface":          "#1E293B",
     "--color-border":           "#334155",

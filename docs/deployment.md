@@ -1,6 +1,6 @@
 # Deployment Guide
 
-AppTemplate can be deployed to production using **Coolify** and `docker-compose.coolify.yml`.
+GrosBuschB2B can be deployed to production using **Coolify** and `docker-compose.coolify.yml`.
 
 For the complete step by step Coolify guide, see [coolify-deployment.md](coolify-deployment.md).
 
@@ -80,10 +80,10 @@ docker compose exec backend npm run seed
 
 ```bash
 # Backup
-docker compose exec postgres pg_dump -U postgres apptemplate > backup.sql
+docker compose exec postgres pg_dump -U postgres grosbuschb2b > backup.sql
 
 # Restore
-docker compose exec -T postgres psql -U postgres apptemplate < backup.sql
+docker compose exec -T postgres psql -U postgres grosbuschb2b < backup.sql
 ```
 
 ---

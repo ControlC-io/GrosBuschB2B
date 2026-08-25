@@ -39,7 +39,7 @@ function getSigningClient(): S3Client {
 }
 
 function getBucket(): string {
-  return process.env.MINIO_BUCKET ?? 'apptemplate-documents';
+  return process.env.MINIO_BUCKET ?? 'grosbuschb2b-documents';
 }
 
 export async function checkMinioHealth(): Promise<{ ok: boolean; latencyMs: number; message: string }> {

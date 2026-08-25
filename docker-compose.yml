@@ -10,11 +10,11 @@ networks:
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: database
+    container_name: grosbuschb2b_database
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      POSTGRES_DB: ${POSTGRES_DB:-apptemplate}
+      POSTGRES_DB: ${POSTGRES_DB:-grosbuschb2b}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -25,7 +25,7 @@ services:
       - internal_net
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-apptemplate}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-grosbuschb2b}"]
       interval: 3s
       timeout: 5s
       retries: 5
@@ -33,7 +33,7 @@ services:
 
   minio:
     image: minio/minio:latest
-    container_name: minio_storage
+    container_name: grosbuschb2b_minio
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
@@ -57,7 +57,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: backend_api
+    container_name: grosbuschb2b_backend
     environment:
       NODE_ENV: ${NODE_ENV:-development}
       DATABASE_URL: ${DATABASE_URL}
@@ -73,7 +73,7 @@ services:
       MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-http://127.0.0.1:9000}
       MINIO_ACCESS_KEY: ${MINIO_ROOT_USER:-minioadmin}
       MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin}
-      MINIO_BUCKET: ${MINIO_BUCKET:-apptemplate-documents}
+      MINIO_BUCKET: ${MINIO_BUCKET:-grosbuschb2b-documents}
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -95,7 +95,7 @@ services:
     build:
       context: ./main_frontend
       dockerfile: Dockerfile
-    container_name: main_frontend_app
+    container_name: grosbuschb2b_main_frontend
     environment:
       NODE_ENV: ${NODE_ENV:-development}
     volumes:
@@ -110,7 +110,7 @@ services:
     build:
       context: ./admin_frontend
       dockerfile: Dockerfile
-    container_name: admin_frontend_app
+    container_name: grosbuschb2b_admin_frontend
     environment:
       NODE_ENV: ${NODE_ENV:-development}
     volumes:
@@ -125,7 +125,7 @@ services:
     build:
       context: ./email_service
       dockerfile: Dockerfile
-    container_name: email_service
+    container_name: grosbuschb2b_email_service
     environment:
       NODE_ENV: ${NODE_ENV:-development}
       EMAIL_SERVICE_PORT: ${EMAIL_SERVICE_PORT:-3001}
@@ -141,7 +141,7 @@ services:
 
   nginx:
     image: nginx:alpine
-    container_name: reverse_proxy
+    container_name: grosbuschb2b_nginx
     ports:
       - "80:80"
       - "443:443"

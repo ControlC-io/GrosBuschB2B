@@ -79,7 +79,7 @@ Both import from `shared/auth/` for AuthProvider, useAuth, authClient, types.
 
 - Only main_frontend has i18n (admin_frontend does not)
 - Default/fallback language: **French** (`fr`)
-- localStorage key: `apptemplate-language`
+- localStorage key: `grosbuschb2b-language`
 - Locale files: `main_frontend/src/locales/{fr,en}/common.json`
 - Config: `main_frontend/src/i18n/index.ts`
 
@@ -87,16 +87,16 @@ Both import from `shared/auth/` for AuthProvider, useAuth, authClient, types.
 
 Both frontends have separate `tailwind.config.js` and `ThemeProvider.tsx` — keep them in sync when changing tokens. Full token reference: `THEME.md`.
 
-## Naming When Renaming
+## Project Naming
 
-When adapting this template, these strings must be replaced:
+The project name appears in these places. Keep them consistent when renaming:
 
 | String | Where it appears |
 |--------|-----------------|
-| `AppTemplate` | package.json names, docker-compose container names |
-| `apptemplate` | POSTGRES_DB, DATABASE_URL, localStorage keys (`apptemplate_jwt_token`, `apptemplate-theme`, `apptemplate-language`) |
-| `DMZ Secure App` | Better Auth `appName` and TOTP `issuer` in `backend/src/lib/auth.ts` |
-| `dmz_auth` | Cookie prefix in `backend/src/lib/auth.ts` |
+| `GrosBuschB2B` | package.json names, page titles, Better Auth `appName` and TOTP `issuer` in `backend/src/lib/auth.ts`, Swagger title |
+| `grosbuschb2b` | POSTGRES_DB, DATABASE_URL, docker-compose container names, localStorage keys (`grosbuschb2b_jwt_token`, `grosbuschb2b-theme`, `grosbuschb2b-language`) |
+| `grosbuschb2b-documents` | MINIO_BUCKET and the matching nginx location block |
+| `grosbuschb2b_auth` | Cookie prefix in `backend/src/lib/auth.ts` and `backend/src/routes/betterAuthProxy.ts` |
 
 ## Adding a New Route
 

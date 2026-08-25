@@ -16,10 +16,10 @@ const Login = () => {
           {/* Brand header */}
           <div className="flex items-center gap-3">
             <span className="w-10 h-10 rounded-lg bg-surface dark:bg-surface-dark border border-border dark:border-border-dark flex items-center justify-center overflow-hidden">
-              <span className="text-base font-bold text-primary">A</span>
+              <span className="text-base font-bold text-primary">G</span>
             </span>
             <span className="text-[22px] font-bold tracking-tight text-textPrimary dark:text-textPrimary-dark">
-              AppTemplate
+              GrosBuschB2B
             </span>
           </div>
 

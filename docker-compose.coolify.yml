@@ -24,7 +24,7 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      POSTGRES_DB: ${POSTGRES_DB:-apptemplate}
+      POSTGRES_DB: ${POSTGRES_DB:-grosbuschb2b}
     command: >
       postgres
         -c shared_buffers=256MB
@@ -37,7 +37,7 @@ services:
     networks:
       - internal_net
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-apptemplate}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-grosbuschb2b}"]
       interval: 10s
       timeout: 5s
       retries: 5

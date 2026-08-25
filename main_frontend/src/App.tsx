@@ -9,6 +9,7 @@ import EmailOtpChallenge from "./pages/EmailOtpChallenge";
 import Navbar from "./components/Navbar";
 import RequireAuth from "./components/RequireAuth";
 import DashboardHome from "./pages/DashboardHome";
+import Catalog from "./pages/Catalog";
 import Documents from "./pages/Documents";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import { ThemeProvider } from "./theme/ThemeProvider";
@@ -30,6 +31,7 @@ const App = () => {
                 <Route path="/auth/email-otp" element={<EmailOtpChallenge />} />
                 <Route element={<RequireAuth />}>
                   <Route path="/dashboard" element={<DashboardHome />} />
+                  <Route path="/catalog" element={<Catalog />} />
                   <Route path="/documents" element={<Documents />} />
                   <Route path="/info" element={<InfoPage />} />
                   {/* Generic feature routes — rename or replace with your own pages */}

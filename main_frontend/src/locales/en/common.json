@@ -4,6 +4,7 @@
     "admin": "Admin Panel",
     "menu": "Menu",
     "dashboard": "Dashboard",
+    "catalog": "Catalog",
     "features": "Features"
   },
   "auth": {
@@ -20,7 +21,7 @@
     },
     "register": {
       "title": "Create Account",
-      "subtitle": "Get started with AppTemplate",
+      "subtitle": "Get started with GrosBuschB2B",
       "haveAccount": "Already have an account?",
       "signIn": "Sign in"
     },
@@ -83,7 +84,7 @@
     "loading": "Loading..."
   },
   "home": {
-    "title": "AppTemplate",
+    "title": "GrosBuschB2B",
     "subtitle": "Full-stack starter template with secure DMZ architecture",
     "status": {
       "checking": "Checking...",
@@ -152,7 +153,7 @@
       "description": "Menu with quick links"
     },
     "footer": {
-      "text": "AppTemplate · Secure architecture with network segmentation · React + Express + PostgreSQL + NGINX"
+      "text": "GrosBuschB2B · Secure architecture with network segmentation · React + Express + PostgreSQL + NGINX"
     },
     "featuresList": {
       "twoFa": {
@@ -193,12 +194,72 @@
     "welcomeDescription": "Your dashboard gives you access to your profile, application features, and system status. Use the links below to navigate.",
     "links": {
       "counter": "Counter Demo",
+      "catalog": "Catalog",
       "profile": "Profile",
       "documents": "Documents",
       "featureOne": "Feature One",
       "featureTwo": "Feature Two",
       "featureThree": "Feature Three",
       "admin": "Admin Panel"
+    }
+  },
+  "catalog": {
+    "title": "Catalog",
+    "subtitle": "Browse the online assortment and filter by universe, origin and label.",
+    "searchPlaceholder": "Search for a product",
+    "deliverySlot": "Delivery",
+    "categoriesLabel": "Product universes",
+    "allCategories": "All products",
+    "resultCount": "{{total}} products",
+    "retry": "Retry",
+    "sort": {
+      "label": "Sort by",
+      "name": "Name",
+      "priceAsc": "Price low to high",
+      "priceDesc": "Price high to low"
+    },
+    "filters": {
+      "title": "Filters",
+      "origins": "Origins",
+      "tags": "Labels and attributes",
+      "clear": "Clear all",
+      "empty": "No value available"
+    },
+    "badges": {
+      "new": "New",
+      "promo": "Promo",
+      "bio": "Bio",
+      "fairtrade": "Fairtrade",
+      "local": "Local",
+      "fresh": "Fresh",
+      "seasonal": "Seasonal",
+      "comingSoon": "Coming soon",
+      "preOrder": "Pre order",
+      "luxury": "Luxury"
+    },
+    "card": {
+      "favorite": "Add to favorites",
+      "decrease": "Decrease quantity",
+      "increase": "Increase quantity",
+      "perSalesUnit": "Sold per {{unit}}"
+    },
+    "empty": {
+      "title": "No product found",
+      "description": "No product matches your selection. Adjust your filters or your search."
+    },
+    "errors": {
+      "noJwt": "No JWT token available. Please sign out and sign in again.",
+      "loadFailed": "Could not load the catalog: {{message}}"
+    },
+    "cart": {
+      "title": "Your cart",
+      "deliveryOn": "Delivery on {{date}} between {{window}}",
+      "empty": "Your cart is empty",
+      "emptyHint": "Add products with the orange button on the product cards.",
+      "subtotal": "Subtotal",
+      "minimumNotice": "Order minimum: {{amount}}",
+      "validate": "Validate and pay",
+      "comingSoon": "The interactive cart lands in the next PoC step."
     }
   },
   "documents": {

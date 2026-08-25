@@ -26,16 +26,16 @@ export const auth = betterAuth({
     enabled: true,
     autoSignIn: true
   },
-  appName: 'DMZ Secure App',
+  appName: 'GrosBuschB2B',
   secret: process.env.BETTER_AUTH_SECRET || 'default_secret_change_in_production',
   baseURL: process.env.BETTER_AUTH_URL || 'http://localhost:3000',
   trustedOrigins,
   advanced: {
-    cookiePrefix: 'dmz_auth'
+    cookiePrefix: 'grosbuschb2b_auth'
   },
   plugins: [
     twoFactor({
-      issuer: 'DMZ Secure App',
+      issuer: 'GrosBuschB2B',
       totpOptions: {
         period: 30
       }
