@@ -304,12 +304,26 @@
     "cart": {
       "title": "Your cart",
       "deliveryOn": "Delivery on {{date}} between {{window}}",
+      "noDate": "No delivery date selected",
+      "changeDate": "Change delivery date",
+      "close": "Close cart",
       "empty": "Your cart is empty",
       "emptyHint": "Add products with the orange button on the product cards.",
       "subtotal": "Subtotal",
       "minimumNotice": "Order minimum: {{amount}}",
       "validate": "Validate and pay",
       "comingSoon": "The interactive cart lands in the next PoC step."
+    },
+    "slotPicker": {
+      "title": "Choose a delivery slot",
+      "subtitle": "This date applies to the cart and the catalog.",
+      "dateLabel": "Date",
+      "windowLabel": "Time slot",
+      "weekdaysOnly": "Delivery Monday to Friday only.",
+      "prevMonth": "Previous month",
+      "nextMonth": "Next month",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
     }
   },
   "documents": {

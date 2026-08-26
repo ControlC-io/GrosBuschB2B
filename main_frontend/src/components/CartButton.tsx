@@ -1,14 +1,26 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useCart } from '../context/CartProvider';
 
 const CartButton = () => {
   const { t } = useTranslation('common');
-  const { itemCount } = useCart();
+  const navigate = useNavigate();
+  const { itemCount, isOpen, openCart } = useCart();
+
+  if (isOpen && itemCount > 0) return null;
+
+  const handleClick = () => {
+    if (itemCount > 0) {
+      openCart();
+      return;
+    }
+    navigate('/catalog');
+  };
 
   return (
-    <Link
-      to="/catalog"
+    <button
+      type="button"
+      onClick={handleClick}
       className="relative flex w-14 flex-col items-center gap-1 text-textPrimary dark:text-textPrimary-dark"
       aria-label={t('nav.cart')}
     >
@@ -27,7 +39,7 @@ const CartButton = () => {
         )}
       </span>
       <span className="text-[0.62rem] font-bold uppercase tracking-wide">{t('nav.cart')}</span>
-    </Link>
+    </button>
   );
 };
 

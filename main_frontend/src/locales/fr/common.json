@@ -304,12 +304,26 @@
     "cart": {
       "title": "Votre panier",
       "deliveryOn": "Livraison le {{date}} entre {{window}}",
+      "noDate": "Aucune date de livraison",
+      "changeDate": "Modifier la date de livraison",
+      "close": "Fermer le panier",
       "empty": "Votre panier est vide",
       "emptyHint": "Ajoutez des articles avec le bouton orange des cartes produit.",
       "subtotal": "Sous total",
       "minimumNotice": "Minimum de commande : {{amount}}",
       "validate": "Valider et payer",
       "comingSoon": "Panier interactif disponible à la prochaine étape du PoC."
+    },
+    "slotPicker": {
+      "title": "Choisissez un créneau de livraison",
+      "subtitle": "Cette date s'applique au panier et au catalogue.",
+      "dateLabel": "Date",
+      "windowLabel": "Créneau",
+      "weekdaysOnly": "Livraison du lundi au vendredi uniquement.",
+      "prevMonth": "Mois précédent",
+      "nextMonth": "Mois suivant",
+      "confirm": "Confirmer",
+      "cancel": "Annuler"
     }
   },
   "documents": {

@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { DELIVERY_SLOT, ORDER_MINIMUM_EUR } from '../../config/catalog';
+import { ORDER_MINIMUM_EUR } from '../../config/catalog';
 import { useCart } from '../../context/CartProvider';
-import { formatPrice } from '../../utils/format';
+import { formatDeliveryDate, formatPrice } from '../../utils/format';
 
 /**
  * Cart panel shown only when it contains articles. Mounted globally so the
@@ -10,21 +10,53 @@ import { formatPrice } from '../../utils/format';
  */
 const CartSidebar = () => {
   const { t, i18n } = useTranslation('common');
-  const { lines, subtotal, increment, decrement } = useCart();
+  const {
+    lines,
+    subtotal,
+    increment,
+    decrement,
+    deliverySlot,
+    closeCart,
+    changeDeliverySlot,
+  } = useCart();
   const belowMinimum = subtotal < ORDER_MINIMUM_EUR;
+  const dateLabel = deliverySlot
+    ? formatDeliveryDate(deliverySlot.date, i18n.language)
+    : '';
 
   return (
     <aside className="flex h-full min-h-0 w-full flex-col rounded-lg border border-border dark:border-border-dark bg-surface dark:bg-surface-dark shadow-sm">
-      <header className="space-y-1 border-b border-border dark:border-border-dark p-4">
-        <h2 className="text-sm font-bold text-textPrimary dark:text-textPrimary-dark">
-          {t('catalog.cart.title')}
-        </h2>
-        <p className="text-xs text-textSecondary dark:text-textSecondary-dark">
-          {t('catalog.cart.deliveryOn', {
-            date: DELIVERY_SLOT.date,
-            window: DELIVERY_SLOT.window,
-          })}
-        </p>
+      <header className="border-b border-border dark:border-border-dark p-4">
+        <div className="flex items-start justify-between gap-2">
+          <h2 className="text-sm font-bold text-textPrimary dark:text-textPrimary-dark">
+            {t('catalog.cart.title')}
+          </h2>
+          <button
+            type="button"
+            onClick={closeCart}
+            aria-label={t('catalog.cart.close')}
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-textSecondary hover:bg-background hover:text-textPrimary dark:text-textSecondary-dark dark:hover:bg-background-dark dark:hover:text-textPrimary-dark"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <button
+          type="button"
+          onClick={changeDeliverySlot}
+          className="mt-2 w-full rounded-md border border-transparent px-0 py-1 text-left text-xs text-textSecondary hover:text-brand-orange dark:text-textSecondary-dark"
+        >
+          {deliverySlot
+            ? t('catalog.cart.deliveryOn', {
+                date: dateLabel,
+                window: deliverySlot.window,
+              })
+            : t('catalog.cart.noDate')}
+          <span className="ml-1 font-semibold text-brand-orange">
+            {t('catalog.cart.changeDate')}
+          </span>
+        </button>
       </header>
 
       <ul className="flex-1 space-y-3 overflow-y-auto p-4">

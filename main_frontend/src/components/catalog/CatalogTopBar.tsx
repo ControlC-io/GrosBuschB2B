@@ -1,8 +1,13 @@
 import { useTranslation } from 'react-i18next';
-import { DELIVERY_SLOT } from '../../config/catalog';
+import { getFirstAvailableSlot } from '../../config/catalog';
+import { useCart } from '../../context/CartProvider';
+import { formatDeliveryDate } from '../../utils/format';
 
 const CatalogTopBar = () => {
-  const { t } = useTranslation('common');
+  const { t, i18n } = useTranslation('common');
+  const { deliverySlot, itemCount } = useCart();
+  const slot = itemCount > 0 && deliverySlot ? deliverySlot : getFirstAvailableSlot();
+  const dateLabel = formatDeliveryDate(slot.date, i18n.language);
 
   return (
     <div className="flex justify-end">
@@ -24,7 +29,7 @@ const CatalogTopBar = () => {
           {t('catalog.deliverySlot')}
         </span>
         <span className="text-sm font-semibold text-textPrimary dark:text-textPrimary-dark">
-          {DELIVERY_SLOT.date} | {DELIVERY_SLOT.window}
+          {dateLabel} | {slot.window}
         </span>
       </div>
     </div>

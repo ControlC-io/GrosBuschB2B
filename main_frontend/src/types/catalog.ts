@@ -49,6 +49,11 @@ export const EMPTY_FACETS: ProductFacets = {
   tags: [],
 };
 
+export interface DeliverySlot {
+  date: string;
+  window: string;
+}
+
 export interface CartLine {
   product: Product;
   quantity: number;

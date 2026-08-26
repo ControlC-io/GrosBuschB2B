@@ -2,13 +2,13 @@ import { useCart } from '../context/CartProvider';
 import CartSidebar from './catalog/CartSidebar';
 
 /**
- * Persistent cart rail. It stays hidden while empty and becomes a fixed panel
- * on every page as soon as the cart contains at least one article.
+ * Persistent cart rail. Hidden while empty or closed, then shown as a fixed
+ * panel on every page.
  */
 const GlobalCartRail = () => {
-  const { itemCount } = useCart();
+  const { itemCount, isOpen } = useCart();
 
-  if (itemCount === 0) return null;
+  if (!isOpen || itemCount === 0) return null;
 
   return (
     <>
