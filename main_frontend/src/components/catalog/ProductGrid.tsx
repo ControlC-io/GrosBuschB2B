@@ -3,12 +3,13 @@ import type { Product } from '../../types/catalog';
 
 interface ProductGridProps {
   products: Product[];
+  showQuantity?: boolean;
 }
 
-const ProductGrid = ({ products }: ProductGridProps) => (
+const ProductGrid = ({ products, showQuantity = true }: ProductGridProps) => (
   <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
     {products.map((product) => (
-      <ProductCard key={product.id} product={product} />
+      <ProductCard key={product.id} product={product} showQuantity={showQuantity} />
     ))}
   </div>
 );

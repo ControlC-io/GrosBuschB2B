@@ -9,6 +9,7 @@
     "tagline": "Fruits & Vegetables",
     "account": "My Account",
     "cart": "Cart",
+    "favorites": "Favorites",
     "theme": "Theme",
     "searchSubmit": "Search",
     "quickLabel": "Quick links",
@@ -106,6 +107,14 @@
   "placeholders": {
     "underConstruction": "This section is under construction. Add your feature here.",
     "loading": "Loading..."
+  },
+  "favorites": {
+    "title": "My favorites",
+    "subtitle": "Find the articles you have saved here.",
+    "count": "{{total}} products",
+    "emptyTitle": "No favorites yet",
+    "emptyDescription": "Tap the heart on a product to save it here, or add your whole cart from the cart panel.",
+    "browseCatalog": "Browse the catalog"
   },
   "home": {
     "title": "GrosBuschB2B",
@@ -219,6 +228,7 @@
     "links": {
       "counter": "Counter Demo",
       "catalog": "Catalog",
+      "favorites": "Favorites",
       "profile": "Profile",
       "documents": "Documents",
       "featureOne": "Feature One",
@@ -263,6 +273,7 @@
     },
     "card": {
       "favorite": "Add to favorites",
+      "unfavorite": "Remove from favorites",
       "decrease": "Decrease quantity",
       "increase": "Increase quantity",
       "perSalesUnit": "Sold per {{unit}}",
@@ -323,7 +334,9 @@
       "subtotal": "Subtotal",
       "minimumNotice": "Order minimum: {{amount}}",
       "validate": "Validate and pay",
-      "comingSoon": "The interactive cart lands in the next PoC step."
+      "comingSoon": "The interactive cart lands in the next PoC step.",
+      "addAllToFavorites": "Add cart to favorites",
+      "viewFavorites": "View my favorites"
     },
     "slotPicker": {
       "title": "Choose a delivery slot",

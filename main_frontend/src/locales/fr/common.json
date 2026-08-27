@@ -6,29 +6,30 @@
     "dashboard": "Tableau de bord",
     "catalog": "Catalogue",
     "features": "Fonctionnalités",
-    "tagline": "Fruits & Vegetables",
+    "tagline": "Fruits et légumes",
     "account": "Mon compte",
     "cart": "Panier",
+    "favorites": "Favoris",
     "theme": "Thème",
     "searchSubmit": "Rechercher",
     "quickLabel": "Accès rapides",
     "quick": {
-      "new": "New",
+      "new": "Nouveautés",
       "promos": "Promos",
-      "catalog": "Catalog"
+      "catalog": "Catalogue"
     },
     "categories": {
-      "fruit": "Fruit",
-      "vegetables": "Vegetables",
-      "freshCut": "Fresh Cut",
-      "driedFruit": "Dried Fruit",
+      "fruit": "Fruits",
+      "vegetables": "Légumes",
+      "freshCut": "Frais découpé",
+      "driedFruit": "Fruits secs",
       "grosbusch": "Grosbusch",
       "local": "Local",
-      "organic": "Organic",
-      "juices": "Juices",
-      "prePacked": "Pre-packed",
-      "herbs": "Herbs",
-      "gifts": "Gifts"
+      "organic": "Bio",
+      "juices": "Jus",
+      "prePacked": "Préemballé",
+      "herbs": "Aromates",
+      "gifts": "Cadeaux"
     }
   },
   "auth": {
@@ -106,6 +107,14 @@
   "placeholders": {
     "underConstruction": "Cette section est en cours de construction. Ajoutez votre fonctionnalité ici.",
     "loading": "Chargement..."
+  },
+  "favorites": {
+    "title": "Mes favoris",
+    "subtitle": "Retrouvez ici les articles que vous avez mis de côté.",
+    "count": "{{total}} articles",
+    "emptyTitle": "Aucun favori pour le moment",
+    "emptyDescription": "Cliquez sur le cœur d'un article pour le retrouver ici, ou ajoutez tout votre panier en un clic.",
+    "browseCatalog": "Parcourir le catalogue"
   },
   "home": {
     "title": "GrosBuschB2B",
@@ -219,6 +228,7 @@
     "links": {
       "counter": "Démo compteur",
       "catalog": "Catalogue",
+      "favorites": "Favoris",
       "profile": "Profil",
       "documents": "Documents",
       "featureOne": "Fonctionnalité 1",
@@ -263,6 +273,7 @@
     },
     "card": {
       "favorite": "Ajouter aux favoris",
+      "unfavorite": "Retirer des favoris",
       "decrease": "Diminuer la quantité",
       "increase": "Augmenter la quantité",
       "perSalesUnit": "Unité : {{unit}}",
@@ -323,7 +334,9 @@
       "subtotal": "Sous total",
       "minimumNotice": "Minimum de commande : {{amount}}",
       "validate": "Valider et payer",
-      "comingSoon": "Panier interactif disponible à la prochaine étape du PoC."
+      "comingSoon": "Panier interactif disponible à la prochaine étape du PoC.",
+      "addAllToFavorites": "Ajouter le panier aux favoris",
+      "viewFavorites": "Voir mes favoris"
     },
     "slotPicker": {
       "title": "Choisissez un créneau de livraison",

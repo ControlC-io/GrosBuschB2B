@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@shared/auth';
@@ -9,8 +8,10 @@ import ProductPrice from '../components/catalog/ProductPrice';
 import QuantityStepper from '../components/catalog/QuantityStepper';
 import EanBarcode from '../components/catalog/EanBarcode';
 import { useCart } from '../context/CartProvider';
+import { useFavorites } from '../context/FavoritesProvider';
 import { useProduct } from '../hooks/useProduct';
 import { formatPrice } from '../utils/format';
+import { labelKeyForCategory } from '../config/navigation';
 
 const ProductSheet = () => {
   const { sku } = useParams<{ sku: string }>();
@@ -18,11 +19,7 @@ const ProductSheet = () => {
   const { user } = useAuth();
   const { product, loading, error, notFound, reload } = useProduct(sku);
   const { quantityOf, increment, decrement } = useCart();
-  const [favorite, setFavorite] = useState(false);
-
-  useEffect(() => {
-    setFavorite(false);
-  }, [sku]);
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   if (loading) {
     return (
@@ -79,6 +76,8 @@ const ProductSheet = () => {
   const quantity = quantityOf(product.sku);
   const canOrder = Boolean(user) && product.isAvailable;
   const unitLabel = t(`catalog.units.${product.salesUnit}`, { defaultValue: product.salesUnit });
+  const categoryKey = labelKeyForCategory(product.category);
+  const categoryLabel = categoryKey ? t(categoryKey) : product.category;
 
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-background dark:bg-background-dark text-textPrimary dark:text-textPrimary-dark">
@@ -94,8 +93,8 @@ const ProductSheet = () => {
           <div className="grid gap-8 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
             <div className="relative flex items-center justify-center rounded-lg bg-background dark:bg-background-dark p-6">
               <FavoriteButton
-                pressed={favorite}
-                onToggle={() => setFavorite((value) => !value)}
+                pressed={isFavorite(product.sku)}
+                onToggle={() => toggleFavorite(product)}
                 className="absolute right-3 top-3"
               />
               <img
@@ -203,7 +202,7 @@ const ProductSheet = () => {
                     to={`/catalog?category=${encodeURIComponent(product.category)}`}
                     className="hover:text-brand-orange"
                   >
-                    {product.category}
+                    {categoryLabel}
                   </Link>
                 </dd>
               </div>

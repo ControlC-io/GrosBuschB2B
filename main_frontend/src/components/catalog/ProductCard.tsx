@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@shared/auth';
 import { useCart } from '../../context/CartProvider';
+import { useFavorites } from '../../context/FavoritesProvider';
 import type { Product } from '../../types/catalog';
 import AvailabilityBadge from './AvailabilityBadge';
 import FavoriteButton from './FavoriteButton';
@@ -14,14 +14,16 @@ const MAX_VISIBLE_BADGES = 2;
 
 interface ProductCardProps {
   product: Product;
+  showQuantity?: boolean;
 }
 
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard = ({ product, showQuantity = true }: ProductCardProps) => {
   const { t } = useTranslation('common');
   const { user } = useAuth();
   const { quantityOf, increment, decrement } = useCart();
-  const [favorite, setFavorite] = useState(false);
+  const { isFavorite, toggleFavorite } = useFavorites();
   const quantity = quantityOf(product.sku);
+  const favorite = isFavorite(product.sku);
   const visibleTags = product.tags.slice(0, MAX_VISIBLE_BADGES);
   const extraTagCount = product.tags.length - visibleTags.length;
   const sheetHref = `/catalog/${encodeURIComponent(product.sku)}`;
@@ -42,7 +44,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
       <FavoriteButton
         pressed={favorite}
-        onToggle={() => setFavorite((value) => !value)}
+        onToggle={() => toggleFavorite(product)}
         className="absolute right-3 top-3 z-10"
       />
 
@@ -73,7 +75,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
       <div className="mt-3 flex items-end justify-between gap-2">
         <ProductPrice product={product} size="card" />
-        {user ? (
+        {user && showQuantity ? (
           <QuantityStepper
             quantity={quantity}
             onIncrement={() => increment(product)}

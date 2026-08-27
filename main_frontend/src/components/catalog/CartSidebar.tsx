@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ORDER_MINIMUM_EUR } from '../../config/catalog';
 import { useCart } from '../../context/CartProvider';
+import { useFavorites } from '../../context/FavoritesProvider';
 import { formatDeliveryDate, formatPrice } from '../../utils/format';
 
 /**
@@ -19,7 +20,10 @@ const CartSidebar = () => {
     closeCart,
     changeDeliverySlot,
   } = useCart();
+  const { addProducts, isFavorite } = useFavorites();
   const belowMinimum = subtotal < ORDER_MINIMUM_EUR;
+  const allAlreadyFavorite =
+    lines.length > 0 && lines.every((line) => isFavorite(line.product.sku));
   const dateLabel = deliverySlot
     ? formatDeliveryDate(deliverySlot.date, i18n.language)
     : '';
@@ -118,6 +122,23 @@ const CartSidebar = () => {
               amount: formatPrice(ORDER_MINIMUM_EUR, i18n.language),
             })}
           </p>
+        )}
+        {allAlreadyFavorite ? (
+          <Link
+            to="/favorites"
+            onClick={closeCart}
+            className="flex w-full items-center justify-center rounded-md border border-brand-orange px-4 py-2.5 text-sm font-semibold text-brand-orange hover:bg-brand-orange-bg dark:hover:bg-brand-orange/10"
+          >
+            {t('catalog.cart.viewFavorites')}
+          </Link>
+        ) : (
+          <button
+            type="button"
+            onClick={() => addProducts(lines.map((line) => line.product))}
+            className="w-full rounded-md border border-brand-orange px-4 py-2.5 text-sm font-semibold text-brand-orange hover:bg-brand-orange-bg dark:hover:bg-brand-orange/10"
+          >
+            {t('catalog.cart.addAllToFavorites')}
+          </button>
         )}
         <button
           type="button"

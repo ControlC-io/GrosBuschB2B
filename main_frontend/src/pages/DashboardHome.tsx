@@ -52,6 +52,12 @@ const CatalogIcon = () => (
   </svg>
 );
 
+const HeartIcon = () => (
+  <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l8.84 8.84 8.84-8.84a5.5 5.5 0 000-7.78z" />
+  </svg>
+);
+
 const StarIcon = () => (
   <svg className="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -69,6 +75,7 @@ const getIconForLink = (id: DashboardLink['id']) => {
   switch (id) {
     case 'counter': return <CounterIcon />;
     case 'catalog': return <CatalogIcon />;
+    case 'favorites': return <HeartIcon />;
     case 'profile': return <ProfileIcon />;
     case 'documents': return <FileIcon />;
     case 'feature-one': return <PuzzleIcon />;
@@ -82,6 +89,7 @@ const getIconForLink = (id: DashboardLink['id']) => {
 const links: DashboardLink[] = [
   { id: 'counter', titleKey: 'dashboard.links.counter', to: '/dashboard' },
   { id: 'catalog', titleKey: 'dashboard.links.catalog', to: '/catalog' },
+  { id: 'favorites', titleKey: 'dashboard.links.favorites', to: '/favorites' },
   { id: 'profile', titleKey: 'dashboard.links.profile', to: '/info' },
   { id: 'documents', titleKey: 'dashboard.links.documents', to: '/documents' },
   { id: 'feature-two', titleKey: 'dashboard.links.featureTwo', to: '/features/example-two' },

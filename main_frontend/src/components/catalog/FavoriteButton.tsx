@@ -18,8 +18,8 @@ const FavoriteButton = ({ pressed, onToggle, className = '' }: FavoriteButtonPro
         onToggle();
       }}
       aria-pressed={pressed}
-      aria-label={t('catalog.card.favorite')}
-      title={t('catalog.card.favorite')}
+      aria-label={pressed ? t('catalog.card.unfavorite') : t('catalog.card.favorite')}
+      title={pressed ? t('catalog.card.unfavorite') : t('catalog.card.favorite')}
       className={`rounded-full p-1.5 text-textSecondary dark:text-textSecondary-dark hover:bg-background dark:hover:bg-background-dark ${className}`}
     >
       <svg

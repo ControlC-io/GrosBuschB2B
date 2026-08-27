@@ -14,8 +14,10 @@ import Catalog from "./pages/Catalog";
 import ProductSheet from "./pages/ProductSheet";
 import Documents from "./pages/Documents";
 import PlaceholderPage from "./pages/PlaceholderPage";
+import Favorites from "./pages/Favorites";
 import { ThemeProvider } from "./theme/ThemeProvider";
 import { CartProvider } from "./context/CartProvider";
+import { FavoritesProvider } from "./context/FavoritesProvider";
 
 const App = () => {
   return (
@@ -23,7 +25,8 @@ const App = () => {
       <BrowserRouter>
         <AuthProvider>
           <CartProvider>
-            <div className="min-h-screen flex flex-col bg-background dark:bg-background-dark text-textPrimary dark:text-textPrimary-dark font-sans">
+            <FavoritesProvider>
+              <div className="min-h-screen flex flex-col bg-background dark:bg-background-dark text-textPrimary dark:text-textPrimary-dark font-sans">
               <Navbar />
               <AppShell>
                 <main>
@@ -36,6 +39,7 @@ const App = () => {
                 <Route path="/auth/email-otp" element={<EmailOtpChallenge />} />
                 <Route path="/catalog" element={<Catalog />} />
                 <Route path="/catalog/:sku" element={<ProductSheet />} />
+                <Route path="/favorites" element={<Favorites />} />
                 <Route element={<RequireAuth />}>
                   <Route path="/dashboard" element={<DashboardHome />} />
                   <Route path="/documents" element={<Documents />} />
@@ -57,7 +61,8 @@ const App = () => {
                   </Routes>
                 </main>
               </AppShell>
-            </div>
+              </div>
+            </FavoritesProvider>
           </CartProvider>
         </AuthProvider>
       </BrowserRouter>

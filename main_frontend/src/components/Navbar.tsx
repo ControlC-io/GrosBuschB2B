@@ -6,6 +6,7 @@ import LanguagePicker from "./LanguagePicker";
 import ThemeToggle from "./ThemeToggle";
 import GlobalSearch from "./GlobalSearch";
 import CartButton from "./CartButton";
+import FavoritesButton from "./FavoritesButton";
 import BrandLogo from "./BrandLogo";
 import {
   QUICK_LINKS,
@@ -85,6 +86,9 @@ const Navbar = () => {
           </Link>
           <Link to="/documents" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm hover:bg-background dark:hover:bg-background-dark">
             {t("dashboard.links.documents")}
+          </Link>
+          <Link to="/favorites" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm hover:bg-background dark:hover:bg-background-dark">
+            {t("nav.favorites")}
           </Link>
           <a
             href="http://localhost:8080"
@@ -193,6 +197,7 @@ const Navbar = () => {
                 {profileOpen && accountMenu}
               </div>
             )}
+            <FavoritesButton />
             {user && <CartButton />}
             <LanguagePicker />
           </div>

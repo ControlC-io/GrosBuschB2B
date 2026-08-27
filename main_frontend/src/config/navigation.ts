@@ -65,3 +65,6 @@ export const isQuickLinkActive = (
   if (wantedTags) return params.get('tags') === wantedTags;
   return params.get('category') === wantedCategory;
 };
+
+export const labelKeyForCategory = (category: string): string | undefined =>
+  SHOP_CATEGORIES.find((item) => item.category === category)?.labelKey;
