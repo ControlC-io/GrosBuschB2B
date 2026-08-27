@@ -126,6 +126,8 @@ const options: swaggerJSDoc.Options = {
             salesUnit: { type: 'string', example: 'KG' },
             tags: { type: 'array', items: { type: 'string' }, example: ['New', 'Promo'] },
             imageUrl: { type: 'string', format: 'uri' },
+            gtin: { type: 'string', nullable: true, example: '2000000000015' },
+            barcodeFixed: { type: 'boolean', example: true },
             isAvailable: { type: 'boolean' },
           },
         },

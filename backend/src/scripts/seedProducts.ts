@@ -19,6 +19,25 @@ type MockProduct = {
   image_url: string;
 };
 
+const ean13CheckDigit = (digits12: string): string => {
+  let sum = 0;
+  for (let index = 0; index < 12; index += 1) {
+    sum += Number(digits12[index]) * (index % 2 === 0 ? 1 : 3);
+  }
+  return String((10 - (sum % 10)) % 10);
+};
+
+/** Builds a PoC EAN 13 from the catalog SKU (prefix 200 for in house articles). */
+const gtinFromSku = (sku: string): string => {
+  const numeric = sku.replace(/\D/g, '').padStart(6, '0').slice(-6);
+  const body = `200000${numeric}`;
+  return `${body}${ean13CheckDigit(body)}`;
+};
+
+/** Antipasti, pre packed and fresh cut keep the same consumer barcode. */
+const hasFixedBarcode = (name: string, category: string): boolean =>
+  /antipasti/i.test(name) || category === 'Pre-packed' || category === 'Fresh Cut';
+
 type ParsedKgPrice = {
   pricePerKg: Prisma.Decimal | null;
   salesUnit: string;
@@ -83,6 +102,8 @@ const seedProducts = async () => {
       salesUnit,
       tags: mock.tags,
       imageUrl: mock.image_url,
+      gtin: gtinFromSku(mock.id),
+      barcodeFixed: hasFixedBarcode(mock.name, mock.category),
       isAvailable: !mock.tags.some((tag) => tag.toLowerCase() === 'coming soon'),
     };
 

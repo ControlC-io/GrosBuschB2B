@@ -189,6 +189,8 @@ model Product {
   salesUnit    String   @default("PCS")
   tags         String[]
   imageUrl     String
+  gtin         String?
+  barcodeFixed Boolean  @default(false)
   isAvailable  Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

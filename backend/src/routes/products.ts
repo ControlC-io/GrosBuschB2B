@@ -19,6 +19,8 @@ type ProductDto = {
   salesUnit: string;
   tags: string[];
   imageUrl: string;
+  gtin: string | null;
+  barcodeFixed: boolean;
   isAvailable: boolean;
 };
 
@@ -53,6 +55,8 @@ const toProductDto = (product: Product): ProductDto => ({
   salesUnit: product.salesUnit,
   tags: product.tags,
   imageUrl: product.imageUrl,
+  gtin: product.gtin,
+  barcodeFixed: product.barcodeFixed,
   isAvailable: product.isAvailable,
 });
 

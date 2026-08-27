@@ -10,6 +10,8 @@ export interface Product {
   salesUnit: string;
   tags: string[];
   imageUrl: string;
+  gtin: string | null;
+  barcodeFixed: boolean;
   isAvailable: boolean;
 }
 

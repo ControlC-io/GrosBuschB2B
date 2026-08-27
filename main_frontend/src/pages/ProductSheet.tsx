@@ -7,12 +7,14 @@ import FavoriteButton from '../components/catalog/FavoriteButton';
 import ProductBadge from '../components/catalog/ProductBadge';
 import ProductPrice from '../components/catalog/ProductPrice';
 import QuantityStepper from '../components/catalog/QuantityStepper';
+import EanBarcode from '../components/catalog/EanBarcode';
 import { useCart } from '../context/CartProvider';
 import { useProduct } from '../hooks/useProduct';
+import { formatPrice } from '../utils/format';
 
 const ProductSheet = () => {
   const { sku } = useParams<{ sku: string }>();
-  const { t } = useTranslation('common');
+  const { t, i18n } = useTranslation('common');
   const { user } = useAuth();
   const { product, loading, error, notFound, reload } = useProduct(sku);
   const { quantityOf, increment, decrement } = useCart();
@@ -154,6 +156,40 @@ const ProductSheet = () => {
             <dl className="mt-4 grid gap-4 sm:grid-cols-2">
               <div>
                 <dt className="text-xs uppercase tracking-wide text-textSecondary dark:text-textSecondary-dark">
+                  {t('catalog.sheet.articleCode')}
+                </dt>
+                <dd className="mt-1 text-sm font-medium">{product.sku}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-textSecondary dark:text-textSecondary-dark">
+                  {t('catalog.sheet.name')}
+                </dt>
+                <dd className="mt-1 text-sm font-medium">{product.name}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-textSecondary dark:text-textSecondary-dark">
+                  {t('catalog.sheet.price')}
+                </dt>
+                <dd className="mt-1 text-sm font-medium text-brand-orange">
+                  {formatPrice(product.pricePerUnit, i18n.language)}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-textSecondary dark:text-textSecondary-dark">
+                  {t('catalog.sheet.availability')}
+                </dt>
+                <dd className="mt-1">
+                  <AvailabilityBadge available={product.isAvailable} compact />
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-textSecondary dark:text-textSecondary-dark">
+                  {t('catalog.sheet.salesUnit')}
+                </dt>
+                <dd className="mt-1 text-sm font-medium">{unitLabel}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-textSecondary dark:text-textSecondary-dark">
                   {t('catalog.sheet.origin')}
                 </dt>
                 <dd className="mt-1 text-sm font-medium">{product.origin}</dd>
@@ -171,13 +207,44 @@ const ProductSheet = () => {
                   </Link>
                 </dd>
               </div>
-              <div>
+              <div className="sm:col-span-2">
                 <dt className="text-xs uppercase tracking-wide text-textSecondary dark:text-textSecondary-dark">
-                  {t('catalog.sheet.salesUnit')}
+                  {t('catalog.sheet.gtin')}
                 </dt>
-                <dd className="mt-1 text-sm font-medium">{unitLabel}</dd>
+                <dd className="mt-2 space-y-2">
+                  {product.gtin ? (
+                    <EanBarcode
+                      gtin={product.gtin}
+                      label={t('catalog.sheet.barcodeLabel', { gtin: product.gtin })}
+                    />
+                  ) : (
+                    <span className="text-sm text-textSecondary dark:text-textSecondary-dark">
+                      {t('catalog.sheet.gtinMissing')}
+                    </span>
+                  )}
+                  {product.gtin ? (
+                    <p
+                      className={`inline-flex max-w-full flex-col rounded-md px-2 py-1 text-xs ${
+                        product.barcodeFixed
+                          ? 'bg-status-success-bg text-status-success dark:bg-status-success-bg-dark dark:text-status-success-dark'
+                          : 'bg-background text-textSecondary dark:bg-background-dark dark:text-textSecondary-dark'
+                      }`}
+                    >
+                      <span className="font-semibold">
+                        {product.barcodeFixed
+                          ? t('catalog.sheet.barcodeFixed')
+                          : t('catalog.sheet.barcodeVariable')}
+                      </span>
+                      <span>
+                        {product.barcodeFixed
+                          ? t('catalog.sheet.barcodeFixedHint')
+                          : t('catalog.sheet.barcodeVariableHint')}
+                      </span>
+                    </p>
+                  ) : null}
+                </dd>
               </div>
-              <div>
+              <div className="sm:col-span-2">
                 <dt className="text-xs uppercase tracking-wide text-textSecondary dark:text-textSecondary-dark">
                   {t('catalog.sheet.labels')}
                 </dt>
