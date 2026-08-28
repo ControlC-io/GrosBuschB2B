@@ -25,6 +25,7 @@ const parseSort = (raw: string | null): ProductSort =>
 
 const parseFilters = (params: URLSearchParams): ProductFilters => ({
   category: params.get('category') ?? '',
+  shop: params.get('shop') ?? '',
   origins: splitParam(params.get('origins')),
   tags: splitParam(params.get('tags')),
   search: params.get('search') ?? '',
@@ -34,6 +35,7 @@ const parseFilters = (params: URLSearchParams): ProductFilters => ({
 const serializeFilters = (filters: ProductFilters): URLSearchParams => {
   const params = new URLSearchParams();
   if (filters.category) params.set('category', filters.category);
+  if (filters.shop) params.set('shop', filters.shop);
   if (filters.origins.length > 0) params.set('origins', filters.origins.join(','));
   if (filters.tags.length > 0) params.set('tags', filters.tags.join(','));
   if (filters.search) params.set('search', filters.search);
@@ -74,7 +76,11 @@ export const useProducts = () => {
   const setCategory = useCallback(
     (category: string) => {
       const current = filtersRef.current;
-      applyFilters({ ...current, category: current.category === category ? '' : category });
+      applyFilters({
+        ...current,
+        category: current.category === category ? '' : category,
+        shop: '',
+      });
     },
     [applyFilters],
   );

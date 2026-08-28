@@ -32,6 +32,7 @@ export type ProductSort = (typeof PRODUCT_SORTS)[number];
 
 export interface ProductFilters {
   category: string;
+  shop: string;
   origins: string[];
   tags: string[];
   search: string;
@@ -63,8 +64,16 @@ export interface CartLine {
 
 export const DEFAULT_FILTERS: ProductFilters = {
   category: '',
+  shop: '',
   origins: [],
   tags: [],
   search: '',
   sort: 'name',
 };
+
+export interface SeasonalShopNavItem {
+  slug: string;
+  nameEn: string;
+  nameFr: string;
+  sortOrder: number;
+}

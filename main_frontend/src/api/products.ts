@@ -16,6 +16,7 @@ const readError = async (res: Response, fallback: string): Promise<Error> => {
 const buildListQuery = (filters: ProductFilters): string => {
   const params = new URLSearchParams();
   if (filters.category) params.set('category', filters.category);
+  if (filters.shop) params.set('shop', filters.shop);
   if (filters.origins.length > 0) params.set('origins', filters.origins.join(','));
   if (filters.tags.length > 0) params.set('tags', filters.tags.join(','));
   if (filters.search) params.set('search', filters.search);
@@ -39,12 +40,13 @@ export const listProducts = async (
 };
 
 export const listFacets = async (
-  filters: Pick<ProductFilters, 'category' | 'origins' | 'tags' | 'search'>,
+  filters: Pick<ProductFilters, 'category' | 'shop' | 'origins' | 'tags' | 'search'>,
   signal?: AbortSignal,
   token?: string,
 ): Promise<ProductFacets> => {
   const params = new URLSearchParams();
   if (filters.category) params.set('category', filters.category);
+  if (filters.shop) params.set('shop', filters.shop);
   if (filters.origins.length > 0) params.set('origins', filters.origins.join(','));
   if (filters.tags.length > 0) params.set('tags', filters.tags.join(','));
   if (filters.search) params.set('search', filters.search);

@@ -31,6 +31,7 @@ const PUBLIC_ROUTES: Array<{ method: string; pathPrefix: string }> = [
   { method: '*',    pathPrefix: '/api/auth/' },
   { method: '*',    pathPrefix: '/api/admin' },  // admin uses x-admin-secret via adminAuth
   { method: 'GET',  pathPrefix: '/api/products' },
+  { method: 'GET',  pathPrefix: '/api/seasonal-shops' },
 ];
 
 function isPublicRoute(method: string, path: string): boolean {

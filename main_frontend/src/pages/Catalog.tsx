@@ -4,7 +4,9 @@ import CatalogSkeleton from '../components/catalog/CatalogSkeleton';
 import CatalogTopBar from '../components/catalog/CatalogTopBar';
 import FilterSidebar from '../components/catalog/FilterSidebar';
 import ProductGrid from '../components/catalog/ProductGrid';
+import { seasonalShopLabel } from '../config/navigation';
 import { useProducts } from '../hooks/useProducts';
+import { useSeasonalShops } from '../hooks/useSeasonalShops';
 import { PRODUCT_SORTS, type ProductSort } from '../types/catalog';
 
 const SORT_LABEL_KEYS: Record<ProductSort, string> = {
@@ -14,7 +16,7 @@ const SORT_LABEL_KEYS: Record<ProductSort, string> = {
 };
 
 const Catalog = () => {
-  const { t } = useTranslation('common');
+  const { t, i18n } = useTranslation('common');
   const {
     filters,
     products,
@@ -29,14 +31,22 @@ const Catalog = () => {
     clearFilters,
     reload,
   } = useProducts();
+  const seasonalShops = useSeasonalShops();
+  const activeShop = seasonalShops.find((shop) => shop.slug === filters.shop);
 
   const hasActiveFilters =
-    activeFilterCount > 0 || filters.category !== '' || filters.search !== '';
+    activeFilterCount > 0 || filters.category !== '' || filters.shop !== '' || filters.search !== '';
 
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-background dark:bg-background-dark text-textPrimary dark:text-textPrimary-dark">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <CatalogTopBar />
+
+        {activeShop && (
+          <h1 className="mt-4 text-xl font-bold text-textPrimary dark:text-textPrimary-dark">
+            {t('catalog.seasonalShopTitle', { name: seasonalShopLabel(activeShop, i18n.language) })}
+          </h1>
+        )}
 
         <div className="mt-5 grid gap-5 lg:grid-cols-[16rem_minmax(0,1fr)]">
           <div className="lg:sticky lg:top-40 lg:self-start">

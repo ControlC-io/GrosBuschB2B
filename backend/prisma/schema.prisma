@@ -178,23 +178,53 @@ model Document {
 
 // Catalog product for the webshop PoC
 model Product {
-  id           String   @id @default(uuid())
-  sku          String   @unique
-  name         String
-  origin       String
-  category     String
-  pricePerUnit Decimal  @db.Decimal(10, 2)
-  oldPrice     Decimal? @db.Decimal(10, 2)
-  pricePerKg   Decimal? @db.Decimal(10, 2)
-  salesUnit    String   @default("PCS")
-  tags         String[]
-  imageUrl     String
-  gtin         String?
-  barcodeFixed Boolean  @default(false)
-  isAvailable  Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id            String                 @id @default(uuid())
+  sku           String                 @unique
+  name          String
+  origin        String
+  category      String
+  pricePerUnit  Decimal                @db.Decimal(10, 2)
+  oldPrice      Decimal?               @db.Decimal(10, 2)
+  pricePerKg    Decimal?               @db.Decimal(10, 2)
+  salesUnit     String                 @default("PCS")
+  tags          String[]
+  imageUrl      String
+  gtin          String?
+  barcodeFixed  Boolean                @default(false)
+  isAvailable   Boolean                @default(true)
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+  seasonalShops ProductSeasonalShop[]
 
   @@index([category])
   @@map("products")
+}
+
+// Time boxed campaign that appears in the category strip while it is live
+model SeasonalShop {
+  id        String                 @id @default(uuid())
+  slug      String                 @unique
+  nameEn    String
+  nameFr    String
+  startsAt  DateTime
+  endsAt    DateTime
+  isEnabled Boolean                @default(true)
+  sortOrder Int                    @default(0)
+  createdAt DateTime               @default(now())
+  updatedAt DateTime               @updatedAt
+  products  ProductSeasonalShop[]
+
+  @@index([startsAt, endsAt])
+  @@map("seasonal_shops")
+}
+
+model ProductSeasonalShop {
+  productId String
+  shopId    String
+  product   Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  shop      SeasonalShop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  @@id([productId, shopId])
+  @@index([shopId])
+  @@map("product_seasonal_shops")
 }

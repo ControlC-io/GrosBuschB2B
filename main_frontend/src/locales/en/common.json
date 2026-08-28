@@ -30,7 +30,8 @@
       "prePacked": "Pre-packed",
       "herbs": "Herbs",
       "gifts": "Gifts"
-    }
+    },
+    "seasonalShops": "Seasonal shops"
   },
   "auth": {
     "signedInAs": "Signed in as",
@@ -244,6 +245,7 @@
     "deliverySlot": "Delivery",
     "categoriesLabel": "Product universes",
     "allCategories": "All products",
+    "seasonalShopTitle": "{{name}}",
     "resultCount": "{{total}} products",
     "retry": "Retry",
     "sort": {

@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { Prisma, Product } from '@prisma/client';
 import prisma from '../lib/prisma';
+import { productsInLiveShopWhere } from '../lib/seasonalShops';
 
 const router = express.Router();
 
@@ -82,10 +83,12 @@ type ProductFilterScope = {
   origins?: string[];
   tags?: string[];
   search?: string;
+  shop?: string;
 };
 
 const buildProductWhere = (scope: ProductFilterScope): Prisma.ProductWhereInput => ({
   ...buildSearchWhere(scope.search ?? ''),
+  ...productsInLiveShopWhere(scope.shop ?? ''),
   ...(scope.category && scope.category.length > 0 ? { category: scope.category } : {}),
   ...(scope.origins && scope.origins.length > 0 ? { origin: { in: scope.origins } } : {}),
   ...(scope.tags && scope.tags.length > 0 ? { tags: { hasSome: scope.tags } } : {}),
@@ -132,6 +135,11 @@ const withSelectedFacets = (facets: Facet[], selected: string[]): Facet[] => {
  *         schema:
  *           type: string
  *         description: Case insensitive search on the product name
+ *       - in: query
+ *         name: shop
+ *         schema:
+ *           type: string
+ *         description: Live seasonal shop slug, for example "autumn"
  *       - in: query
  *         name: sort
  *         schema:
@@ -181,11 +189,12 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
     const origins = parseList(req.query.origins);
     const tags = parseList(req.query.tags);
     const search = parseText(req.query.search);
+    const shop = parseText(req.query.shop);
     const sortParam = parseText(req.query.sort);
     const page = parsePositiveInt(req.query.page, 1, Number.MAX_SAFE_INTEGER);
     const pageSize = parsePositiveInt(req.query.pageSize, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE);
 
-    const where = buildProductWhere({ category, origins, tags, search });
+    const where = buildProductWhere({ category, origins, tags, search, shop });
 
     const orderBy = isSortKey(sortParam) ? SORT_CLAUSES[sortParam] : SORT_CLAUSES.name;
 
@@ -240,6 +249,11 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
  *         schema:
  *           type: string
  *         description: Scopes every count to a case insensitive name search
+ *       - in: query
+ *         name: shop
+ *         schema:
+ *           type: string
+ *         description: Scopes every count to products tagged in a live seasonal shop
  *     responses:
  *       200:
  *         description: Facet groups
@@ -269,12 +283,13 @@ router.get('/facets', async (req: Request, res: Response): Promise<void> => {
     const origins = parseList(req.query.origins);
     const tags = parseList(req.query.tags);
     const search = parseText(req.query.search);
+    const shop = parseText(req.query.shop);
 
     // Each group ignores its own selection so remaining options stay comparable,
     // while still applying the other filters (Belgium narrows labels, Bio narrows origins).
-    const categoryWhere = buildProductWhere({ search, origins, tags });
-    const originWhere = buildProductWhere({ search, category, tags });
-    const tagWhere = buildProductWhere({ search, category, origins });
+    const categoryWhere = buildProductWhere({ search, origins, tags, shop });
+    const originWhere = buildProductWhere({ search, category, tags, shop });
+    const tagWhere = buildProductWhere({ search, category, origins, shop });
 
     const [categoryGroups, originGroups, taggedProducts] = await Promise.all([
       prisma.product.groupBy({

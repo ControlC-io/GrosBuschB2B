@@ -12,6 +12,9 @@ export type ShopCategory = {
   tags?: string;
 };
 
+export const catalogHrefForShop = (slug: string): string =>
+  `/catalog?shop=${encodeURIComponent(slug)}`;
+
 export const QUICK_LINKS: QuickLink[] = [
   { id: 'new', labelKey: 'nav.quick.new', to: '/catalog?tags=New', icon: 'star' },
   { id: 'promos', labelKey: 'nav.quick.promos', to: '/catalog?tags=Promo', icon: 'promo' },
@@ -44,10 +47,17 @@ export const isCategoryActive = (
   pathname: string,
 ): boolean => {
   if (pathname !== '/catalog') return false;
+  if (params.get('shop')) return false;
   if (item.tags) return params.get('tags') === item.tags && !params.get('category');
   if (item.category) return params.get('category') === item.category;
   return false;
 };
+
+export const isShopNavActive = (
+  slug: string,
+  params: URLSearchParams,
+  pathname: string,
+): boolean => pathname === '/catalog' && params.get('shop') === slug;
 
 export const isQuickLinkActive = (
   to: string,
@@ -60,7 +70,7 @@ export const isQuickLinkActive = (
   const wantedTags = target.searchParams.get('tags');
   const wantedCategory = target.searchParams.get('category');
   if (!wantedTags && !wantedCategory) {
-    return !params.get('category') && !params.get('tags') && !params.get('search');
+    return !params.get('category') && !params.get('tags') && !params.get('search') && !params.get('shop');
   }
   if (wantedTags) return params.get('tags') === wantedTags;
   return params.get('category') === wantedCategory;
@@ -68,3 +78,8 @@ export const isQuickLinkActive = (
 
 export const labelKeyForCategory = (category: string): string | undefined =>
   SHOP_CATEGORIES.find((item) => item.category === category)?.labelKey;
+
+export const seasonalShopLabel = (
+  shop: { nameEn: string; nameFr: string },
+  language: string,
+): string => (language.toLowerCase().startsWith('en') ? shop.nameEn : shop.nameFr);

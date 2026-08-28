@@ -30,7 +30,8 @@
       "prePacked": "Préemballé",
       "herbs": "Aromates",
       "gifts": "Cadeaux"
-    }
+    },
+    "seasonalShops": "Boutiques éphémères"
   },
   "auth": {
     "signedInAs": "Connecté en tant que",
@@ -244,6 +245,7 @@
     "deliverySlot": "Livraison",
     "categoriesLabel": "Univers produits",
     "allCategories": "Tous les articles",
+    "seasonalShopTitle": "{{name}}",
     "resultCount": "{{total}} articles",
     "retry": "Réessayer",
     "sort": {

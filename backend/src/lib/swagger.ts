@@ -131,6 +131,15 @@ const options: swaggerJSDoc.Options = {
             isAvailable: { type: 'boolean' },
           },
         },
+        SeasonalShopNav: {
+          type: 'object',
+          properties: {
+            slug: { type: 'string', example: 'autumn' },
+            nameEn: { type: 'string', example: 'Autumn' },
+            nameFr: { type: 'string', example: 'Automne' },
+            sortOrder: { type: 'integer', example: 20 },
+          },
+        },
         Facet: {
           type: 'object',
           properties: {

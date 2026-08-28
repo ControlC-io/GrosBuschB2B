@@ -20,8 +20,10 @@ import adminRouter from './routes/admin';
 import rolesRouter from './routes/roles';
 import counterRouter from './routes/counter';
 import productsRouter from './routes/products';
+import seasonalShopsRouter from './routes/seasonalShops';
 import uploadRouter from './routes/upload';
 import documentsRouter from './routes/documents';
+import adminSeasonalShopsRouter from './routes/adminSeasonalShops';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -121,8 +123,9 @@ app.use(jwtAuth);
 // ─── Counter Routes (JWT protected) ──────────────────────────────────────────
 app.use('/api/counter', counterRouter);
 
-// ─── Catalog Routes (JWT protected) ──────────────────────────────────────────
+// Catalog routes (public GET via jwtAuth allowlist)
 app.use('/api/products', productsRouter);
+app.use('/api/seasonal-shops', seasonalShopsRouter);
 
 // ─── Document Upload & Storage Routes (JWT protected) ─────────────────────────
 app.use('/api/upload', uploadRouter);
@@ -131,6 +134,7 @@ app.use('/api/documents', documentsRouter);
 // ─── Admin API Routes (x-admin-secret auth; jwtAuth skips /api/admin via PUBLIC_ROUTES) ─
 app.use('/api/admin', adminAuth);
 app.use('/api/admin', adminRouter);
+app.use('/api/admin', adminSeasonalShopsRouter);
 app.use('/api/admin', rolesRouter);
 
 // ─── 404 for API (no route matched) ─────────────────────────────────────────────

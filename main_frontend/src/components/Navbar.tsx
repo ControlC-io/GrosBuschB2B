@@ -12,9 +12,13 @@ import {
   QUICK_LINKS,
   SHOP_CATEGORIES,
   catalogHrefFor,
+  catalogHrefForShop,
   isCategoryActive,
   isQuickLinkActive,
+  isShopNavActive,
+  seasonalShopLabel,
 } from "../config/navigation";
+import { useSeasonalShops } from "../hooks/useSeasonalShops";
 
 const iconClass = "h-7 w-7";
 
@@ -48,11 +52,12 @@ const QuickIcon = ({ name }: { name: "star" | "promo" | "catalog" }) => {
 const Navbar = () => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const { user, logout, loading } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+  const seasonalShops = useSeasonalShops();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -213,6 +218,25 @@ const Navbar = () => {
           aria-label={t("catalog.categoriesLabel")}
           className="flex items-center justify-center gap-5 overflow-x-auto"
         >
+          {seasonalShops.map((shop) => {
+            const active = isShopNavActive(shop.slug, searchParams, location.pathname);
+            return (
+              <Link
+                key={shop.slug}
+                to={catalogHrefForShop(shop.slug)}
+                className={`relative shrink-0 border-b-[3px] py-2 text-[0.8rem] font-bold uppercase tracking-wide ${
+                  active
+                    ? "border-brand-orange text-brand-orange"
+                    : "border-transparent text-textPrimary hover:text-brand-orange dark:text-textPrimary-dark"
+                }`}
+              >
+                {seasonalShopLabel(shop, i18n.language)}
+              </Link>
+            );
+          })}
+          {seasonalShops.length > 0 && (
+            <span className="hidden h-4 w-px shrink-0 bg-border sm:block dark:bg-border-dark" aria-hidden />
+          )}
           {SHOP_CATEGORIES.map((item) => {
             const active = isCategoryActive(item, searchParams, location.pathname);
             return (
@@ -259,6 +283,21 @@ const Navbar = () => {
                 ))}
               </div>
               <div className="space-y-1 border-t border-border pt-3 dark:border-border-dark">
+                {seasonalShops.length > 0 && (
+                  <p className="px-1 pb-1 text-xs font-semibold uppercase tracking-wide text-textSecondary dark:text-textSecondary-dark">
+                    {t("nav.seasonalShops")}
+                  </p>
+                )}
+                {seasonalShops.map((shop) => (
+                  <Link
+                    key={shop.slug}
+                    to={catalogHrefForShop(shop.slug)}
+                    onClick={() => setMobileOpen(false)}
+                    className="block px-1 py-1.5 text-sm font-semibold uppercase text-brand-orange"
+                  >
+                    {seasonalShopLabel(shop, i18n.language)}
+                  </Link>
+                ))}
                 {SHOP_CATEGORIES.map((item) => (
                   <Link
                     key={item.id}

@@ -1,6 +1,7 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 import fs from 'fs';
 import path from 'path';
+import { parseEndDate, parseStartDate } from '../lib/seasonalShops';
 
 const prisma = new PrismaClient();
 
@@ -118,6 +119,95 @@ const seedProducts = async () => {
 
   const total = await prisma.product.count();
   console.log(`\nCatalog seeded successfully! ${total} products in database.`);
+
+  await seedSeasonalShops();
+};
+
+type SeedShop = {
+  slug: string;
+  nameEn: string;
+  nameFr: string;
+  startsAt: string;
+  endsAt: string;
+  sortOrder: number;
+  productSkus: string[];
+};
+
+const SEED_SHOPS: SeedShop[] = [
+  {
+    slug: 'valentines',
+    nameEn: "Valentine's Day",
+    nameFr: 'Saint Valentin',
+    startsAt: '2026-01-20',
+    endsAt: '2026-02-16',
+    sortOrder: 10,
+    productSkus: ['p001', 'p002', 'p011', 'p016'],
+  },
+  {
+    slug: 'autumn',
+    nameEn: 'Autumn',
+    nameFr: 'Automne',
+    startsAt: '2026-08-15',
+    endsAt: '2026-11-30',
+    sortOrder: 20,
+    productSkus: ['p004', 'p005', 'p010', 'p014', 'p015', 'p019'],
+  },
+  {
+    slug: 'new_year',
+    nameEn: 'New Year',
+    nameFr: 'Nouvel An',
+    startsAt: '2026-12-15',
+    endsAt: '2027-01-10',
+    sortOrder: 30,
+    productSkus: ['p001', 'p003', 'p013', 'p016', 'p018'],
+  },
+];
+
+const seedSeasonalShops = async () => {
+  console.log('\nSeeding seasonal shops...');
+
+  for (const seed of SEED_SHOPS) {
+    const startsAt = parseStartDate(seed.startsAt);
+    const endsAt = parseEndDate(seed.endsAt);
+    if (!startsAt || !endsAt) {
+      throw new Error(`Invalid date window for shop ${seed.slug}`);
+    }
+
+    const shop = await prisma.seasonalShop.upsert({
+      where: { slug: seed.slug },
+      update: {
+        nameEn: seed.nameEn,
+        nameFr: seed.nameFr,
+        startsAt,
+        endsAt,
+        isEnabled: true,
+        sortOrder: seed.sortOrder,
+      },
+      create: {
+        slug: seed.slug,
+        nameEn: seed.nameEn,
+        nameFr: seed.nameFr,
+        startsAt,
+        endsAt,
+        isEnabled: true,
+        sortOrder: seed.sortOrder,
+      },
+    });
+
+    const products = await prisma.product.findMany({
+      where: { sku: { in: seed.productSkus } },
+      select: { id: true, sku: true },
+    });
+
+    await prisma.productSeasonalShop.deleteMany({ where: { shopId: shop.id } });
+    if (products.length > 0) {
+      await prisma.productSeasonalShop.createMany({
+        data: products.map((product) => ({ productId: product.id, shopId: shop.id })),
+      });
+    }
+
+    console.log(`  ✓ ${shop.slug} (${products.length} products)`);
+  }
 };
 
 const main = async () => {
