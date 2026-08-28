@@ -19,7 +19,7 @@ export interface AuthContextType {
   login: (email: string, password: string) => Promise<{ twoFactorRedirect?: true; emailOtpRequired?: true }>;
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  checkSession: () => Promise<void>;
+  checkSession: (commitSync?: boolean) => Promise<void>;
   enable2FA: (password: string) => Promise<TwoFactorSetupData>;
   verify2FASetup: (code: string) => Promise<void>;
   disable2FA: (password: string) => Promise<void>;

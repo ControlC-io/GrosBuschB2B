@@ -156,14 +156,16 @@ export const createHttpClient = (config: HttpClientConfig): HttpClient => {
     let headers = mergeHeaders(authHeaders, rawHeaders);
 
     // Ensure Content-Type is set for JSON bodies when not already specified.
-    const method = (rest.method ?? 'GET').toUpperCase() as HttpMethod;
-    const hasBody = rest.body !== undefined && rest.body !== null && method !== 'GET' && method !== 'HEAD';
+    const methodUpper = (rest.method ?? 'GET').toUpperCase();
+    const method = methodUpper as HttpMethod;
+    const hasBody =
+      rest.body !== undefined && rest.body !== null && methodUpper !== 'GET' && methodUpper !== 'HEAD';
     if (hasBody && !headers.has('Content-Type')) {
       headers.set('Content-Type', 'application/json');
     }
 
     // Handle timeout with AbortController, but allow caller-provided signal to override.
-    let finalSignal: AbortSignal | undefined = signal;
+    let finalSignal: AbortSignal | undefined = signal ?? undefined;
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
     if (!finalSignal && defaultTimeoutMs > 0) {

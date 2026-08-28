@@ -11,7 +11,7 @@ WORKDIR /build/main_frontend
 RUN --mount=type=cache,id=npm-main-frontend,target=/root/.npm npm install
 
 COPY main_frontend/ ./
-COPY shared/ /build/shared/
+COPY shared/ ./shared/
 
 ARG VITE_API_URL=
 ARG VITE_API_BASE_URL=
