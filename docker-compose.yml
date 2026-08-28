@@ -1,0 +1,3 @@
+# Default local compose. `docker compose up` loads the development stack.
+include:
+  - docker-compose.dev.yml

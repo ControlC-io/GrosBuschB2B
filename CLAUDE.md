@@ -72,7 +72,7 @@ Two isolated Docker networks enforce the DMZ boundary:
 | `dmz_net` | NGINX, main_frontend, admin_frontend | Yes (via NGINX) |
 | `internal_net` | backend, postgres, email_service | No |
 
-NGINX (ports 80 and 8080) is the sole entry point. All `/api` traffic is proxied to the backend; frontends are never exposed directly. In development, `internal_net` has `internal: false` to allow host-machine access (e.g., Prisma Studio). Set `internal: true` for production.
+NGINX (port 80) is the sole entry point. Admin is served at `/admin-panel` on the same host. All `/api` traffic is proxied to the backend; frontends are never exposed directly. In development, `internal_net` has `internal: false` to allow host-machine access (e.g., Prisma Studio). Set `internal: true` for production.
 
 ### Authentication Flow (dual-token model)
 

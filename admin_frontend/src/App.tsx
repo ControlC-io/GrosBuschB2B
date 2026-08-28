@@ -108,7 +108,7 @@ const Header = () => {
 const App = () => {
   return (
     <ThemeProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/admin-panel">
         <AuthProvider>
           <div className="min-h-screen bg-background dark:bg-background-dark flex flex-col text-textPrimary dark:text-textPrimary-dark font-sans">
             <Routes>

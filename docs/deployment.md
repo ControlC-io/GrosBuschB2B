@@ -1,6 +1,6 @@
 # Deployment Guide
 
-GrosBuschB2B can be deployed to production using **Coolify** and `docker-compose.coolify.yml`.
+GrosBuschB2B can be deployed to production using **Coolify** and `docker-compose.prod.yml`.
 
 For the complete step by step Coolify guide, see [coolify-deployment.md](coolify-deployment.md).
 
@@ -22,7 +22,7 @@ docker compose exec backend npm run seed
 | URL | Service |
 |---|---|
 | http://localhost | Main app |
-| http://localhost:8080 | Admin panel |
+| http://localhost/admin-panel | Admin panel |
 | http://localhost/api/docs | Swagger |
 | http://localhost:5555 | Prisma Studio (dev only) |
 
@@ -44,7 +44,7 @@ See [coolify-deployment.md](coolify-deployment.md) for:
 
 - Creating the Coolify application
 - Environment variables (use `.env.production.sample` as reference)
-- DNS and dual domain setup (main app + admin panel)
+- DNS and single domain setup (shop at `/`, admin at `/admin-panel`)
 - First deploy database bootstrap
 - Common Coolify gotchas
 

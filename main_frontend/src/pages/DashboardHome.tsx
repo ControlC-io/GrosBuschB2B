@@ -94,7 +94,7 @@ const links: DashboardLink[] = [
   { id: 'documents', titleKey: 'dashboard.links.documents', to: '/documents' },
   { id: 'feature-two', titleKey: 'dashboard.links.featureTwo', to: '/features/example-two' },
   { id: 'feature-three', titleKey: 'dashboard.links.featureThree', to: '/features/example-three' },
-  { id: 'admin', titleKey: 'dashboard.links.admin', to: 'http://localhost:8080' },
+  { id: 'admin', titleKey: 'dashboard.links.admin', to: '/admin-panel' },
 ];
 
 const DashboardHome = () => {
@@ -102,7 +102,7 @@ const DashboardHome = () => {
   const { t } = useTranslation('common');
 
   const handleClick = (link: DashboardLink) => {
-    if (link.to.startsWith('http')) {
+    if (link.to.startsWith('http') || link.to.startsWith('/admin-panel')) {
       window.open(link.to, '_blank', 'noopener,noreferrer');
     } else {
       navigate(link.to);

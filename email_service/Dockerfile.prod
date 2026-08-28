@@ -1,4 +1,4 @@
-# Multi stage production image for Coolify.
+# Multi stage production image.
 FROM node:20-alpine AS builder
 
 ENV NODE_ENV=development

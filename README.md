@@ -27,17 +27,17 @@ docker compose exec backend npm run seed   # optional test user
 | URL | Service |
 |-----|---------|
 | http://localhost | Main app |
-| http://localhost:8080 | Admin panel |
+| http://localhost/admin-panel | Admin panel |
 | http://localhost/api/docs | Swagger |
 | http://localhost:5555 | Prisma Studio |
 
 ## Deployment (Coolify)
 
-Production deploys use `docker-compose.coolify.yml` on [Coolify](https://coolify.io).
+Production deploys use `docker-compose.prod.yml` on [Coolify](https://coolify.io).
 
-See **[docs/coolify-deployment.md](docs/coolify-deployment.md)** for the full guide (domains, env vars, first deploy bootstrap, gotchas).
+See **[docs/coolify-deployment.md](docs/coolify-deployment.md)** for the full guide (domain, env vars, first deploy bootstrap, gotchas).
 
-Quick reference: copy `.env.production.sample`, set secrets, point Coolify to `/docker-compose.coolify.yml`, assign domains to the `nginx` service.
+Quick reference: copy `.env.production.sample`, set secrets, point Coolify to `/docker-compose.prod.yml`, assign the app domain to the `nginx` service.
 
 ## Project Structure
 
@@ -152,7 +152,7 @@ cd backend && npm install && npm run dev
 cd main_frontend && npm install && npm run dev   # http://localhost:5173
 
 # Frontend (admin)
-cd admin_frontend && npm install && npm run dev  # http://localhost:5174
+cd admin_frontend && npm install && npm run dev  # http://localhost:5174/admin-panel
 ```
 
 ## Architecture
@@ -160,12 +160,12 @@ cd admin_frontend && npm install && npm run dev  # http://localhost:5174
 ```
 Internet → NGINX (DMZ)
              ├── main_frontend  (React)
-             ├── admin_frontend (React, port 8080)
+             ├── admin_frontend (React, /admin-panel)
              └── /api/* → backend (internal network)
                             ├── PostgreSQL
                             └── email_service
 ```
 
 DMZ and internal networks are isolated. NGINX is the only bridge.
-For production: set `internal: true` on `internal_net` in `docker-compose.yml`
+For production: set `internal: true` on `internal_net` in `docker-compose.prod.yml`
 and remove the `5432` / `5555` port mappings.

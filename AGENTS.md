@@ -5,7 +5,7 @@
 Secure DMZ web app template: React + Express + PostgreSQL + NGINX with auth, 2FA, RBAC, i18n, and dark mode.
 
 - **Main app**: port 80 (NGINX) → main_frontend (React/Vite)
-- **Admin panel**: port 8080 (NGINX) → admin_frontend (React/Vite)
+- **Admin panel**: `/admin-panel` on the same host (NGINX) → admin_frontend (React/Vite)
 - **Backend API**: port 3000 (internal, not exposed directly)
 - **Swagger docs**: `http://localhost/api/docs`
 
@@ -23,7 +23,7 @@ Internet → NGINX (dmz_net)
 - `dmz_net`: NGINX + frontends (internet-facing)
 - `internal_net`: backend + postgres + email_service (isolated)
 - NGINX is the only bridge between networks
-- For production: set `internal: true` on `internal_net` in `docker-compose.yml`, remove exposed ports (5432, 5555)
+- For production: set `internal: true` on `internal_net` in `docker-compose.prod.yml`, remove exposed ports (5432, 5555)
 
 ## Auth Flow (Critical)
 
@@ -142,7 +142,7 @@ cd backend && npm install && npm run dev
 
 # Frontend (local)
 cd main_frontend && npm install && npm run dev    # port 5173
-cd admin_frontend && npm install && npm run dev   # port 5174
+cd admin_frontend && npm install && npm run dev   # http://localhost:5174/admin-panel
 ```
 
 ## No Test Framework

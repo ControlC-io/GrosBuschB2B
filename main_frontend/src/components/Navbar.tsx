@@ -96,7 +96,7 @@ const Navbar = () => {
             {t("nav.favorites")}
           </Link>
           <a
-            href="http://localhost:8080"
+            href="/admin-panel"
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setProfileOpen(false)}

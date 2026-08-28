@@ -15,9 +15,9 @@ Step by step guide to deploy this project on [Coolify](https://coolify.io) using
 | `email_service` | SendGrid microservice (2FA OTP) | No (internal only) |
 | `postgres` | PostgreSQL 16 | No (internal only) |
 
-**Local dev** uses `docker-compose.yml` (Vite dev servers, volume mounts, exposed ports).
+**Local dev** uses `docker-compose.dev.yml` (loaded by `docker-compose.yml`; Vite dev servers, volume mounts, exposed ports).
 
-**Production on Coolify** uses `docker-compose.coolify.yml` (compiled images, no repo mounts, Traefik handles SSL).
+**Production on Coolify** uses `docker-compose.prod.yml` (compiled images, no repo mounts, Traefik handles SSL).
 
 ---
 
@@ -31,7 +31,7 @@ Step by step guide to deploy this project on [Coolify](https://coolify.io) using
 | CPU | 2 vCPU | 2+ vCPU |
 | Disk | 10 GB | 20 GB |
 
-This compose file budgets roughly **1.5 GB** for all services (see memory limits in `docker-compose.coolify.yml`).
+This compose file budgets roughly **1.5 GB** for all services (see memory limits in `docker-compose.prod.yml`).
 
 ### 2. Commit Prisma migrations
 
@@ -46,14 +46,14 @@ docker compose exec backend npx prisma migrate dev --name init
 
 Then commit `backend/prisma/migrations/`. If `.gitignore` blocks that folder, remove the `backend/prisma/migrations/` entry from `.gitignore` first.
 
-### 3. Two domains (recommended)
+### 3. One domain
 
-| Domain | Purpose |
+| URL | Purpose |
 |---|---|
-| `app.yourdomain.com` | Main user application |
-| `admin.yourdomain.com` | Admin panel |
+| `https://app.yourdomain.com` | Main user application |
+| `https://app.yourdomain.com/admin-panel` | Admin panel |
 
-Both domains point to the **same** `nginx` service in Coolify. NGINX routes by `Host` header using `MAIN_APP_DOMAIN` and `ADMIN_APP_DOMAIN`.
+Both the shop and the admin panel are served by the **same** `nginx` service on one hostname. NGINX routes `/admin-panel/` to `admin_frontend` and everything else to `main_frontend`.
 
 ### 4. SendGrid (for email OTP 2FA)
 
@@ -77,15 +77,14 @@ openssl rand -hex 24   # ADMIN_SECRET, EMAIL_SERVICE_SECRET
 
 | Variable | Rule |
 |---|---|
-| `BETTER_AUTH_URL` | Full main app URL with `https://`, e.g. `https://app.yourdomain.com` |
-| `TRUSTED_ORIGINS` | Comma separated list of **both** main and admin URLs |
+| `BETTER_AUTH_URL` | Full app URL with `https://`, e.g. `https://app.yourdomain.com` |
+| `TRUSTED_ORIGINS` | The same origin as the app (shop and admin share the host) |
 | `DATABASE_URL` | Use Docker service name: `@postgres:5432` |
 | `EMAIL_SERVICE_URL` | Internal URL: `http://email_service:3001` |
 | `VITE_API_URL` | **Leave empty** — frontends use same origin `/api` paths |
 | `VITE_ADMIN_SECRET` | Must match `ADMIN_SECRET` exactly (baked into admin SPA at build time) |
 | `NODE_ENV` | `production` — mark as **Runtime only** in Coolify (see gotchas below) |
 | `MAIN_APP_DOMAIN` | Hostname only, no protocol: `app.yourdomain.com` |
-| `ADMIN_APP_DOMAIN` | Hostname only: `admin.yourdomain.com` |
 | `EXTERNAL_API_UPSTREAM` | Optional `host:port` for `/external-api` proxy (no `http://`) |
 
 > **`VITE_API_URL` must be empty.** Vite bakes env vars at build time. Any non empty value gets hardcoded into the JS bundle and the browser will call that URL directly instead of using nginx relative paths.
@@ -98,10 +97,9 @@ openssl rand -hex 24   # ADMIN_SECRET, EMAIL_SERVICE_SECRET
 
 1. In Coolify: **New Resource → Docker Compose**
 2. Connect your Git repository
-3. Set **Docker Compose Location** to `/docker-compose.coolify.yml`
-4. Assign domains to the `nginx` service:
+3. Set **Docker Compose Location** to `/docker-compose.prod.yml`
+4. Assign the app domain to the `nginx` service:
    - `https://app.yourdomain.com`
-   - `https://admin.yourdomain.com`
 5. Confirm the exposed port is **80**
 
 Coolify/Traefik terminates SSL upstream. The internal nginx config is HTTP only.
@@ -123,11 +121,10 @@ Do not configure Preview Deployment variables unless you use preview environment
 
 ## Step 4 — DNS
 
-Create A records (or CNAME) pointing both domains to your Coolify server IP:
+Create an A record (or CNAME) pointing the app domain to your Coolify server IP:
 
 ```
 app.yourdomain.com    →  YOUR_SERVER_IP
-admin.yourdomain.com  →  YOUR_SERVER_IP
 ```
 
 Propagation can take a few minutes.
@@ -169,7 +166,7 @@ The production backend image does not include the TypeScript seed script. Option
 
 ### 6c. Access the admin panel
 
-1. Open `https://admin.yourdomain.com`
+1. Open `https://app.yourdomain.com/admin-panel`
 2. The admin panel uses `VITE_ADMIN_SECRET` (set at build time) to call `/api/admin/*`
 3. Configure auth providers, 2FA, and RBAC from the Settings tab
 
@@ -180,7 +177,7 @@ The production backend image does not include the TypeScript seed script. Option
 | Check | URL / command |
 |---|---|
 | Main app loads | `https://app.yourdomain.com` |
-| Admin panel loads | `https://admin.yourdomain.com` |
+| Admin panel loads | `https://app.yourdomain.com/admin-panel` |
 | API health | `curl https://app.yourdomain.com/api/health` |
 | Swagger docs | `https://app.yourdomain.com/api/docs` |
 | Auth session | Register + login flow on main app |
@@ -211,12 +208,10 @@ Coolify Traefik (SSL, ports 80/443)
    │
    ▼
 nginx (dmz_net + internal_net bridge)
-   ├── /           → main_frontend:80  (static SPA)
-   ├── /api        → backend:3000
-   ├── /external-api → upstream (optional)
-   │
-   └── admin host  → admin_frontend:80  (static SPA)
-                     └── /api → backend:3000
+   ├── /              → main_frontend:80  (static SPA)
+   ├── /admin-panel/  → admin_frontend:80 (static SPA)
+   ├── /api           → backend:3000
+   └── /external-api  → upstream (optional)
 
 internal_net (isolated):
    backend ↔ postgres
@@ -232,9 +227,9 @@ The DMZ pattern is preserved: only `nginx` bridges `dmz_net` and `internal_net`.
 | Problem | Cause | Fix |
 |---|---|---|
 | Build hangs 1+ hour | npm cache mount shared between parallel builds | Each Dockerfile uses a unique cache `id=` (already configured) |
-| nginx fails: "not a directory" | Volume mount of a repo file in compose | Use `docker-compose.coolify.yml` — nginx config is COPY'd into the image |
+| nginx fails: "not a directory" | Volume mount of a repo file in compose | Use `docker-compose.prod.yml` — nginx config is COPY'd into the image |
 | Port 80 already allocated | Traefik owns host port 80 | No `ports:` on nginx; only `expose: - "80"` |
-| 404 after successful deploy | Traefik has no route | Set both domains on the `nginx` service in Coolify |
+| 404 after successful deploy | Traefik has no route | Set the app domain on the `nginx` service in Coolify |
 | Frontend calls `http://127.0.0.1:3000` | `VITE_API_URL` was non empty at build time | Set `VITE_API_URL=` (empty) and redeploy |
 | Admin panel 401 on all tabs | `VITE_ADMIN_SECRET` ≠ `ADMIN_SECRET` | Set both to the same value and redeploy |
 | Login fails after redeploy | DB volume recreated or `JWT_SECRET` changed | Users must re register; secrets must stay stable |
@@ -265,10 +260,10 @@ If you do not use this feature, leave both empty. The `/external-api` location w
 - [ ] `ADMIN_SECRET` — strong secret, matches `VITE_ADMIN_SECRET`
 - [ ] `EMAIL_SERVICE_SECRET` — strong secret, shared only between backend and email_service
 - [ ] `POSTGRES_PASSWORD` — strong password, not the default
-- [ ] `TRUSTED_ORIGINS` — only your real production domains
+- [ ] `TRUSTED_ORIGINS` — only your real production origin
 - [ ] OAuth redirect URIs updated in Google/GitHub consoles if used
-- [ ] Postgres port **not** exposed on the host (already the case in coolify compose)
-- [ ] `internal_net: internal: true` enabled in `docker-compose.coolify.yml`
+- [ ] Postgres port **not** exposed on the host (already the case in prod compose)
+- [ ] `internal_net: internal: true` enabled in `docker-compose.prod.yml`
 
 ---
 
@@ -276,15 +271,17 @@ If you do not use this feature, leave both empty. The `/external-api` location w
 
 | File | Purpose |
 |---|---|
-| `docker-compose.coolify.yml` | Production compose for Coolify |
-| `docker-compose.yml` | Local development only |
+| `docker-compose.prod.yml` | Production compose for Coolify |
+| `docker-compose.dev.yml` | Local development stack |
+| `docker-compose.yml` | Includes the dev compose so `docker compose up` works |
 | `.env.production.sample` | Production env template |
-| `nginx/nginx.coolify.conf` | HTTP reverse proxy (main + admin hosts) |
+| `nginx/nginx.prod.conf` | HTTP reverse proxy (shop + `/admin-panel`) |
+| `nginx/admin-spa.conf` | Static SPA config for the admin image |
 | `nginx/Dockerfile` | nginx image with baked config |
-| `backend/Dockerfile.coolify` | Compiled backend + auto migrations |
-| `main_frontend/Dockerfile.coolify` | Vite build → nginx static |
-| `admin_frontend/Dockerfile.coolify` | Vite build → nginx static |
-| `email_service/Dockerfile.coolify` | Compiled email microservice |
+| `backend/Dockerfile.prod` | Compiled backend + auto migrations |
+| `main_frontend/Dockerfile.prod` | Vite build → nginx static |
+| `admin_frontend/Dockerfile.prod` | Vite build → nginx static under `/admin-panel` |
+| `email_service/Dockerfile.prod` | Compiled email microservice |
 | `backend/scripts/migrate.js` | Waits for DB, runs `prisma migrate deploy` |
 
 For local development deployment notes, see [deployment.md](deployment.md).

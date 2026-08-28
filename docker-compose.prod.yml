@@ -1,6 +1,6 @@
-# Docker Compose for Coolify deployment.
+# Docker Compose for production deployment (Coolify).
 #
-# Key differences from docker-compose.yml:
+# Key differences from docker-compose.dev.yml:
 #   - Production images (compiled binaries, static frontends)
 #   - No source code volume mounts
 #   - No host port bindings (Traefik owns 80/443)
@@ -8,7 +8,7 @@
 #   - Memory limits per service
 #   - internal_net isolated from dmz_net (DMZ pattern preserved)
 #
-# Usage in Coolify: set Docker Compose Location to /docker-compose.coolify.yml
+# Usage in Coolify: set Docker Compose Location to /docker-compose.prod.yml
 
 networks:
   dmz_net:
@@ -49,7 +49,7 @@ services:
   email_service:
     build:
       context: ./email_service
-      dockerfile: Dockerfile.coolify
+      dockerfile: Dockerfile.prod
     restart: unless-stopped
     environment:
       NODE_ENV: production
@@ -67,7 +67,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile.coolify
+      dockerfile: Dockerfile.prod
     restart: unless-stopped
     environment:
       NODE_ENV: production
@@ -101,7 +101,7 @@ services:
   main_frontend:
     build:
       context: .
-      dockerfile: main_frontend/Dockerfile.coolify
+      dockerfile: main_frontend/Dockerfile.prod
       args:
         VITE_API_URL: ${VITE_API_URL:-}
         VITE_API_BASE_URL: ${VITE_API_BASE_URL:-}
@@ -118,7 +118,7 @@ services:
   admin_frontend:
     build:
       context: .
-      dockerfile: admin_frontend/Dockerfile.coolify
+      dockerfile: admin_frontend/Dockerfile.prod
       args:
         VITE_API_URL: ${VITE_API_URL:-}
         VITE_ADMIN_SECRET: ${VITE_ADMIN_SECRET}
@@ -139,7 +139,6 @@ services:
       - "80"
     environment:
       MAIN_APP_DOMAIN: ${MAIN_APP_DOMAIN}
-      ADMIN_APP_DOMAIN: ${ADMIN_APP_DOMAIN}
       EXTERNAL_API_UPSTREAM: ${EXTERNAL_API_UPSTREAM:-127.0.0.1:1}
     depends_on:
       - backend
