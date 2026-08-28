@@ -98,7 +98,7 @@ openssl rand -hex 24   # ADMIN_SECRET, EMAIL_SERVICE_SECRET
 1. In Coolify: **New Resource → Docker Compose**
 2. Connect your Git repository
 3. Set **Docker Compose Location** to `/docker-compose.prod.yml`
-4. Assign the app domain to the `nginx` service:
+4. Assign the app domain to the **`nginx` service only** (not `main_frontend`):
    - `https://app.yourdomain.com`
 5. Confirm the exposed port is **80**
 
@@ -229,7 +229,8 @@ The DMZ pattern is preserved: only `nginx` bridges `dmz_net` and `internal_net`.
 | Build hangs 1+ hour | npm cache mount shared between parallel builds | Each Dockerfile uses a unique cache `id=` (already configured) |
 | nginx fails: "not a directory" | Volume mount of a repo file in compose | Use `docker-compose.prod.yml` — nginx config is COPY'd into the image |
 | Port 80 already allocated | Traefik owns host port 80 | No `ports:` on nginx; only `expose: - "80"` |
-| 404 after successful deploy | Traefik has no route | Set the app domain on the `nginx` service in Coolify |
+| 404 after successful deploy | Traefik has no route | Set the app domain on the `nginx` service in Coolify, port 80 |
+| `no available server` | Traefik has no healthy backend for that domain | Domain and port 80 must be set on the `nginx` service, not `main_frontend` |
 | Frontend calls `http://127.0.0.1:3000` | `VITE_API_URL` was non empty at build time | Set `VITE_API_URL=` (empty) and redeploy |
 | Admin panel 401 on all tabs | `VITE_ADMIN_SECRET` ≠ `ADMIN_SECRET` | Set both to the same value and redeploy |
 | Login fails after redeploy | DB volume recreated or `JWT_SECRET` changed | Users must re register; secrets must stay stable |
