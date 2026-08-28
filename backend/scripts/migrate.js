@@ -9,6 +9,7 @@ const fs = require('fs');
 
 const backendDir = path.resolve(__dirname, '..');
 const schemaPath = path.join(backendDir, 'prisma', 'schema.prisma');
+const FAILED_DOCUMENTS_MIGRATION = '20250629120000_add_documents';
 
 const run = (cmd, args, opts = {}) => {
   const result = spawnSync(cmd, args, {
@@ -21,6 +22,24 @@ const run = (cmd, args, opts = {}) => {
   if (result.status !== 0) {
     process.exit(result.status ?? 1);
   }
+};
+
+const runCaptured = (cmd, args) => {
+  const result = spawnSync(cmd, args, {
+    encoding: 'utf8',
+    cwd: backendDir,
+    shell: process.platform === 'win32',
+    env: process.env,
+  });
+
+  if (result.stdout) {
+    process.stdout.write(result.stdout);
+  }
+  if (result.stderr) {
+    process.stderr.write(result.stderr);
+  }
+
+  return result;
 };
 
 const parseDatabaseHostPort = () => {
@@ -71,6 +90,34 @@ const waitForDatabase = async (maxAttempts = 30) => {
   }
 };
 
+const deployMigrations = () => {
+  const result = runCaptured('npx', ['prisma', 'migrate', 'deploy', `--schema=${schemaPath}`]);
+  if (result.status === 0) {
+    return;
+  }
+
+  const output = `${result.stdout ?? ''}${result.stderr ?? ''}`;
+  const isFailedDocuments =
+    output.includes('P3009') && output.includes(FAILED_DOCUMENTS_MIGRATION);
+
+  if (!isFailedDocuments) {
+    process.exit(result.status ?? 1);
+  }
+
+  console.log(
+    `Clearing failed ${FAILED_DOCUMENTS_MIGRATION} record, then retrying migrations...`,
+  );
+  run('npx', [
+    'prisma',
+    'migrate',
+    'resolve',
+    '--rolled-back',
+    FAILED_DOCUMENTS_MIGRATION,
+    `--schema=${schemaPath}`,
+  ]);
+  run('npx', ['prisma', 'migrate', 'deploy', `--schema=${schemaPath}`]);
+};
+
 const main = async () => {
   const migrationsDir = path.join(backendDir, 'prisma', 'migrations');
 
@@ -89,7 +136,7 @@ const main = async () => {
   run('npx', ['prisma', 'generate', `--schema=${schemaPath}`]);
 
   console.log('Running migrations...');
-  run('npx', ['prisma', 'migrate', 'deploy', `--schema=${schemaPath}`]);
+  deployMigrations();
 
   console.log('Migrations completed.');
 };
