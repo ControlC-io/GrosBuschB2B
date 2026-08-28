@@ -10,21 +10,18 @@ const PORT = parseInt(process.env.EMAIL_SERVICE_PORT ?? '3001', 10);
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY ?? '';
 const SENDGRID_FROM_EMAIL = process.env.SENDGRID_FROM_EMAIL ?? '';
 const EMAIL_SERVICE_SECRET = process.env.EMAIL_SERVICE_SECRET ?? '';
+const sendgridReady = Boolean(SENDGRID_API_KEY && SENDGRID_FROM_EMAIL);
 
-if (!SENDGRID_API_KEY) {
-  console.error('FATAL: SENDGRID_API_KEY is not set');
-  process.exit(1);
-}
-if (!SENDGRID_FROM_EMAIL) {
-  console.error('FATAL: SENDGRID_FROM_EMAIL is not set');
-  process.exit(1);
-}
 if (!EMAIL_SERVICE_SECRET) {
   console.error('FATAL: EMAIL_SERVICE_SECRET is not set');
   process.exit(1);
 }
 
-sgMail.setApiKey(SENDGRID_API_KEY);
+if (sendgridReady) {
+  sgMail.setApiKey(SENDGRID_API_KEY);
+} else {
+  console.warn('SendGrid is not configured. Email OTP is disabled until SENDGRID_API_KEY and SENDGRID_FROM_EMAIL are set.');
+}
 
 const app = express();
 app.use(express.json());
@@ -44,7 +41,11 @@ function requireServiceSecret(req: Request, res: Response, next: NextFunction): 
 // ─── Routes ───────────────────────────────────────────────────────────────────
 
 app.get('/health', (_req: Request, res: Response) => {
-  res.json({ status: 'ok', service: 'email-service' });
+  res.json({
+    status: 'ok',
+    service: 'email-service',
+    sendgrid: sendgridReady,
+  });
 });
 
 interface SendOtpBody {
@@ -58,6 +59,11 @@ app.post('/send-otp', requireServiceSecret, async (req: Request, res: Response) 
 
   if (!to || !code) {
     res.status(400).json({ error: '`to` and `code` are required' });
+    return;
+  }
+
+  if (!sendgridReady) {
+    res.status(503).json({ error: 'Email delivery is not configured' });
     return;
   }
 
@@ -92,5 +98,9 @@ app.post('/send-otp', requireServiceSecret, async (req: Request, res: Response) 
 // ─── Start ────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`Email service running on port ${PORT}`);
-  console.log(`From address: ${SENDGRID_FROM_EMAIL}`);
+  if (sendgridReady) {
+    console.log(`From address: ${SENDGRID_FROM_EMAIL}`);
+  } else {
+    console.log('SendGrid disabled. OTP emails will return 503.');
+  }
 });
