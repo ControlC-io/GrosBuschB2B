@@ -24,6 +24,7 @@ import seasonalShopsRouter from './routes/seasonalShops';
 import uploadRouter from './routes/upload';
 import documentsRouter from './routes/documents';
 import adminSeasonalShopsRouter from './routes/adminSeasonalShops';
+import adminProductsRouter from './routes/adminProducts';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -134,6 +135,7 @@ app.use('/api/documents', documentsRouter);
 // ─── Admin API Routes (x-admin-secret auth; jwtAuth skips /api/admin via PUBLIC_ROUTES) ─
 app.use('/api/admin', adminAuth);
 app.use('/api/admin', adminRouter);
+app.use('/api/admin', adminProductsRouter);
 app.use('/api/admin', adminSeasonalShopsRouter);
 app.use('/api/admin', rolesRouter);
 
